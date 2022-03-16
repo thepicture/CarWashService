@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2d1c62e391ce4278bddc97b4ac1630e1" Name="Diagram1">
+        <EntityTypeShape EntityType="CarWashBaseModel.Address" Width="1.5" PointX="6" PointY="0.75" />
+        <EntityTypeShape EntityType="CarWashBaseModel.Branch" Width="1.5" PointX="8.25" PointY="9" />
+        <EntityTypeShape EntityType="CarWashBaseModel.City" Width="1.5" PointX="3.75" PointY="1.125" />
+        <EntityTypeShape EntityType="CarWashBaseModel.Service" Width="1.5" PointX="10.5" PointY="8.875" />
+        <EntityTypeShape EntityType="CarWashBaseModel.ServiceDiscount" Width="1.5" PointX="12.75" PointY="8" />
+        <EntityTypeShape EntityType="CarWashBaseModel.ServiceType" Width="1.5" PointX="12.75" PointY="10.875" />
+        <EntityTypeShape EntityType="CarWashBaseModel.User" Width="1.5" PointX="3" PointY="4.125" />
+        <EntityTypeShape EntityType="CarWashBaseModel.UserAddress" Width="1.5" PointX="8.25" PointY="4.875" />
+        <EntityTypeShape EntityType="CarWashBaseModel.UserEmail" Width="1.5" PointX="5.25" PointY="3.625" />
+        <EntityTypeShape EntityType="CarWashBaseModel.UserPhone" Width="1.5" PointX="5.25" PointY="9" />
+        <EntityTypeShape EntityType="CarWashBaseModel.UserType" Width="1.5" PointX="0.75" PointY="5" />
+        <AssociationConnector Association="CarWashBaseModel.FK_Address_City" />
+        <AssociationConnector Association="CarWashBaseModel.FK_Branch_Address" />
+        <AssociationConnector Association="CarWashBaseModel.FK_UserAddress_Address" />
+        <AssociationConnector Association="CarWashBaseModel.FK_ServiceDiscount_Service" />
+        <AssociationConnector Association="CarWashBaseModel.FK_User_UserType" />
+        <AssociationConnector Association="CarWashBaseModel.FK_UserAddress_User" />
+        <AssociationConnector Association="CarWashBaseModel.FK_UserEmail_User" />
+        <AssociationConnector Association="CarWashBaseModel.FK_UserPhone_User" />
+        <AssociationConnector Association="CarWashBaseModel.ServiceOfBranch" />
+        <AssociationConnector Association="CarWashBaseModel.TypeOfService" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
