@@ -12,24 +12,24 @@ namespace CarWashService.Web.Models.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class Branch
+    public partial class Order
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Branch()
+        public Order()
         {
-            this.Order = new HashSet<Order>();
             this.Service = new HashSet<Service>();
         }
     
         public int Id { get; set; }
-        public string Title { get; set; }
-        public int AddressId { get; set; }
-        public System.TimeSpan WorkFrom { get; set; }
-        public System.TimeSpan WorkTo { get; set; }
+        public int SellerId { get; set; }
+        public int ClientId { get; set; }
+        public int BranchId { get; set; }
+        public System.DateTime Date { get; set; }
+        public bool IsConfirmed { get; set; }
     
-        public virtual Address Address { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Order { get; set; }
+        public virtual Branch Branch { get; set; }
+        public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Service> Service { get; set; }
     }

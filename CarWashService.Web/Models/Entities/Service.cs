@@ -19,20 +19,22 @@ namespace CarWashService.Web.Models.Entities
         {
             this.ServiceDiscount = new HashSet<ServiceDiscount>();
             this.Branch = new HashSet<Branch>();
-            this.ServiceType1 = new HashSet<ServiceType>();
+            this.Order = new HashSet<Order>();
+            this.ServiceType = new HashSet<ServiceType>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public int ServiceType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ServiceDiscount> ServiceDiscount { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Branch> Branch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ServiceType> ServiceType1 { get; set; }
+        public virtual ICollection<Order> Order { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ServiceType> ServiceType { get; set; }
     }
 }

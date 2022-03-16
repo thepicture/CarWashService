@@ -17,6 +17,8 @@ namespace CarWashService.Web.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.Order = new HashSet<Order>();
+            this.Order1 = new HashSet<Order>();
             this.UserAddress = new HashSet<UserAddress>();
             this.UserEmail = new HashSet<UserEmail>();
             this.UserPhone = new HashSet<UserPhone>();
@@ -32,6 +34,10 @@ namespace CarWashService.Web.Models.Entities
         public string PassportNumber { get; set; }
         public string PassportSeries { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Order { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Order1 { get; set; }
         public virtual UserType UserType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAddress> UserAddress { get; set; }

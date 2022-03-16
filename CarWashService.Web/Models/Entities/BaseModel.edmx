@@ -30,6 +30,17 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SellerId" Type="int" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="BranchId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="IsConfirmed" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Service">
           <Key>
             <PropertyRef Name="Id" />
@@ -38,7 +49,6 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Price" Type="money" Nullable="false" />
-          <Property Name="ServiceType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ServiceDiscount">
           <Key>
@@ -57,6 +67,14 @@
           </Key>
           <Property Name="ServiceId" Type="int" Nullable="false" />
           <Property Name="BranchId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServiceOfOrder">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="ServiceId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ServiceType">
           <Key>
@@ -142,6 +160,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Order_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="BranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ServiceDiscount_Service">
           <End Role="Service" Type="Self.Service" Multiplicity="1" />
           <End Role="ServiceDiscount" Type="Self.ServiceDiscount" Multiplicity="*" />
@@ -174,6 +228,30 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ServiceOfBranch">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceOfOrder_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="ServiceOfOrder" Type="Self.ServiceOfOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceOfOrder">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceOfOrder_Service">
+          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="ServiceOfOrder" Type="Self.ServiceOfOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceOfOrder">
               <PropertyRef Name="ServiceId" />
             </Dependent>
           </ReferentialConstraint>
@@ -266,9 +344,11 @@
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Branch" EntityType="Self.Branch" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServiceDiscount" EntityType="Self.ServiceDiscount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServiceOfBranch" EntityType="Self.ServiceOfBranch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceOfOrder" EntityType="Self.ServiceOfOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServiceType" EntityType="Self.ServiceType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TypeOfService" EntityType="Self.TypeOfService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -284,6 +364,18 @@
             <End Role="Address" EntitySet="Address" />
             <End Role="Branch" EntitySet="Branch" />
           </AssociationSet>
+          <AssociationSet Name="FK_Order_Branch" Association="Self.FK_Order_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User1" Association="Self.FK_Order_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
           <AssociationSet Name="FK_ServiceDiscount_Service" Association="Self.FK_ServiceDiscount_Service">
             <End Role="Service" EntitySet="Service" />
             <End Role="ServiceDiscount" EntitySet="ServiceDiscount" />
@@ -295,6 +387,14 @@
           <AssociationSet Name="FK_ServiceOfBranch_Service" Association="Self.FK_ServiceOfBranch_Service">
             <End Role="Service" EntitySet="Service" />
             <End Role="ServiceOfBranch" EntitySet="ServiceOfBranch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceOfOrder_Order" Association="Self.FK_ServiceOfOrder_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="ServiceOfOrder" EntitySet="ServiceOfOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceOfOrder_Service" Association="Self.FK_ServiceOfOrder_Service">
+            <End Role="Service" EntitySet="Service" />
+            <End Role="ServiceOfOrder" EntitySet="ServiceOfOrder" />
           </AssociationSet>
           <AssociationSet Name="FK_TypeOfService_Service" Association="Self.FK_TypeOfService_Service">
             <End Role="Service" EntitySet="Service" />
@@ -333,6 +433,7 @@
           <EntitySet Name="Address" EntityType="CarWashBaseModel.Address" />
           <EntitySet Name="Branch" EntityType="CarWashBaseModel.Branch" />
           <EntitySet Name="City" EntityType="CarWashBaseModel.City" />
+          <EntitySet Name="Order" EntityType="CarWashBaseModel.Order" />
           <EntitySet Name="Service" EntityType="CarWashBaseModel.Service" />
           <EntitySet Name="ServiceDiscount" EntityType="CarWashBaseModel.ServiceDiscount" />
           <EntitySet Name="ServiceType" EntityType="CarWashBaseModel.ServiceType" />
@@ -352,6 +453,18 @@
           <AssociationSet Name="FK_UserAddress_Address" Association="CarWashBaseModel.FK_UserAddress_Address">
             <End Role="Address" EntitySet="Address" />
             <End Role="UserAddress" EntitySet="UserAddress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Branch" Association="CarWashBaseModel.FK_Order_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="CarWashBaseModel.FK_Order_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User1" Association="CarWashBaseModel.FK_Order_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
           </AssociationSet>
           <AssociationSet Name="FK_ServiceDiscount_Service" Association="CarWashBaseModel.FK_ServiceDiscount_Service">
             <End Role="Service" EntitySet="Service" />
@@ -375,6 +488,10 @@
           </AssociationSet>
           <AssociationSet Name="ServiceOfBranch" Association="CarWashBaseModel.ServiceOfBranch">
             <End Role="Branch" EntitySet="Branch" />
+            <End Role="Service" EntitySet="Service" />
+          </AssociationSet>
+          <AssociationSet Name="ServiceOfOrder" Association="CarWashBaseModel.ServiceOfOrder">
+            <End Role="Order" EntitySet="Order" />
             <End Role="Service" EntitySet="Service" />
           </AssociationSet>
           <AssociationSet Name="TypeOfService" Association="CarWashBaseModel.TypeOfService">
@@ -403,6 +520,7 @@
           <Property Name="WorkFrom" Type="Time" Nullable="false" Precision="7" />
           <Property Name="WorkTo" Type="Time" Nullable="false" Precision="7" />
           <NavigationProperty Name="Address" Relationship="CarWashBaseModel.FK_Branch_Address" FromRole="Branch" ToRole="Address" />
+          <NavigationProperty Name="Order" Relationship="CarWashBaseModel.FK_Order_Branch" FromRole="Branch" ToRole="Order" />
           <NavigationProperty Name="Service" Relationship="CarWashBaseModel.ServiceOfBranch" FromRole="Branch" ToRole="Service" />
         </EntityType>
         <EntityType Name="City">
@@ -413,6 +531,21 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Address" Relationship="CarWashBaseModel.FK_Address_City" FromRole="City" ToRole="Address" />
         </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SellerId" Type="Int32" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="BranchId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsConfirmed" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Branch" Relationship="CarWashBaseModel.FK_Order_Branch" FromRole="Order" ToRole="Branch" />
+          <NavigationProperty Name="User" Relationship="CarWashBaseModel.FK_Order_User" FromRole="Order" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="CarWashBaseModel.FK_Order_User1" FromRole="Order" ToRole="User" />
+          <NavigationProperty Name="Service" Relationship="CarWashBaseModel.ServiceOfOrder" FromRole="Order" ToRole="Service" />
+        </EntityType>
         <EntityType Name="Service">
           <Key>
             <PropertyRef Name="Id" />
@@ -421,10 +554,10 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="ServiceType" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ServiceDiscount" Relationship="CarWashBaseModel.FK_ServiceDiscount_Service" FromRole="Service" ToRole="ServiceDiscount" />
           <NavigationProperty Name="Branch" Relationship="CarWashBaseModel.ServiceOfBranch" FromRole="Service" ToRole="Branch" />
-          <NavigationProperty Name="ServiceType1" Relationship="CarWashBaseModel.TypeOfService" FromRole="Service" ToRole="ServiceType" />
+          <NavigationProperty Name="Order" Relationship="CarWashBaseModel.ServiceOfOrder" FromRole="Service" ToRole="Order" />
+          <NavigationProperty Name="ServiceType" Relationship="CarWashBaseModel.TypeOfService" FromRole="Service" ToRole="ServiceType" />
         </EntityType>
         <EntityType Name="ServiceDiscount">
           <Key>
@@ -458,6 +591,8 @@
           <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PassportNumber" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="PassportSeries" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="CarWashBaseModel.FK_Order_User" FromRole="User" ToRole="Order" />
+          <NavigationProperty Name="Order1" Relationship="CarWashBaseModel.FK_Order_User1" FromRole="User" ToRole="Order" />
           <NavigationProperty Name="UserType" Relationship="CarWashBaseModel.FK_User_UserType" FromRole="User" ToRole="UserType" />
           <NavigationProperty Name="UserAddress" Relationship="CarWashBaseModel.FK_UserAddress_User" FromRole="User" ToRole="UserAddress" />
           <NavigationProperty Name="UserEmail" Relationship="CarWashBaseModel.FK_UserEmail_User" FromRole="User" ToRole="UserEmail" />
@@ -535,6 +670,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Order_Branch">
+          <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="1" />
+          <End Type="CarWashBaseModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="BranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Type="CarWashBaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="CarWashBaseModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="SellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User1">
+          <End Type="CarWashBaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="CarWashBaseModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ServiceDiscount_Service">
           <End Type="CarWashBaseModel.Service" Role="Service" Multiplicity="1" />
           <End Type="CarWashBaseModel.ServiceDiscount" Role="ServiceDiscount" Multiplicity="*" />
@@ -599,11 +770,15 @@
           <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="*" />
           <End Type="CarWashBaseModel.Service" Role="Service" Multiplicity="*" />
         </Association>
+        <Association Name="ServiceOfOrder">
+          <End Type="CarWashBaseModel.Order" Role="Order" Multiplicity="*" />
+          <End Type="CarWashBaseModel.Service" Role="Service" Multiplicity="*" />
+        </Association>
         <Association Name="TypeOfService">
           <End Type="CarWashBaseModel.Service" Role="Service" Multiplicity="*" />
           <End Type="CarWashBaseModel.ServiceType" Role="ServiceType" Multiplicity="*" />
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -637,10 +812,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="CarWashBaseModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Service">
             <EntityTypeMapping TypeName="CarWashBaseModel.Service">
               <MappingFragment StoreEntitySet="Service">
-                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -723,6 +909,14 @@
             </EndProperty>
             <EndProperty Name="Branch">
               <ScalarProperty Name="Id" ColumnName="BranchId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ServiceOfOrder" TypeName="CarWashBaseModel.ServiceOfOrder" StoreEntitySet="ServiceOfOrder">
+            <EndProperty Name="Service">
+              <ScalarProperty Name="Id" ColumnName="ServiceId" />
+            </EndProperty>
+            <EndProperty Name="Order">
+              <ScalarProperty Name="Id" ColumnName="OrderId" />
             </EndProperty>
           </AssociationSetMapping>
           <AssociationSetMapping Name="TypeOfService" TypeName="CarWashBaseModel.TypeOfService" StoreEntitySet="TypeOfService">
