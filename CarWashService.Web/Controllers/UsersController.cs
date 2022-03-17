@@ -174,6 +174,33 @@ namespace CarWashService.Web.Controllers
             return Ok(totalChangesCount);
         }
 
+        [HttpGet]
+        [Route("api/myorders")]
+        [Authorize(Roles = "Сотрудник, Клиент")]
+        public async Task<IHttpActionResult> GetMyOrders()
+        {
+            var user = await db
+                .User
+                .FirstOrDefaultAsync(u => u.Login == Thread.CurrentPrincipal.Identity.Name);
+            var identity = (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
+            var role = identity.FindFirst(ClaimTypes.Role).Value;
+            switch (role)
+            {
+                case "Сотрудник":
+                    return
+                        Ok(
+                            user.Order.ToList()
+                            .ConvertAll(o => new SerializedOrder(o)));
+                case "Клиент":
+                    return
+                        Ok(
+                            user.Order1.ToList()
+                            .ConvertAll(o => new SerializedOrder(o)));
+                default:
+                    return NotFound();
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
