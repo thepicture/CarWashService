@@ -11,7 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarWashService.MobileApp.An
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarWashService.MobileApp.iOS", "CarWashService.MobileApp\CarWashService.MobileApp.iOS\CarWashService.MobileApp.iOS.csproj", "{00E16302-8A08-4579-8D85-745AA8B3E701}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarWashService.MobileApp", "CarWashService.MobileApp\CarWashService.MobileApp\CarWashService.MobileApp.csproj", "{9BC2131F-34BE-4198-95BE-21EAFB1D9252}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarWashService.MobileApp", "CarWashService.MobileApp\CarWashService.MobileApp\CarWashService.MobileApp.csproj", "{9BC2131F-34BE-4198-95BE-21EAFB1D9252}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4050CCD8-C5AD-4882-9303-08C028BBBD63}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

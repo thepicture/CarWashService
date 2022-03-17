@@ -4,7 +4,7 @@
              x:Class="CarWashService.MobileApp.Views.RegisterPage"
              xmlns:vm="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
-             xmlns:models="clr-namespace:XF.Material.Forms.Models;assembly=XF.Material"
+             xmlns:viewmodelhelpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              x:DataType="vm:RegisterViewModel"
              Title="Регистрация">
     <ScrollView Margin="10">
@@ -35,15 +35,10 @@
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
                                         BackgroundColor="White" />
-            <Label Text="Тип пользователя" />
-            <Picker SelectedIndex="0"
-                    Title="Тип пользователя">
-                <Picker.Items>
-                    <x:String>Клиент</x:String>
-                    <x:String>Сотрудник</x:String>
-                    <x:String>Администратор</x:String>
-                </Picker.Items>
-            </Picker>
+            <Label  Text="Тип пользователя" />
+            <Picker Title="Тип пользователя"
+                    ItemsSource="{Binding UserTypes}"
+                    ItemDisplayBinding="{Binding Name}"/>
             <material:MaterialTextField Text="{Binding Login}"
                                         Placeholder="Введите логин"
                                         LeadingIcon="authorization"
@@ -83,7 +78,7 @@
                                             BackgroundColor="White"
                                             HelperText="* Обязательно" />
             </Grid>
-            <material:MaterialTextField Text="{Binding PassportSeries}"
+            <material:MaterialTextField Text="{Binding Email}"
                                         Placeholder="Введите email"
                                         LeadingIcon="profile"
                                         InputType="Email"

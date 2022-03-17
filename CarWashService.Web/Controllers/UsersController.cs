@@ -68,7 +68,7 @@ namespace CarWashService.Web.Controllers
             return StatusCode(System.Net.HttpStatusCode.NoContent);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/users/login")]
         public IHttpActionResult PostLogin()
         {

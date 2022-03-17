@@ -10,7 +10,10 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public IDataStore<Item> DataStore =>
+            DependencyService.Get<IDataStore<Item>>();
+        public IFeedbackService FeedbackService =>
+            DependencyService.Get<IFeedbackService>();
 
         bool isBusy = false;
         public bool IsBusy

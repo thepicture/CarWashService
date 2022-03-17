@@ -52,7 +52,7 @@
                                      FontAttributes="None"
                                      HeightRequest="60"
                                      VerticalOptions="EndAndExpand" />
-            <material:MaterialButton Command="{Binding LoginCommand}"
+            <material:MaterialButton Command="{Binding ExitCommand}"
                                      CornerRadius="50"
                                      BackgroundColor="Transparent"
                                      Text="Выход"
