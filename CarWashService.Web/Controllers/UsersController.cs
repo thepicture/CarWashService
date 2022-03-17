@@ -1,18 +1,10 @@
-﻿using CarWashService.Web.Models.AuthenticationModels;
-using CarWashService.Web.Models.Entities;
-using System;
+﻿using CarWashService.Web.Models.Entities;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Principal;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Http.Filters;
 
 namespace CarWashService.Web.Controllers
 {
@@ -20,89 +12,69 @@ namespace CarWashService.Web.Controllers
     {
         private CarWashBaseEntities db = new CarWashBaseEntities();
 
-        // GET: api/Users
-        public IQueryable<User> GetUser()
-        {
-            return db.User;
-        }
 
-        // GET: api/Users/5
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> GetUser(int id)
+        [Route("api/users/register")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> Register(User user)
         {
-            User user = await db.User.FindAsync(id);
             if (user == null)
             {
-                return NotFound();
+                ModelState.AddModelError("User", "user can't be null");
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(user.Login))
+                {
+                    ModelState.AddModelError("Login", "login must be provided");
+                }
+
+                if (string.IsNullOrWhiteSpace(user.Email))
+                {
+                    ModelState.AddModelError("Login", "email must be provided");
+                }
             }
 
-            return Ok(user);
-        }
-
-        // PUT: api/Users/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutUser(int id, User user)
-        {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.Id)
+
+            if (await db
+                .User
+                .AnyAsync(u =>
+                    u.Login.ToLower()
+                    == user.Login.ToLower()))
             {
-                return BadRequest();
+                return Conflict();
             }
 
-            db.Entry(user).State = EntityState.Modified;
-
-            try
+            if (await db
+              .User
+              .AnyAsync(u =>
+                  u.Email.ToLower()
+                  == user.Email.ToLower()))
             {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Users
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
+                return Conflict();
             }
 
             db.User.Add(user);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
+            return StatusCode(System.Net.HttpStatusCode.NoContent);
         }
 
-        // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> DeleteUser(int id)
+        [HttpGet]
+        [Route("api/users/login")]
+        public IHttpActionResult Login()
         {
-            User user = await db.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            db.User.Remove(user);
-            await db.SaveChangesAsync();
-
-            return Ok(user);
+            var identity = (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
+            string role = identity
+                .FindFirst(ClaimTypes.Role)
+                .Value;
+            return Ok(role);
         }
 
         protected override void Dispose(bool disposing)
@@ -112,11 +84,6 @@ namespace CarWashService.Web.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool UserExists(int id)
-        {
-            return db.User.Count(e => e.Id == id) > 0;
         }
     }
 }

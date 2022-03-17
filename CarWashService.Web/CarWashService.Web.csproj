@@ -170,7 +170,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationModels\SimpleAuthenticator.cs" />
-    <Compile Include="Models\BasicAuthenticationAttribute.cs" />
+    <Compile Include="Models\AuthenticationModels\BasicAuthenticationAttribute.cs" />
     <Compile Include="Models\Entities\Address.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
@@ -198,6 +198,7 @@
     <Compile Include="Models\Entities\Order.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Serialized\SerializedBranch.cs" />
     <Compile Include="Models\Entities\Service.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>

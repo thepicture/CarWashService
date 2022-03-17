@@ -222,6 +222,10 @@ namespace CarWashService.ImportApp
                         PassportSeries = random
                             .Next(1000, 9999 + 1)
                             .ToString(),
+                        Email = Guid
+                            .NewGuid()
+                            .ToString()
+                            .Substring(0, 12) + "@example.com",
                     };
                     context.User.Add(user);
                 }
@@ -291,13 +295,25 @@ namespace CarWashService.ImportApp
                     {
                         everyServiceNumber = random.Next(0, 5 + 1);
                     }
+                    var serviceWithFutureDiscount = context.Service.Find(
+                            random.Next(minServiceId, maxServiceId + 1)
+                        );
                     ServiceDiscount discount = new ServiceDiscount
                     {
-                        ServiceId = random.Next(minServiceId, maxServiceId + 1),
+                        ServiceId = serviceWithFutureDiscount.Id,
                         DiscountPercent = random.Next(5, 50),
-                        EveryServiceNumber = everyServiceNumber,
                         Description = discountDescriptions
-                            [random.Next(0, discountDescriptions.Length)]
+                            [random.Next(0, discountDescriptions.Length)],
+                        WorkFrom = DateTime.Now.Subtract(
+                                TimeSpan.FromDays(
+                                        random.Next(1, 365)
+                                        )
+                                ),
+                        WorkTo = DateTime.Now.Add(
+                                TimeSpan.FromDays(
+                                        random.Next(1, 365)
+                                        )
+                                )
                     };
                     context.ServiceDiscount.Add(discount);
                 }

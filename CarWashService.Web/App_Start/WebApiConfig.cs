@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Formatting;
+﻿using CarWashService.Web.Models.AuthenticationModels;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace CarWashService.Web
@@ -19,6 +20,7 @@ namespace CarWashService.Web
             );
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());
+            config.Filters.Add(new BasicAuthenticationAttribute());
         }
     }
 }

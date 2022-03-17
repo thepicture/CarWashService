@@ -33,6 +33,7 @@ namespace CarWashService.Web.Models.Entities
         public string Password { get; set; }
         public string PassportNumber { get; set; }
         public string PassportSeries { get; set; }
+        public string Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Order { get; set; }

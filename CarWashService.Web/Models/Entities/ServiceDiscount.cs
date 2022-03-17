@@ -17,8 +17,9 @@ namespace CarWashService.Web.Models.Entities
         public int Id { get; set; }
         public int ServiceId { get; set; }
         public int DiscountPercent { get; set; }
-        public Nullable<int> EveryServiceNumber { get; set; }
         public string Description { get; set; }
+        public System.DateTime WorkFrom { get; set; }
+        public System.DateTime WorkTo { get; set; }
     
         public virtual Service Service { get; set; }
     }

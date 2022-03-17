@@ -1,5 +1,6 @@
-﻿using CarWashService.Web.Models;
-using CarWashService.Web.Models.Entities;
+﻿using CarWashService.Web.Models.Entities;
+using CarWashService.Web.Models.Entities.Serialized;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -10,19 +11,23 @@ using System.Web.Http.Description;
 
 namespace CarWashService.Web.Controllers
 {
-    [BasicAuthentication]
     public class BranchesController : ApiController
     {
         private CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/Branches
-        public IQueryable<Branch> GetBranch()
+        [Authorize(Roles = "Администратор, Клиент")]
+        public IHttpActionResult GetBranch()
         {
-            return db.Branch;
+            var branches = db.Branch
+                .ToList()
+                .ConvertAll(b => new SerializedBranch(b));
+            return Ok(branches);
         }
 
         // GET: api/Branches/5
         [ResponseType(typeof(Branch))]
+        [Authorize(Roles = "Администратор, Клиент")]
         public async Task<IHttpActionResult> GetBranch(int id)
         {
             Branch branch = await db.Branch.FindAsync(id);
@@ -31,24 +36,60 @@ namespace CarWashService.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(branch);
+            return Ok(new SerializedBranch(branch));
         }
 
         // PUT: api/Branches/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutBranch(int id, Branch branch)
+        [Authorize(Roles = "Администратор")]
+        public async Task<IHttpActionResult> PutBranch(int id, SerializedBranch serializedBranch)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != branch.Id)
+            if (id != serializedBranch.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(branch).State = EntityState.Modified;
+            var city = await db.City
+              .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
+            if (city == null)
+            {
+                city = new City
+                {
+                    Name = serializedBranch.CityName
+                };
+                db.City.Add(city);
+            }
+
+            var address = await db.Address
+                .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
+            if (address == null)
+            {
+                address = new Address
+                {
+                    City = city,
+                    StreetName = serializedBranch.StreetName,
+                };
+            }
+
+            var branchToPut = new Branch
+            {
+                Id = serializedBranch.Id,
+                Title = serializedBranch.Title,
+                AddressId = address.Id,
+                WorkFrom = TimeSpan.Parse(serializedBranch.WorkFrom),
+                WorkTo = TimeSpan.Parse(serializedBranch.WorkTo)
+            };
+
+            var branchFromDb = db.Branch.Find(serializedBranch.Id);
+
+            db.Entry(branchFromDb)
+                .CurrentValues
+                .SetValues(branchToPut);
 
             try
             {
@@ -71,21 +112,56 @@ namespace CarWashService.Web.Controllers
 
         // POST: api/Branches
         [ResponseType(typeof(Branch))]
-        public async Task<IHttpActionResult> PostBranch(Branch branch)
+        [Authorize(Roles = "Администратор")]
+        public async Task<IHttpActionResult> PostBranch(
+            SerializedBranch serializedBranch)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Branch.Add(branch);
+            var city = await db.City
+                .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
+            if (city == null)
+            {
+                city = new City
+                {
+                    Name = serializedBranch.CityName
+                };
+                db.City.Add(city);
+            }
+
+            var address = await db.Address
+                .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
+            if (address == null)
+            {
+                address = new Address
+                {
+                    City = city,
+                    StreetName = serializedBranch.StreetName,
+                };
+            }
+
+            var branchToAdd = new Branch
+            {
+                Title = serializedBranch.Title,
+                Address = address,
+                WorkFrom = TimeSpan.Parse(serializedBranch.WorkFrom),
+                WorkTo = TimeSpan.Parse(serializedBranch.WorkTo)
+            };
+
+            db.Branch.Add(branchToAdd);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = branch.Id }, branch);
+            return CreatedAtRoute("DefaultApi",
+                                  new { id = branchToAdd.Id },
+                                  branchToAdd.Id);
         }
 
         // DELETE: api/Branches/5
         [ResponseType(typeof(Branch))]
+        [Authorize(Roles = "Администратор")]
         public async Task<IHttpActionResult> DeleteBranch(int id)
         {
             Branch branch = await db.Branch.FindAsync(id);
@@ -112,6 +188,38 @@ namespace CarWashService.Web.Controllers
         private bool BranchExists(int id)
         {
             return db.Branch.Count(e => e.Id == id) > 0;
+        }
+
+        [Authorize(Roles = "Администратор")]
+        [Route("api/branches/{branchId}/add/service")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AssignService(int branchId, int serviceId)
+        {
+            Branch branch = await db.Branch.FindAsync(branchId);
+            if (branch == null)
+            {
+                return NotFound();
+            }
+
+            Service service = await db.Service.FindAsync(serviceId);
+
+            if (service == null)
+            {
+                return NotFound();
+            }
+            if (branch.Service.Any(s => s.Id == service.Id))
+            {
+                return Conflict();
+            }
+
+            branch.Service.Add(service);
+            await db.SaveChangesAsync();
+
+            return Ok(new
+            {
+                BranchId = branchId,
+                ServiceId = serviceId
+            });
         }
     }
 }
