@@ -199,6 +199,7 @@
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Serialized\SerializedBranch.cs" />
+    <Compile Include="Models\Entities\Serialized\SerializedContacts.cs" />
     <Compile Include="Models\Entities\Service.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>

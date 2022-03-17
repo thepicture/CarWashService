@@ -1,5 +1,7 @@
 ﻿using CarWashService.Web.Models.Entities;
+using CarWashService.Web.Models.Entities.Serialized;
 using System.Data.Entity;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,13 +70,108 @@ namespace CarWashService.Web.Controllers
 
         [HttpGet]
         [Route("api/users/login")]
-        public IHttpActionResult Login()
+        public IHttpActionResult PostLogin()
         {
             var identity = (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
             string role = identity
                 .FindFirst(ClaimTypes.Role)
                 .Value;
             return Ok(role);
+        }
+
+        [HttpGet]
+        [Route("api/users/{userId}/contacts")]
+        [Authorize(Roles = "Администратор, Сотрудник")]
+        public async Task<IHttpActionResult> GetContacts(int userId)
+        {
+            var user = await db
+                .User
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var phones = user.UserPhone.Select(p => p.PhoneNumber);
+            var addresses = user.UserAddress.Select(u => new
+            {
+                u.Address.StreetName,
+                u.Address.City
+            });
+            return Ok(new
+            {
+                Phones = phones,
+                Addresses = addresses
+            });
+        }
+
+        [HttpPost]
+        [Route("api/users/{userId}/contacts")]
+        [Authorize(Roles = "Администратор, Сотрудник")]
+        public async Task<IHttpActionResult> PostContacts(int userId,
+                                                          SerializedContacts contacts)
+        {
+            var user = await db
+                .User
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            int totalChangesCount = 0;
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if (contacts == null)
+            {
+                return BadRequest();
+            }
+            foreach (UserPhone phone in contacts.UserPhones)
+            {
+                if (user.UserPhone
+                    .Any(p => p.PhoneNumber == phone.PhoneNumber))
+                {
+                    continue;
+                }
+                user.UserPhone.Add(phone);
+                totalChangesCount++;
+            }
+            foreach (Address address in contacts.Adresses)
+            {
+                if (user.UserAddress.Any(ua =>
+                {
+                    return ua.Address.StreetName == address.StreetName
+                           && ua.Address.City.Name == address.City.Name;
+                }))
+                {
+                    continue;
+                }
+                var cityFromDb = await db.City
+                    .FirstOrDefaultAsync(c => c.Name == address.City.Name);
+                if (cityFromDb == null)
+                {
+                    cityFromDb = new City
+                    {
+                        Name = address.City.Name
+                    };
+                    db.City.Add(cityFromDb);
+                }
+
+                var addressFromDb = await db.Address
+                    .FirstOrDefaultAsync(b => b.StreetName == address.StreetName);
+                if (addressFromDb == null)
+                {
+                    addressFromDb = new Address
+                    {
+                        City = cityFromDb,
+                        StreetName = address.StreetName
+                    };
+                }
+                user.UserAddress.Add(new UserAddress
+                {
+                    UserId = userId,
+                    Address = addressFromDb
+                });
+                totalChangesCount++;
+            }
+            await db.SaveChangesAsync();
+            return Ok(totalChangesCount);
         }
 
         protected override void Dispose(bool disposing)
