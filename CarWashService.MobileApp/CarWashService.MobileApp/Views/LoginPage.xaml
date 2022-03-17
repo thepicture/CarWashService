@@ -10,7 +10,8 @@
              x:Class="CarWashService.MobileApp.Views.LoginPage"
              Title="Авторизация">
     <ScrollView Margin="0,40,0,0">
-        <StackLayout Padding="10,0,10,0" VerticalOptions="Fill">
+        <StackLayout Padding="10,0,10,0"
+                     VerticalOptions="Fill">
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="Center">
                 <Image Source="logo"
@@ -42,12 +43,13 @@
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
                                         BackgroundColor="White" />
-            <material:MaterialButton Command="{Binding LoginCommand}" CornerRadius="50"
+            <material:MaterialButton Command="{Binding LoginCommand}"
+                                     CornerRadius="50"
                                      BackgroundColor="{StaticResource Primary}"
-                                     Text="Авторизоваться" 
+                                     Text="Авторизоваться"
                                      FontAttributes="None"
                                      HeightRequest="60"
-                                     VerticalOptions="EndAndExpand"/>
+                                     VerticalOptions="EndAndExpand" />
             <material:MaterialButton Command="{Binding LoginCommand}"
                                      CornerRadius="50"
                                      BackgroundColor="Transparent"

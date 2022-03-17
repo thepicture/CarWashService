@@ -1,7 +1,5 @@
-﻿using CarWashService.MobileApp.ViewModels;
-using CarWashService.MobileApp.Views;
+﻿using CarWashService.MobileApp.Views;
 using System;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp

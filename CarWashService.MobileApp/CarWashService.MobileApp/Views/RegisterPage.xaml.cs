@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using CarWashService.MobileApp.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace CarWashService.MobileApp.Views
 {
@@ -10,6 +8,7 @@ namespace CarWashService.MobileApp.Views
         public RegisterPage()
         {
             InitializeComponent();
+            BindingContext = new RegisterViewModel();
         }
     }
 }
