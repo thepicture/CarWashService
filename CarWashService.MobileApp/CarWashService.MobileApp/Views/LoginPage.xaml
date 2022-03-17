@@ -3,33 +3,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
+             x:DataType="viewmodels:LoginViewModel"
              mc:Ignorable="d"
              x:Class="CarWashService.MobileApp.Views.LoginPage"
-             Shell.NavBarIsVisible="False">
-    <ContentPage.Content>
-        <StackLayout Padding="10,0,10,0">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                <Image Source="logo" WidthRequest="110"/>
+             Title="Авторизация">
+    <ScrollView Margin="0,40,0,0">
+        <StackLayout Padding="10,0,10,0" VerticalOptions="Fill">
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center">
+                <Image Source="logo"
+                       WidthRequest="110" />
                 <StackLayout VerticalOptions="Center">
-                <Label Text="АВТОМОЙКА"
-                       Grid.Column="1"
-                       FontSize="40"
-                       FontAttributes="Bold"
-                       TextColor="Black"/>
-                <Label Text="Всемирная сеть"
-                       VerticalTextAlignment="Start"
-                       Grid.Row="1"
-                       Grid.Column="1"/>
+                    <Label Text="АВТОМОЙКА"
+                           Grid.Column="1"
+                           FontSize="40"
+                           FontAttributes="Bold"
+                           TextColor="Black" />
+                    <Label Text="Всемирная сеть"
+                           Margin="0,-5,0,0"
+                           VerticalTextAlignment="Start"
+                           Grid.Row="1"
+                           Grid.Column="1" />
                 </StackLayout>
             </StackLayout>
-            <Entry Keyboard="Text"
-                   Placeholder="Введите логин"
-                   PlaceholderColor="{StaticResource Primary}"/>
-            <Entry Keyboard="Text"
-                   Placeholder="Введите пароль"
-                   PlaceholderColor="{StaticResource Primary}" 
-                   />
-            <Button VerticalOptions="Center" Text="Авторизоваться" Command="{Binding LoginCommand}"/>
+            <material:MaterialTextField Text="{Binding Login}"
+                                        Placeholder="Введите логин"
+                                        InputType="Text"
+                                        MaxLength="50"
+                                        AlwaysShowUnderline="True"
+                                        TintColor="{StaticResource Primary}"
+                                        BackgroundColor="White" />
+            <material:MaterialTextField Text="{Binding Password}"
+                                        Placeholder="Введите пароль"
+                                        InputType="Password"
+                                        MaxLength="50"
+                                        AlwaysShowUnderline="True"
+                                        TintColor="{StaticResource Primary}"
+                                        BackgroundColor="White" />
+            <material:MaterialButton Command="{Binding LoginCommand}" CornerRadius="50"
+                                     BackgroundColor="{StaticResource Primary}"
+                                     Text="Авторизоваться" 
+                                     FontAttributes="None"
+                                     HeightRequest="60"
+                                     VerticalOptions="EndAndExpand"/>
+            <material:MaterialButton Command="{Binding LoginCommand}"
+                                     CornerRadius="50"
+                                     BackgroundColor="Transparent"
+                                     Text="Выход"
+                                     FontAttributes="None"
+                                     Padding="5"
+                                     TextColor="{StaticResource Primary}"
+                                     VerticalOptions="End" />
         </StackLayout>
-    </ContentPage.Content>
+    </ScrollView>
 </ContentPage>

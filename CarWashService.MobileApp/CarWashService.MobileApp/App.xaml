@@ -5,7 +5,6 @@
     <!--
         Define global resources and styles here, that apply to all pages in your app.
     -->
-    <!--Traffic icons created by Freepik - Flaticon-->
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>

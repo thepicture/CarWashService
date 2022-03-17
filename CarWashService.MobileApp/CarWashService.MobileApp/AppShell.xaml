@@ -5,12 +5,6 @@
        Title="CarWashService.MobileApp"
        x:Class="CarWashService.MobileApp.AppShell">
 
-    <!--
-        The overall app visual hierarchy is defined here, along with navigation.
-    
-        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
-    -->
-
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle"
@@ -39,10 +33,6 @@
             <Style TargetType="FlyoutItem"
                    BasedOn="{StaticResource BaseStyle}" />
 
-            <!--
-            Default Styles for all Flyout Items
-            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
-            -->
             <Style Class="FlyoutItemLabelStyle"
                    TargetType="Label">
                 <Setter Property="TextColor"
@@ -74,9 +64,6 @@
                 </Setter>
             </Style>
 
-            <!--
-            Custom Style you can apply to any Flyout Item
-            -->
             <Style Class="MenuItemLayoutStyle"
                    TargetType="Layout"
                    ApplyToDerivedTypes="True">
@@ -97,28 +84,6 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <!-- 
-        When the Flyout is visible this defines the content to display in the flyout.
-        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
-        https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
-    -->
-    <FlyoutItem Title="About"
-                Icon="icon_about.png">
-        <ShellContent Route="AboutPage"
-                      ContentTemplate="{DataTemplate local:AboutPage}" />
-    </FlyoutItem>
-    <FlyoutItem Title="Browse"
-                Icon="icon_feed.png">
-        <ShellContent Route="ItemsPage"
-                      ContentTemplate="{DataTemplate local:ItemsPage}" />
-    </FlyoutItem>
-
-    <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
-    <MenuItem Text="Logout"
-              StyleClass="MenuItemLayoutStyle"
-              Clicked="OnMenuItemClicked">
-    </MenuItem>
-
     <!--
         TabBar lets you define content that won't show up in a flyout menu. When this content is active
         the flyout menu won't be available. This is useful for creating areas of the application where 
@@ -129,11 +94,11 @@
     <TabBar>
         <ShellContent Route="LoginPage"
                       Title="Авторизация"
-                      Icon="icon_about"
+                      Icon="authorization"
                       ContentTemplate="{DataTemplate local:LoginPage}" />
         <ShellContent Route="RegisterPage"
                       Title="Регистрация"
-                      Icon="icon_feed"
+                      Icon="registration"
                       ContentTemplate="{DataTemplate local:RegisterPage}" />
     </TabBar>
 </Shell>

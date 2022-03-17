@@ -1,8 +1,5 @@
 ﻿using CarWashService.MobileApp.Services;
-using CarWashService.MobileApp.Views;
-using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace CarWashService.MobileApp
 {
@@ -12,6 +9,8 @@ namespace CarWashService.MobileApp
         public App()
         {
             InitializeComponent();
+
+            XF.Material.Forms.Material.Init(this);
 
             DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
