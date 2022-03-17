@@ -165,6 +165,7 @@
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceDiscountsController.cs" />
+    <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -202,6 +203,8 @@
     <Compile Include="Models\Entities\Serialized\SerializedBranch.cs" />
     <Compile Include="Models\Entities\Serialized\SerializedContacts.cs" />
     <Compile Include="Models\Entities\Serialized\SerializedDiscount.cs" />
+    <Compile Include="Models\Entities\Serialized\SerializedOrder.cs" />
+    <Compile Include="Models\Entities\Serialized\SerializedService.cs" />
     <Compile Include="Models\Entities\Service.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>

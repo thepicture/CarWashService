@@ -90,6 +90,7 @@ namespace CarWashService.Web.Controllers
 
         // DELETE: api/ServiceDiscounts/5
         [ResponseType(typeof(ServiceDiscount))]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public async Task<IHttpActionResult> DeleteServiceDiscount(int id)
         {
             ServiceDiscount serviceDiscount = await db.ServiceDiscount.FindAsync(id);
@@ -101,7 +102,7 @@ namespace CarWashService.Web.Controllers
             db.ServiceDiscount.Remove(serviceDiscount);
             await db.SaveChangesAsync();
 
-            return Ok(serviceDiscount);
+            return Ok(new SerializedDiscount(serviceDiscount));
         }
 
         protected override void Dispose(bool disposing)
