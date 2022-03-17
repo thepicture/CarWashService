@@ -11,6 +11,7 @@
         <StackLayout>
             <material:MaterialTextField Text="{Binding FirstName}"
                                         Placeholder="Введите ваше имя"
+                                        LeadingIcon="profile"
                                         InputType="Text"
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
@@ -19,6 +20,7 @@
                                         HelperText="* Обязательно" />
             <material:MaterialTextField Text="{Binding LastName}"
                                         Placeholder="Введите вашу фамилию"
+                                        LeadingIcon="profile"
                                         InputType="Text"
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
@@ -27,21 +29,24 @@
                                         HelperText="* Обязательно" />
             <material:MaterialTextField Text="{Binding Patronymic}"
                                         Placeholder="Введите ваше отчество"
+                                        LeadingIcon="profile"
                                         InputType="Text"
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
                                         BackgroundColor="White" />
-            <Label Text="Тип пользователя"/>
-            <Picker SelectedIndex="0" Title="Тип пользователя">
+            <Label Text="Тип пользователя" />
+            <Picker SelectedIndex="0"
+                    Title="Тип пользователя">
                 <Picker.Items>
-                        <x:String>Клиент</x:String>
-                        <x:String>Сотрудник</x:String>
-                        <x:String>Администратор</x:String>
+                    <x:String>Клиент</x:String>
+                    <x:String>Сотрудник</x:String>
+                    <x:String>Администратор</x:String>
                 </Picker.Items>
             </Picker>
             <material:MaterialTextField Text="{Binding Login}"
                                         Placeholder="Введите логин"
+                                        LeadingIcon="authorization"
                                         InputType="Text"
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
@@ -50,6 +55,7 @@
                                         HelperText="* Обязательно" />
             <material:MaterialTextField Text="{Binding Password}"
                                         Placeholder="Введите пароль"
+                                        LeadingIcon="key"
                                         InputType="Password"
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
@@ -57,27 +63,29 @@
                                         BackgroundColor="White"
                                         HelperText="* Обязательно" />
             <Grid ColumnDefinitions="*,*">
-                
-            <material:MaterialTextField Text="{Binding PassportNumber}"
-                                        Placeholder="Номер паспорта"
-                                        InputType="Numeric"
-                                        MaxLength="6"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White"
-                                        HelperText="* Обязательно" />
-            <material:MaterialTextField Text="{Binding PassportSeries}"
-                                        Grid.Column="1"
-                                        Placeholder="Серия паспорта"
-                                        InputType="Numeric"
-                                        MaxLength="4"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White"
-                                        HelperText="* Обязательно" />
+                <material:MaterialTextField Text="{Binding PassportNumber}"
+                                            Placeholder="Номер паспорта"
+                                            LeadingIcon="registration"
+                                            InputType="Numeric"
+                                            MaxLength="6"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            BackgroundColor="White"
+                                            HelperText="* Обязательно" />
+                <material:MaterialTextField Text="{Binding PassportSeries}"
+                                            Grid.Column="1"
+                                            Placeholder="Серия паспорта"
+                                            LeadingIcon="registration"
+                                            InputType="Numeric"
+                                            MaxLength="4"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            BackgroundColor="White"
+                                            HelperText="* Обязательно" />
             </Grid>
             <material:MaterialTextField Text="{Binding PassportSeries}"
                                         Placeholder="Введите email"
+                                        LeadingIcon="profile"
                                         InputType="Email"
                                         MaxLength="100"
                                         AlwaysShowUnderline="True"
