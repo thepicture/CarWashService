@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\BranchesPage.xaml.cs">
+      <DependentUpon>BranchesPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>

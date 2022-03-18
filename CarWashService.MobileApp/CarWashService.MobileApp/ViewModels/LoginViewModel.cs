@@ -57,21 +57,24 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 if (IsRememberMe)
                 {
-                    string encodedLoginAndPassword = 
+                    string encodedLoginAndPassword =
                         new LoginAndPasswordToBasicEncoder()
                         .Encode(Login, Password);
                     await SecureStorage
                         .SetAsync("Identity",
                                   encodedLoginAndPassword);
+                    await SecureStorage
+                       .SetAsync("Role",
+                                 Authenticator.Role);
                 }
                 await FeedbackService.Inform("Вы авторизованы " +
                     $"как {Authenticator.Role}");
+                (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
             }
             else
             {
                 await FeedbackService.InformError("Неверный логин или пароль");
             }
-            await Shell.Current.GoToAsync($"//{nameof(RegisterPage)}");
         }
 
         private string login;

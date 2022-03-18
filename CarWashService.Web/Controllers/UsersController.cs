@@ -76,7 +76,7 @@ namespace CarWashService.Web.Controllers
                 Thread.CurrentPrincipal.Identity;
             string role = identity
                 .FindFirst(ClaimTypes.Role)
-                .Value.Replace("\"", "");
+                .Value;
             return Ok(role);
         }
 

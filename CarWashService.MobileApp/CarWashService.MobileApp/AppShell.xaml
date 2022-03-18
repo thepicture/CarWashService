@@ -83,15 +83,5 @@
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
-
-    <TabBar>
-        <ShellContent Route="LoginPage"
-                      Title="Авторизация"
-                      Icon="authorization"
-                      ContentTemplate="{DataTemplate local:LoginPage}" />
-        <ShellContent Route="RegisterPage"
-                      Title="Регистрация"
-                      Icon="registration"
-                      ContentTemplate="{DataTemplate local:RegisterPage}" />
-    </TabBar>
+    <TabBar x:Name="CommonTabBar" />
 </Shell>

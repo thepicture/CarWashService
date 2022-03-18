@@ -27,7 +27,9 @@ namespace CarWashService.MobileApp.Services
                 {
                     byte[] response = await client
                         .DownloadDataTaskAsync("api/users/login");
-                    Role = Encoding.UTF8.GetString(response);
+                    Role = Encoding.UTF8
+                        .GetString(response)
+                        .Replace("\"", "");
                     return true;
                 }
                 catch (WebException ex)
