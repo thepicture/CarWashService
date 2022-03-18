@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Diagnostics;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +8,12 @@ namespace CarWashService.MobileApp.Services
 {
     public class ApiAuthenticator : IAuthenticator
     {
+        public string Role
+        {
+            get;
+            private set;
+        }
+
         public async Task<bool> IsCorrectAsync(string login, string password)
         {
             string loginAndPassword = string.Format("{0}:{1}",
@@ -15,23 +21,27 @@ namespace CarWashService.MobileApp.Services
                                                     password);
             string encodedLoginAndPassword = Convert.ToBase64String(
                 Encoding.UTF8.GetBytes(loginAndPassword));
-            using (HttpClient client = new HttpClient())
+            using (WebClient client = new WebClient())
             {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Basic",
-                                                  encodedLoginAndPassword);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.Headers.Add(HttpRequestHeader.Authorization,
+                                   $"Basic {encodedLoginAndPassword}");
+                client.BaseAddress = (App.Current as App).BaseUrl;
                 try
                 {
-                    HttpResponseMessage response =
-                         await client
-                        .PostAsync($"/users/login", null);
-                    return response.IsSuccessStatusCode;
+                    byte[] response = await client
+                        .DownloadDataTaskAsync("api/users/login");
+                    Role = Encoding.UTF8.GetString(response);
+                    return true;
                 }
-                catch (Exception ex)
+                catch (WebException ex)
                 {
-
-                    throw;
+                    if ((ex.Response as HttpWebResponse).StatusCode
+                        != HttpStatusCode.Unauthorized)
+                    {
+                        Debug.WriteLine(ex.StackTrace);
+                        throw;
+                    }
+                    return false;
                 }
             }
         }

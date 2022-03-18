@@ -68,14 +68,15 @@ namespace CarWashService.Web.Controllers
             return StatusCode(System.Net.HttpStatusCode.NoContent);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("api/users/login")]
-        public IHttpActionResult PostLogin()
+        public IHttpActionResult IsAuthenticated()
         {
-            var identity = (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
+            ClaimsIdentity identity = (ClaimsIdentity)
+                Thread.CurrentPrincipal.Identity;
             string role = identity
                 .FindFirst(ClaimTypes.Role)
-                .Value;
+                .Value.Replace("\"", "");
             return Ok(role);
         }
 

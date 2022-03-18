@@ -5,7 +5,7 @@ namespace CarWashService.MobileApp
 {
     public partial class App : Application
     {
-        public string BaseUrl { get; set; } = "http://10.0.2.2:10000/api";
+        public string BaseUrl { get; set; } = "https://carwashservice-web.conveyor.cloud/api";
         public App()
         {
             InitializeComponent();

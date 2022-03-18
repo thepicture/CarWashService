@@ -54,7 +54,8 @@ namespace CarWashService.MobileApp.ViewModels
             }
             if (isAuthenticated)
             {
-                await FeedbackService.Inform("Вы авторизованы");
+                await FeedbackService.Inform("Вы авторизованы " +
+                    $"как {Authenticator.Role}");
             }
             else
             {
