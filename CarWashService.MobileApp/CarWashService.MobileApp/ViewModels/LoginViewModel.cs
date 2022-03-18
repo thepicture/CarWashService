@@ -39,7 +39,7 @@ namespace CarWashService.MobileApp.ViewModels
                 return;
             }
 
-            bool isAuthenticated = false;
+            bool isAuthenticated;
             try
             {
                 isAuthenticated = await Authenticator

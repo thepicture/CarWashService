@@ -1,6 +1,5 @@
 ﻿using CarWashService.MobileApp.Models.ViewModelHelpers;
 using CarWashService.MobileApp.ViewModels;
-using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 

@@ -1,4 +1,5 @@
-﻿using CarWashService.MobileApp.Services;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Services;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -6,6 +7,7 @@ namespace CarWashService.MobileApp
     public partial class App : Application
     {
         public string BaseUrl { get; set; } = "https://carwashservice-web.conveyor.cloud/api";
+        public SerializedBranch CurrentBranch { get; set; }
         public App()
         {
             InitializeComponent();

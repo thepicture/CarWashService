@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
+             x:DataType="viewmodels:AddEditBranchViewModel"
+             Title="{Binding Title}"
+             x:Class="CarWashService.MobileApp.Views.AddEditBranchPage">
+    <ScrollView Margin="10"
+                IsEnabled="{Binding IsNotInReadMode}">
+        <StackLayout>
+            <material:MaterialTextField Text="{Binding CurrentBranch.Title}"
+                                        Placeholder="Введите название филиала"
+                                        LeadingIcon="icon_about"
+                                        InputType="Text"
+                                        MaxLength="50"
+                                        AlwaysShowUnderline="True"
+                                        TintColor="{StaticResource Primary}"
+                                        BackgroundColor="White"
+                                        HelperText="* Обязательно" />
+            <Picker Title="Город филиала (обязательно)"
+                    ItemsSource="{Binding Cities}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding CurrentCity}" />
+            <material:MaterialTextField Text="{Binding StreetName}"
+                                        Placeholder="Введите улицу филиала"
+                                        LeadingIcon="branch"
+                                        InputType="Text"
+                                        MaxLength="50"
+                                        AlwaysShowUnderline="True"
+                                        TintColor="{StaticResource Primary}"
+                                        BackgroundColor="White"
+                                        HelperText="* Обязательно"
+                                        Grid.Column="1" />
+            <Label Text="Укажите время начала работы" />
+            <material:MaterialTimePicker Time="{Binding WorkFrom}"/>
+            <Label Text="Укажите время окончания работы" />
+            <material:MaterialTimePicker Time="{Binding WorkTo}"/>
+            <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                     CornerRadius="50"
+                                     BackgroundColor="{StaticResource Primary}"
+                                     Text="Сохранить"
+                                     IsEnabled="{Binding IsNotInReadMode}"
+                                     Opacity="{Binding IsNotInReadMode}"
+                                     FontAttributes="None"
+                                     HeightRequest="60"
+                                     VerticalOptions="EndAndExpand" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

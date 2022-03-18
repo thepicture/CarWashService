@@ -1,6 +1,8 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
+using CarWashService.MobileApp.Views;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -59,10 +61,10 @@ namespace CarWashService.MobileApp.ViewModels
                         {
                             Address = $"{branch.StreetName}, " +
                             $"{branch.CityName}",
-                            Description = "С " +
-                            $"{branch.WorkFrom} " +
-                            "по " +
-                            $"{branch.WorkTo}",
+                            Description = "С "
+                            + TimeSpan.Parse(branch.WorkFrom).ToString(@"hh\:mm")
+                            + " по "
+                            + TimeSpan.Parse(branch.WorkTo).ToString(@"hh\:mm"),
                             Position = position,
                             Branch = branch
                         });
@@ -75,45 +77,49 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
-        private Command goToBranchViewModelCommand;
+        private Command goToSelectedBranchPageCommand;
 
-        public ICommand GoToBranchViewModelCommand
+        public ICommand GoToSelectedBranchPageCommand
         {
             get
             {
-                if (goToBranchViewModelCommand == null)
+                if (goToSelectedBranchPageCommand == null)
                 {
-                    goToBranchViewModelCommand =
-                        new Command(PerformGoToBranchViewModel);
+                    goToSelectedBranchPageCommand =
+                        new Command(GoToSelectedBranchPageAsync);
                 }
 
-                return goToBranchViewModelCommand;
+                return goToSelectedBranchPageCommand;
             }
         }
 
-        private bool canGoToBranchViewModelExecute;
+        private bool canGoToSelectedBranchPageExecute;
 
-        private void PerformGoToBranchViewModel()
+        private async void GoToSelectedBranchPageAsync()
         {
+            (App.Current as App).CurrentBranch = SelectedLocation.Branch;
+            await Shell.Current.GoToAsync($"{nameof(AddEditBranchPage)}");
         }
 
-        private Command goToAddBranchCommand;
+        private Command goToAddBranchPageCommand;
 
-        public ICommand GoToAddBranchCommand
+        public ICommand GoToAddBranchPageCommand
         {
             get
             {
-                if (goToAddBranchCommand == null)
+                if (goToAddBranchPageCommand == null)
                 {
-                    goToAddBranchCommand = new Command(GoToBranchViewModel);
+                    goToAddBranchPageCommand = new Command(GoToAddBranchPageAsync);
                 }
 
-                return goToAddBranchCommand;
+                return goToAddBranchPageCommand;
             }
         }
 
-        private void GoToBranchViewModel()
+        private async void GoToAddBranchPageAsync()
         {
+            (App.Current as App).CurrentBranch = new SerializedBranch();
+            await Shell.Current.GoToAsync($"{nameof(AddEditBranchPage)}");
         }
 
         private LocationHelper selectedLocation;
@@ -125,15 +131,15 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 if (SetProperty(ref selectedLocation, value))
                 {
-                    CanGoToBranchViewModelExecute = selectedLocation != null;
+                    CanGoToSelectedBranchPageExecute = selectedLocation != null;
                 }
             }
         }
 
-        public bool CanGoToBranchViewModelExecute
+        public bool CanGoToSelectedBranchPageExecute
         {
-            get => canGoToBranchViewModelExecute;
-            set => SetProperty(ref canGoToBranchViewModelExecute, value);
+            get => canGoToSelectedBranchPageExecute;
+            set => SetProperty(ref canGoToSelectedBranchPageExecute, value);
         }
     }
 }

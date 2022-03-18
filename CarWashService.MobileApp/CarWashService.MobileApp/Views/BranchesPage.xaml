@@ -38,14 +38,14 @@
                              VerticalOptions="EndAndExpand"
                              HorizontalOptions="Center"
                              Grid.Row="1">
-                    <material:MaterialButton Command="{Binding GoToBranchViewModelCommand}"
+                    <material:MaterialButton Command="{Binding GoToSelectedBranchPageCommand}"
                                              CornerRadius="50"
                                              BackgroundColor="{StaticResource Primary}"
                                              Text="Подробнее"
-                                             IsEnabled="{Binding CanGoToBranchViewModelExecute}"
+                                             IsEnabled="{Binding CanGoToSelectedBranchPageExecute}"
                                              FontAttributes="None"
                                              HeightRequest="60" />
-                    <material:MaterialButton Command="{Binding GoToAddBranchCommand}"
+                    <material:MaterialButton Command="{Binding GoToAddBranchPageCommand}"
                                              CornerRadius="50"
                                              BackgroundColor="Transparent"
                                              Text="Добавить филиал"
