@@ -13,7 +13,7 @@ namespace CarWashService.MobileApp
             XF.Material.Forms.Material.Init(this);
 
             DependencyService.Register<ToastFeedbackService>();
-            DependencyService.Register<MockDataStore>();
+            DependencyService.Register<BranchDataStore>();
             DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ApiRegistrator>();
             MainPage = new AppShell();

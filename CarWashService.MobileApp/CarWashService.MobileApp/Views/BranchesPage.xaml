@@ -2,42 +2,58 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CarWashService.MobileApp.Views.BranchesPage"
-             Title="{Binding Title}"
+             Title="Филиалы"
              xmlns:local="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:model="clr-namespace:CarWashService.MobileApp.Models"
-             x:Name="BrowseItemsPage">
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add"
-                     Command="{Binding AddItemCommand}" />
-    </ContentPage.ToolbarItems>
-    <RefreshView x:DataType="local:BranchesViewModel"
-                 Command="{Binding LoadItemsCommand}"
-                 IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-        <CollectionView x:Name="ItemsListView"
-                        ItemsSource="{Binding Items}"
-                        SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Padding="10"
-                                 x:DataType="model:Item">
-                        <Label Text="{Binding Text}"
-                               LineBreakMode="NoWrap"
-                               Style="{DynamicResource ListItemTextStyle}"
-                               FontSize="16" />
-                        <Label Text="{Binding Description}"
-                               LineBreakMode="NoWrap"
-                               Style="{DynamicResource ListItemDetailTextStyle}"
-                               FontSize="13" />
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer NumberOfTapsRequired="1"
-                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type local:BranchesViewModel}}, Path=ItemTapped}"
-                                                  CommandParameter="{Binding .}">
-                            </TapGestureRecognizer>
-                        </StackLayout.GestureRecognizers>
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </RefreshView>
+             xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             x:DataType="local:BranchesViewModel">
+    <ContentPage.Content>
+        <Grid RowDefinitions="7*,2*">
+            <maps:Map ItemsSource="{Binding Locations}"
+                      IsShowingUser="True"
+                      x:Name="BranchesMap">
+                <maps:Map.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type helpers:LocationHelper}">
+                        <maps:Pin Position="{Binding Position}"
+                                  Address="{Binding Address}"
+                                  MarkerClicked="OnPinClicked">
+                            <maps:Pin.Label>
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="Branch.Title" />
+                                    <Binding Path="Description" />
+                                </MultiBinding>
+                            </maps:Pin.Label>
+                        </maps:Pin>
+                    </DataTemplate>
+                </maps:Map.ItemTemplate>
+            </maps:Map>
+            <StackLayout Grid.Row="1"
+                         VerticalOptions="CenterAndExpand">
+                <Label Text="{Binding SelectedLocation.Branch.Title, 
+                                      FallbackValue=Выберите филиал на карте для подробной информации}"
+                       HorizontalOptions="Center" />
+                <StackLayout Orientation="Horizontal"
+                             VerticalOptions="EndAndExpand"
+                             HorizontalOptions="Center"
+                             Grid.Row="1">
+                    <material:MaterialButton Command="{Binding GoToBranchViewModelCommand}"
+                                             CornerRadius="50"
+                                             BackgroundColor="{StaticResource Primary}"
+                                             Text="Подробнее"
+                                             IsEnabled="{Binding CanGoToBranchViewModelExecute}"
+                                             FontAttributes="None"
+                                             HeightRequest="60" />
+                    <material:MaterialButton Command="{Binding GoToAddBranchCommand}"
+                                             CornerRadius="50"
+                                             BackgroundColor="Transparent"
+                                             Text="Добавить филиал"
+                                             FontAttributes="None"
+                                             Padding="5"
+                                             TextColor="{StaticResource Primary}" />
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

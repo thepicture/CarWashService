@@ -1,84 +1,139 @@
-﻿using CarWashService.MobileApp.Models;
-using CarWashService.MobileApp.Views;
-using System;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Models.ViewModelHelpers;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace CarWashService.MobileApp.ViewModels
 {
     public class BranchesViewModel : BaseViewModel
     {
-        private Item _selectedItem;
-
-        public ObservableCollection<Item> Items { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
-
+        public ObservableCollection<LocationHelper> Locations { get; set; } =
+            new ObservableCollection<LocationHelper>();
         public BranchesViewModel()
         {
-            Title = "Browse";
-            Items = new ObservableCollection<Item>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
-            ItemTapped = new Command<Item>(OnItemSelected);
-
-            AddItemCommand = new Command(OnAddItem);
+            _ = InsertBranchesIntoPositions();
         }
 
-        async Task ExecuteLoadItemsCommand()
+        private async Task InsertBranchesIntoPositions()
         {
-            IsBusy = true;
-
-            try
+            using (WebClient client = new WebClient())
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in items)
+                client.Headers.Add(HttpRequestHeader.Authorization,
+                                   await SecureStorage
+                                    .GetAsync("Identity"));
+                client.BaseAddress = (App.Current as App).BaseUrl;
+                try
                 {
-                    Items.Add(item);
+                    byte[] response = client
+                        .DownloadData("api/branches");
+                    string branchesJsonString = Encoding.UTF8
+                        .GetString(response);
+                    IEnumerable<SerializedBranch> branches = JsonConvert
+                        .DeserializeObject
+                        <IEnumerable<SerializedBranch>>
+                        (branchesJsonString);
+                    Geocoder geoCoder = new Geocoder();
+                    foreach (SerializedBranch branch in branches)
+                    {
+                        IEnumerable<Position> approximateLocations =
+                            await geoCoder
+                            .GetPositionsForAddressAsync(
+                            string.Format("{0}, {1}, {2}",
+                                          branch.StreetName,
+                                          branch.CityName,
+                                          "Россия")
+                            );
+                        Position position = approximateLocations
+                            .FirstOrDefault();
+                        Locations.Add(new LocationHelper
+                        {
+                            Address = $"{branch.StreetName}, " +
+                            $"{branch.CityName}",
+                            Description = "С " +
+                            $"{branch.WorkFrom} " +
+                            "по " +
+                            $"{branch.WorkTo}",
+                            Position = position,
+                            Branch = branch
+                        });
+                    }
+                }
+                catch (WebException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
                 }
             }
-            catch (Exception ex)
+        }
+
+        private Command goToBranchViewModelCommand;
+
+        public ICommand GoToBranchViewModelCommand
+        {
+            get
             {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
+                if (goToBranchViewModelCommand == null)
+                {
+                    goToBranchViewModelCommand =
+                        new Command(PerformGoToBranchViewModel);
+                }
+
+                return goToBranchViewModelCommand;
             }
         }
 
-        public void OnAppearing()
+        private bool canGoToBranchViewModelExecute;
+
+        private void PerformGoToBranchViewModel()
         {
-            IsBusy = true;
-            SelectedItem = null;
         }
 
-        public Item SelectedItem
+        private Command goToAddBranchCommand;
+
+        public ICommand GoToAddBranchCommand
         {
-            get => _selectedItem;
+            get
+            {
+                if (goToAddBranchCommand == null)
+                {
+                    goToAddBranchCommand = new Command(GoToBranchViewModel);
+                }
+
+                return goToAddBranchCommand;
+            }
+        }
+
+        private void GoToBranchViewModel()
+        {
+        }
+
+        private LocationHelper selectedLocation;
+
+        public LocationHelper SelectedLocation
+        {
+            get => selectedLocation;
             set
             {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
+                if (SetProperty(ref selectedLocation, value))
+                {
+                    CanGoToBranchViewModelExecute = selectedLocation != null;
+                }
             }
         }
 
-        private async void OnAddItem(object obj)
+        public bool CanGoToBranchViewModelExecute
         {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
-        }
-
-        async void OnItemSelected(Item item)
-        {
-            if (item == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            get => canGoToBranchViewModelExecute;
+            set => SetProperty(ref canGoToBranchViewModelExecute, value);
         }
     }
 }

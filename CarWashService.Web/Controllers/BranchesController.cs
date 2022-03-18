@@ -16,7 +16,7 @@ namespace CarWashService.Web.Controllers
         private CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/Branches
-        [Authorize(Roles = "Администратор, Клиент")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public IHttpActionResult GetBranch()
         {
             var branches = db.Branch
@@ -27,7 +27,7 @@ namespace CarWashService.Web.Controllers
 
         // GET: api/Branches/5
         [ResponseType(typeof(Branch))]
-        [Authorize(Roles = "Администратор, Клиент")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public async Task<IHttpActionResult> GetBranch(int id)
         {
             Branch branch = await db.Branch.FindAsync(id);
