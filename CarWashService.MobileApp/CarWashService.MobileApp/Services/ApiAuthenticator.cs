@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,15 +15,13 @@ namespace CarWashService.MobileApp.Services
 
         public async Task<bool> IsCorrectAsync(string login, string password)
         {
-            string loginAndPassword = string.Format("{0}:{1}",
-                                                    login,
-                                                    password);
-            string encodedLoginAndPassword = Convert.ToBase64String(
-                Encoding.UTF8.GetBytes(loginAndPassword));
+            string encodedLoginAndPassword =
+                new LoginAndPasswordToBasicEncoder()
+                .Encode(login, password);
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.Authorization,
-                                   $"Basic {encodedLoginAndPassword}");
+                                   encodedLoginAndPassword);
                 client.BaseAddress = (App.Current as App).BaseUrl;
                 try
                 {

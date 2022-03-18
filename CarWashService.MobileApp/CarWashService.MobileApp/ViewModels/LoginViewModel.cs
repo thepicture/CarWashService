@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -54,6 +55,15 @@ namespace CarWashService.MobileApp.ViewModels
             }
             if (isAuthenticated)
             {
+                if (IsRememberMe)
+                {
+                    string encodedLoginAndPassword = 
+                        new LoginAndPasswordToBasicEncoder()
+                        .Encode(Login, Password);
+                    await SecureStorage
+                        .SetAsync("Identity",
+                                  encodedLoginAndPassword);
+                }
                 await FeedbackService.Inform("Вы авторизованы " +
                     $"как {Authenticator.Role}");
             }
@@ -93,6 +103,14 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 App.Current.Quit();
             }
+        }
+
+        private bool isRememberMe = false;
+
+        public bool IsRememberMe
+        {
+            get => isRememberMe;
+            set => SetProperty(ref isRememberMe, value);
         }
     }
 }

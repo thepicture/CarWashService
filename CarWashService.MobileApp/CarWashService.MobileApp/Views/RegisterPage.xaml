@@ -38,7 +38,8 @@
             <Label  Text="Тип пользователя" />
             <Picker Title="Тип пользователя"
                     ItemsSource="{Binding UserTypes}"
-                    ItemDisplayBinding="{Binding Name}"/>
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding UserType}"/>
             <material:MaterialTextField Text="{Binding Login}"
                                         Placeholder="Введите логин"
                                         LeadingIcon="authorization"

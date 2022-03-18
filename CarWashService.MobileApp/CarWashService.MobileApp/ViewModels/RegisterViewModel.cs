@@ -20,7 +20,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         public UserTypeHelper UserType
         {
-            get => UserType;
+            get => userType;
             set => SetProperty(ref userType, value);
         }
 
@@ -120,6 +120,7 @@ namespace CarWashService.MobileApp.ViewModels
                 Patronymic = Patronymic,
                 PassportNumber = PassportNumber,
                 PassportSeries = PassportSeries,
+                UserTypeId = userType.Id
             };
 
             bool isRegistered = false;
