@@ -1,4 +1,5 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Models.ViewModelHelpers;
 using CarWashService.MobileApp.Services;
 using Newtonsoft.Json;
 using System;
@@ -11,7 +12,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -59,7 +59,7 @@ namespace CarWashService.MobileApp.ViewModels
                 }
             }
             StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(Title))
+            if (string.IsNullOrWhiteSpace(CurrentBranch.Title))
             {
                 _ = validationErrors.AppendLine("Введите наименование " +
                     "филиала");
@@ -175,7 +175,7 @@ namespace CarWashService.MobileApp.ViewModels
                 CityName = CurrentBranch.CityName;
                 WorkFrom = TimeSpan.Parse(CurrentBranch.WorkFrom);
                 WorkTo = TimeSpan.Parse(CurrentBranch.WorkTo);
-                foreach (var phoneNumber in CurrentBranch.PhoneNumbers)
+                foreach (string phoneNumber in CurrentBranch.PhoneNumbers)
                 {
                     PhoneNumbers.Add(new PhoneNumberHelper
                     {

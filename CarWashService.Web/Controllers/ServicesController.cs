@@ -92,7 +92,7 @@ namespace CarWashService.Web.Controllers
         }
 
         // POST: api/Services
-        [ResponseType(typeof(Service))]
+        [ResponseType(typeof(SerializedService))]
         [Authorize(Roles = "Администратор, Сотрудник")]
         public async Task<IHttpActionResult> PostService(SerializedService serializedService)
         {

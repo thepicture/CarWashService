@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
+             xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
+             x:DataType="viewmodels:AddServiceViewModel"
+             Title="Добавление услуги"
+             x:Class="CarWashService.MobileApp.Views.AddServicePage">
+    <ContentPage.BindingContext>
+        <viewmodels:AddServiceViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ScrollView Margin="10,10,10,0">
+            <StackLayout>
+                <material:MaterialTextField Text="{Binding CurrentService.Name}"
+                                            Placeholder="Введите название"
+                                            LeadingIcon="icon_about"
+                                            InputType="Text"
+                                            MaxLength="50"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            BackgroundColor="White"
+                                            HelperText="* Обязательно" />
+                <Picker Title="Тип услуги"
+                        SelectedItem="{Binding CurrentType}"
+                        ItemDisplayBinding="{Binding Name}">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type helpers:ServiceTypeHelper}">
+                            <helpers:ServiceTypeHelper>
+                                <helpers:ServiceTypeHelper.Id>1</helpers:ServiceTypeHelper.Id>
+                                <helpers:ServiceTypeHelper.Name>Мойка двигателя</helpers:ServiceTypeHelper.Name>
+                            </helpers:ServiceTypeHelper>
+                            <helpers:ServiceTypeHelper>
+                                <helpers:ServiceTypeHelper.Id>2</helpers:ServiceTypeHelper.Id>
+                                <helpers:ServiceTypeHelper.Name>Уборка салона</helpers:ServiceTypeHelper.Name>
+                            </helpers:ServiceTypeHelper>
+                            <helpers:ServiceTypeHelper>
+                                <helpers:ServiceTypeHelper.Id>3</helpers:ServiceTypeHelper.Id>
+                                <helpers:ServiceTypeHelper.Name>Ополаскивание</helpers:ServiceTypeHelper.Name>
+                            </helpers:ServiceTypeHelper>
+                            <helpers:ServiceTypeHelper>
+                                <helpers:ServiceTypeHelper.Id>4</helpers:ServiceTypeHelper.Id>
+                                <helpers:ServiceTypeHelper.Name>Полировка кузова</helpers:ServiceTypeHelper.Name>
+                            </helpers:ServiceTypeHelper>
+                            <helpers:ServiceTypeHelper>
+                                <helpers:ServiceTypeHelper.Id>5</helpers:ServiceTypeHelper.Id>
+                                <helpers:ServiceTypeHelper.Name>Химчистка салона</helpers:ServiceTypeHelper.Name>
+                            </helpers:ServiceTypeHelper>
+                            <helpers:ServiceTypeHelper>
+                                <helpers:ServiceTypeHelper.Id>6</helpers:ServiceTypeHelper.Id>
+                                <helpers:ServiceTypeHelper.Name>Чистка колесных дисков</helpers:ServiceTypeHelper.Name>
+                            </helpers:ServiceTypeHelper>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <material:MaterialTextField Text="{Binding CurrentService.Description}"
+                                            Placeholder="Введите описание"
+                                            LeadingIcon="icon_feed"
+                                            InputType="Text"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            BackgroundColor="White"
+                                            HelperText="* можно оставить пустым" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <material:MaterialTextField Text="{Binding PriceString}"
+                                                Placeholder="Введите стоимость"
+                                                LeadingIcon="branch"
+                                                InputType="Numeric"
+                                                MaxLength="50"
+                                                AlwaysShowUnderline="True"
+                                                TintColor="{StaticResource Primary}"
+                                                BackgroundColor="White"
+                                                HelperText="* Обязательно" />
+                    <Label Text="руб."
+                           Grid.Column="1"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+                <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                         CornerRadius="50"
+                                         BackgroundColor="{StaticResource Primary}"
+                                         Text="Сохранить"
+                                         FontAttributes="None"
+                                         HeightRequest="60"
+                                         VerticalOptions="EndAndExpand" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

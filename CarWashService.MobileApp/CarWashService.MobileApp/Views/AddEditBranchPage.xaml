@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
-             xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
+             xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              x:DataType="viewmodels:AddEditBranchViewModel"
              Title="{Binding Title}"
              x:Class="CarWashService.MobileApp.Views.AddEditBranchPage">
@@ -133,7 +133,7 @@
             <StackLayout BindableLayout.ItemsSource="{Binding PhoneNumbers}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <Grid x:DataType="serialized:PhoneNumberHelper">
+                        <Grid x:DataType="helpers:PhoneNumberHelper">
                             <material:MaterialCard Elevation="5"
                                                    Margin="10">
                                 <Label Text="{Binding PhoneNumber, StringFormat='+{0}'}"

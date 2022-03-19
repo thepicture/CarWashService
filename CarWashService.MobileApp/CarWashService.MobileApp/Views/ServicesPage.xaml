@@ -7,6 +7,10 @@
              x:DataType="mobileapp:ServicesViewModel"
              Title="Набор услуг"
              x:Class="CarWashService.MobileApp.Views.ServicesPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Добавить"
+                     Command="{Binding GoToAddServicePage}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
             <SearchBar Text="{Binding SearchText}" />
@@ -22,11 +26,11 @@
                                     <StackLayout>
                                         <Label Text="{Binding Name}"
                                                FontAttributes="Bold"
-                                               HorizontalTextAlignment="Center"/>
+                                               HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
                                         <Label Text="{Binding Description, TargetNullValue='Описание не предоставлено'}"
-                                               HorizontalTextAlignment="Center"/>
+                                               HorizontalTextAlignment="Center" />
                                         <Label Text="{Binding Price, StringFormat='Цена: {0:F0} руб.'}"
                                                HorizontalOptions="Center" />
                                     </StackLayout>

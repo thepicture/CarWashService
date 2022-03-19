@@ -1,4 +1,4 @@
-﻿namespace CarWashService.MobileApp.Models.Serialized
+﻿namespace CarWashService.MobileApp.Models.ViewModelHelpers
 {
     public class PhoneNumberHelper
     {

@@ -15,6 +15,7 @@ namespace CarWashService.MobileApp
             Routing.RegisterRoute(nameof(AccountPage), typeof(AccountPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(ServicesPage), typeof(ServicesPage));
+            Routing.RegisterRoute(nameof(AddServicePage), typeof(AddServicePage));
             if (VersionTracking.IsFirstLaunchForCurrentBuild)
             {
                 SecureStorage.RemoveAll();

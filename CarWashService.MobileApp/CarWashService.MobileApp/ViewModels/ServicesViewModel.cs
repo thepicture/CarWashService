@@ -1,8 +1,11 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.ViewModels;
+using CarWashService.MobileApp.Views;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
 {
@@ -51,6 +54,26 @@ namespace CarWashService.MobileApp
                     });
             }
             Services = currentServices;
+        }
+
+        private Command goToAddServicePage;
+
+        public ICommand GoToAddServicePage
+        {
+            get
+            {
+                if (goToAddServicePage == null)
+                {
+                    goToAddServicePage = new Command(PerformGoToAddServicePageAsync);
+                }
+
+                return goToAddServicePage;
+            }
+        }
+
+        private async void PerformGoToAddServicePageAsync()
+        {
+            await Shell.Current.GoToAsync($"{nameof(AddServicePage)}");
         }
     }
 }
