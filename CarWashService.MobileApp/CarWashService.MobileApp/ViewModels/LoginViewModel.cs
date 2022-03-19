@@ -54,11 +54,11 @@ namespace CarWashService.MobileApp.ViewModels
             }
             if (isAuthenticated)
             {
+                string encodedLoginAndPassword =
+                    new LoginAndPasswordToBasicEncoder()
+                    .Encode(Login, Password);
                 if (IsRememberMe)
                 {
-                    string encodedLoginAndPassword =
-                        new LoginAndPasswordToBasicEncoder()
-                        .Encode(Login, Password);
                     await SecureStorage
                         .SetAsync("Identity",
                                   encodedLoginAndPassword);
@@ -66,9 +66,13 @@ namespace CarWashService.MobileApp.ViewModels
                        .SetAsync("Role",
                                  Authenticator.Role);
                 }
+                else
+                {
+                    (App.Current as App).Role = Authenticator.Role;
+                    (App.Current as App).Identity = encodedLoginAndPassword;
+                }
                 await FeedbackService.Inform("Вы авторизованы " +
                     $"как {Authenticator.Role}");
-                (App.Current as App).Role = Authenticator.Role;
                 (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
             }
             else

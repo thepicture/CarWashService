@@ -58,7 +58,11 @@ namespace CarWashService.MobileApp
             string role = null;
             CommonTabBar.Items.Clear();
             role = await SecureStorage.GetAsync("Role");
-            if (role == null)
+            if ((App.Current as App).Role == null)
+            {
+                role = await SecureStorage.GetAsync("Role");
+            }
+            else
             {
                 role = (App.Current as App).Role;
             }
