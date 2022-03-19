@@ -17,6 +17,7 @@ namespace CarWashService.Web.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Branch()
         {
+            this.BranchPhone = new HashSet<BranchPhone>();
             this.Order = new HashSet<Order>();
             this.Service = new HashSet<Service>();
         }
@@ -28,6 +29,8 @@ namespace CarWashService.Web.Models.Entities
         public System.TimeSpan WorkTo { get; set; }
     
         public virtual Address Address { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BranchPhone> BranchPhone { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Order { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

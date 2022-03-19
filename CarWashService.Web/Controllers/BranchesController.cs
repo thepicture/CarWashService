@@ -39,6 +39,21 @@ namespace CarWashService.Web.Controllers
             return Ok(new SerializedBranch(branch));
         }
 
+        // GET: api/Branches/contacts?id=5
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [Route("api/branches/contacts")]
+        public async Task<IHttpActionResult> GetBranchContacts(int id)
+        {
+            Branch branch = await db.Branch.FindAsync(id);
+            if (branch == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(branch.BranchPhone
+                .Select(p => p.PhoneNumber));
+        }
+
         // PUT: api/Branches/5
         [ResponseType(typeof(void))]
         [Authorize(Roles = "Администратор")]

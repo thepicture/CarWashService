@@ -196,6 +196,9 @@
     <Compile Include="Models\Entities\Branch.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\BranchPhone.cs">
+      <DependentUpon>BaseModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\City.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>

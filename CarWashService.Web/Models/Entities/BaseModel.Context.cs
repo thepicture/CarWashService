@@ -27,6 +27,7 @@ namespace CarWashService.Web.Models.Entities
     
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<Branch> Branch { get; set; }
+        public virtual DbSet<BranchPhone> BranchPhone { get; set; }
         public virtual DbSet<City> City { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<Service> Service { get; set; }

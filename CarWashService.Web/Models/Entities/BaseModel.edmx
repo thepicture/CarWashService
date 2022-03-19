@@ -23,6 +23,14 @@
           <Property Name="WorkFrom" Type="time" Precision="7" Nullable="false" />
           <Property Name="WorkTo" Type="time" Precision="7" Nullable="false" />
         </EntityType>
+        <EntityType Name="BranchPhone">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BranchId" Type="int" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="City">
           <Key>
             <PropertyRef Name="Id" />
@@ -159,6 +167,18 @@
             </Principal>
             <Dependent Role="Branch">
               <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchPhone_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+          <End Role="BranchPhone" Type="Self.BranchPhone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BranchPhone">
+              <PropertyRef Name="BranchId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -345,6 +365,7 @@
         <EntityContainer Name="CarWashBaseModelStoreContainer">
           <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Branch" EntityType="Self.Branch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BranchPhone" EntityType="Self.BranchPhone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
@@ -365,6 +386,10 @@
           <AssociationSet Name="FK_Branch_Address" Association="Self.FK_Branch_Address">
             <End Role="Address" EntitySet="Address" />
             <End Role="Branch" EntitySet="Branch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchPhone_Branch" Association="Self.FK_BranchPhone_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="BranchPhone" EntitySet="BranchPhone" />
           </AssociationSet>
           <AssociationSet Name="FK_Order_Branch" Association="Self.FK_Order_Branch">
             <End Role="Branch" EntitySet="Branch" />
@@ -434,6 +459,7 @@
         <EntityContainer Name="CarWashBaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Address" EntityType="CarWashBaseModel.Address" />
           <EntitySet Name="Branch" EntityType="CarWashBaseModel.Branch" />
+          <EntitySet Name="BranchPhone" EntityType="CarWashBaseModel.BranchPhone" />
           <EntitySet Name="City" EntityType="CarWashBaseModel.City" />
           <EntitySet Name="Order" EntityType="CarWashBaseModel.Order" />
           <EntitySet Name="Service" EntityType="CarWashBaseModel.Service" />
@@ -455,6 +481,10 @@
           <AssociationSet Name="FK_UserAddress_Address" Association="CarWashBaseModel.FK_UserAddress_Address">
             <End Role="Address" EntitySet="Address" />
             <End Role="UserAddress" EntitySet="UserAddress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchPhone_Branch" Association="CarWashBaseModel.FK_BranchPhone_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="BranchPhone" EntitySet="BranchPhone" />
           </AssociationSet>
           <AssociationSet Name="FK_Order_Branch" Association="CarWashBaseModel.FK_Order_Branch">
             <End Role="Branch" EntitySet="Branch" />
@@ -522,8 +552,18 @@
           <Property Name="WorkFrom" Type="Time" Nullable="false" Precision="7" />
           <Property Name="WorkTo" Type="Time" Nullable="false" Precision="7" />
           <NavigationProperty Name="Address" Relationship="CarWashBaseModel.FK_Branch_Address" FromRole="Branch" ToRole="Address" />
+          <NavigationProperty Name="BranchPhone" Relationship="CarWashBaseModel.FK_BranchPhone_Branch" FromRole="Branch" ToRole="BranchPhone" />
           <NavigationProperty Name="Order" Relationship="CarWashBaseModel.FK_Order_Branch" FromRole="Branch" ToRole="Order" />
           <NavigationProperty Name="Service" Relationship="CarWashBaseModel.ServiceOfBranch" FromRole="Branch" ToRole="Service" />
+        </EntityType>
+        <EntityType Name="BranchPhone">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchId" Type="Int32" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branch" Relationship="CarWashBaseModel.FK_BranchPhone_Branch" FromRole="BranchPhone" ToRole="Branch" />
         </EntityType>
         <EntityType Name="City">
           <Key>
@@ -674,6 +714,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BranchPhone_Branch">
+          <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="1" />
+          <End Type="CarWashBaseModel.BranchPhone" Role="BranchPhone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BranchPhone">
+              <PropertyRef Name="BranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Order_Branch">
           <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="1" />
           <End Type="CarWashBaseModel.Order" Role="Order" Multiplicity="*" />
@@ -804,6 +856,15 @@
                 <ScalarProperty Name="WorkFrom" ColumnName="WorkFrom" />
                 <ScalarProperty Name="AddressId" ColumnName="AddressId" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BranchPhone">
+            <EntityTypeMapping TypeName="CarWashBaseModel.BranchPhone">
+              <MappingFragment StoreEntitySet="BranchPhone">
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
