@@ -1,60 +1,62 @@
-﻿using CarWashService.MobileApp.Models;
-using System;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace CarWashService.MobileApp.Services
 {
-    public class BranchDataStore : IDataStore<Item>
+    public class BranchDataStore : IDataStore<SerializedBranch>
     {
-        readonly List<Item> items;
-
-        public BranchDataStore()
+        public async Task<bool> AddItemAsync(SerializedBranch item)
         {
-            items = new List<Item>()
+            using (WebClient client = new WebClient())
             {
-                new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
-            };
-        }
-
-        public async Task<bool> AddItemAsync(Item item)
-        {
-            items.Add(item);
-
+                client.Headers.Add(HttpRequestHeader.Authorization,
+                                   await SecureStorage
+                                    .GetAsync("Identity"));
+                client.Headers.Add(HttpRequestHeader.ContentType,
+                                 "application/json");
+                client.BaseAddress = (App.Current as App).BaseUrl;
+                try
+                {
+                    byte[] encodedBranch = Encoding.UTF8
+                        .GetBytes(
+                        JsonConvert.SerializeObject(item));
+                    byte[] response = await client
+                        .UploadDataTaskAsync("api/branches", encodedBranch);
+                }
+                catch (WebException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    return await Task.FromResult(false);
+                }
+            }
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateItemAsync(Item item)
+        public async Task<bool> UpdateItemAsync(SerializedBranch item)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == item.Id).FirstOrDefault();
-            items.Remove(oldItem);
-            items.Add(item);
-
-            return await Task.FromResult(true);
+            return await Task.FromResult(false);
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == id).FirstOrDefault();
-            items.Remove(oldItem);
-
-            return await Task.FromResult(true);
+            return await Task.FromResult(false);
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        public async Task<SerializedBranch> GetItemAsync(string id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult<SerializedBranch>(null);
         }
 
-        public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<SerializedBranch>> GetItemsAsync
+            (bool forceRefresh = false)
         {
-            return await Task.FromResult(items);
+            return await Task.FromResult<IEnumerable<SerializedBranch>>(null);
         }
     }
 }

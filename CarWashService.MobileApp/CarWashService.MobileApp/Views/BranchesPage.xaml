@@ -33,6 +33,8 @@
                          VerticalOptions="CenterAndExpand">
                 <Label Text="{Binding SelectedLocation.Branch.Title, 
                                       FallbackValue=Выберите филиал на карте для подробной информации}"
+                       HorizontalTextAlignment="Center"
+                       Margin="5"
                        HorizontalOptions="Center" />
                 <StackLayout Orientation="Horizontal"
                              VerticalOptions="EndAndExpand"
@@ -44,6 +46,7 @@
                                              Text="Подробнее"
                                              IsEnabled="{Binding CanGoToSelectedBranchPageExecute}"
                                              FontAttributes="None"
+                                             FontSize="10"
                                              HeightRequest="60" />
                     <material:MaterialButton Command="{Binding GoToAddBranchPageCommand}"
                                              CornerRadius="50"
@@ -51,6 +54,7 @@
                                              Text="Добавить филиал"
                                              FontAttributes="None"
                                              Padding="5"
+                                             FontSize="10"
                                              TextColor="{StaticResource Primary}" />
                 </StackLayout>
             </StackLayout>

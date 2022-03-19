@@ -163,6 +163,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
+    <Compile Include="Controllers\CitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ServiceDiscountsController.cs" />
@@ -202,6 +203,7 @@
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Serialized\SerializedBranch.cs" />
+    <Compile Include="Models\Entities\Serialized\SerializedCity.cs" />
     <Compile Include="Models\Entities\Serialized\SerializedContacts.cs" />
     <Compile Include="Models\Entities\Serialized\SerializedDiscount.cs" />
     <Compile Include="Models\Entities\Serialized\SerializedOrder.cs" />

@@ -16,6 +16,7 @@ namespace CarWashService.MobileApp
 
             DependencyService.Register<ToastFeedbackService>();
             DependencyService.Register<BranchDataStore>();
+            DependencyService.Register<CityDataStore>();
             DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ApiRegistrator>();
             MainPage = new AppShell();

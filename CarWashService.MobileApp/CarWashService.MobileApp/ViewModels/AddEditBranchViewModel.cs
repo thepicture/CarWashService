@@ -1,6 +1,7 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -8,14 +9,6 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class AddEditBranchViewModel : BaseViewModel
     {
-        private IEnumerable<SerializedCity> cities;
-
-        public IEnumerable<SerializedCity> Cities
-        {
-            get => cities;
-            set => SetProperty(ref cities, value);
-        }
-
         private string streetName;
 
         public string StreetName
@@ -32,23 +25,74 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 if (saveChangesCommand == null)
                 {
-                    saveChangesCommand = new Command(SaveChanges);
+                    saveChangesCommand = new Command(SaveChangesAsync);
                 }
 
                 return saveChangesCommand;
             }
         }
 
-        private void SaveChanges()
+        private async void SaveChangesAsync()
         {
-        }
+            StringBuilder validationErrors = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                validationErrors.AppendLine("Введите наименование " +
+                    "филиала");
+            }
+            if (string.IsNullOrWhiteSpace(CityName))
+            {
+                validationErrors.AppendLine("Укажите город");
+            }
+            if (string.IsNullOrWhiteSpace(StreetName))
+            {
+                validationErrors.AppendLine("Введите название улицы");
+            }
+            if (WorkFrom >= WorkTo)
+            {
+                validationErrors.AppendLine("Время " +
+                    "начала работы должно быть " +
+                    "раньше времени окончания работы");
+            }
 
-        private SerializedCity currentCity;
+            if (validationErrors.Length > 0)
+            {
+                await FeedbackService.InformError(
+                    validationErrors.ToString());
+                return;
+            }
 
-        public SerializedCity CurrentCity
-        {
-            get => currentCity;
-            set => SetProperty(ref currentCity, value);
+            CurrentBranch.CityName = CityName;
+            CurrentBranch.StreetName = StreetName;
+            CurrentBranch.WorkFrom = WorkFrom.ToString();
+            CurrentBranch.WorkTo = WorkTo.ToString();
+            bool isSuccessfulAdding;
+            try
+            {
+                isSuccessfulAdding = await BranchDataStore
+                    .AddItemAsync(CurrentBranch);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+                await FeedbackService.Inform("Подключение к интернету " +
+                     "отсутствует, проверьте подключение " +
+                     "и попробуйте ещё раз");
+                return;
+            }
+            if (isSuccessfulAdding)
+            {
+                await FeedbackService.Inform($"Филиал {CurrentBranch.Title} " +
+                    "добавлен");
+                await Shell.Current.GoToAsync($"..");
+            }
+            else
+            {
+                await FeedbackService.InformError("Не удалось " +
+                    "добавить филиал. " +
+                    "Вероятно, политика компании изменилась. " +
+                    "Обратитесь к системному администратору");
+            }
         }
 
         private bool isNotInReadMode;
@@ -62,21 +106,21 @@ namespace CarWashService.MobileApp.ViewModels
 
         public AddEditBranchViewModel()
         {
-            SerializedBranch currentBranch = (App.Current as App)
+            CurrentBranch = (App.Current as App)
                 .CurrentBranch;
-            if (currentBranch.Id != 0)
+            if (CurrentBranch.Id != 0)
             {
-                Title = "Редактирование филиала";
-                StreetName = currentBranch.StreetName;
-                WorkFrom = TimeSpan.Parse(currentBranch.WorkFrom);
-                WorkTo = TimeSpan.Parse(currentBranch.WorkTo);
+                Title = "Филиал " + CurrentBranch.Title;
+                StreetName = CurrentBranch.StreetName;
+                CityName = CurrentBranch.CityName;
+                WorkFrom = TimeSpan.Parse(CurrentBranch.WorkFrom);
+                WorkTo = TimeSpan.Parse(CurrentBranch.WorkTo);
             }
             else
             {
                 Title = "Добавление филиала";
             }
-            IsNotInReadMode = currentBranch.Id == 0;
-            CurrentBranch = currentBranch;
+            IsNotInReadMode = CurrentBranch.Id == 0;
         }
 
         public bool IsNotInReadMode
@@ -99,6 +143,14 @@ namespace CarWashService.MobileApp.ViewModels
         {
             get => workTo;
             set => SetProperty(ref workTo, value);
+        }
+
+        private string cityName;
+
+        public string CityName
+        {
+            get => cityName;
+            set => SetProperty(ref cityName, value);
         }
     }
 }

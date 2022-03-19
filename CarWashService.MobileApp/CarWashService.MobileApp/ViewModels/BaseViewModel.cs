@@ -1,4 +1,4 @@
-﻿using CarWashService.MobileApp.Models;
+﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,10 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore =>
-            DependencyService.Get<IDataStore<Item>>();
+        public IDataStore<SerializedBranch> BranchDataStore =>
+            DependencyService.Get<IDataStore<SerializedBranch>>();
+        public IDataStore<SerializedCity> CityDataStore =>
+        DependencyService.Get<IDataStore<SerializedCity>>();
         public IFeedbackService FeedbackService =>
             DependencyService.Get<IFeedbackService>();
 

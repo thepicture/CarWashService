@@ -16,11 +16,13 @@ namespace CarWashService.ImportApp
         };
         private static readonly string[] branchNamePartsTwo = new string[]
         {
-            "Филиал автомоек",
-            "Автомойка",
-            "Помой сам",
+            "Помою сам",
             "Чистые машины",
-            "Доеду сам",
+            "Автопрачечная",
+            "До блеска",
+            "Водяной",
+            "По газам",
+            "Доездился",
         };
         private static readonly string[] branchNamePartsThree = new string[]
         {
@@ -65,26 +67,25 @@ namespace CarWashService.ImportApp
         private static readonly string[] patronymics = new string[]
         {
             "Иваненко",
-            "Петренкр",
+            "Петренко",
             "Владимиренко",
-            "Андреенкр",
-            "Кирилленкр",
-            "Максенкр",
-            "Александренкр",
-            "Дмитриенкр",
+            "Андреенко",
+            "Кирилленко",
+            "Максенко",
+            "Александренко",
+            "Дмитриенко",
             "Николаенко",
         };
 
         private static readonly Random random = new Random();
         static void Main()
         {
-            InsertBranchesIntoDb(50);
-            InsertServicesIntoDb(50);
-            InsertTypesOfServicesIntoDb(1, 3);
-            InsertServicesOfBranchesIntoDb(5, 15);
-            InsertServicesDiscounts(25);
-            InsertUsersIntoDb(25);
-            InsertOrdersIntoBranchesIntoDb(1, 10);
+            InsertBranchesIntoDb(5);
+            InsertServicesIntoDb(25);
+            InsertTypesOfServicesIntoDb(1, 2);
+            InsertServicesDiscounts(5);
+            InsertUsersIntoDb(5);
+            InsertOrdersIntoBranchesIntoDb(1, 5);
             InsertServicesIntoOrdersIntoDb(1, 5);
         }
 
