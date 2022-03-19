@@ -21,6 +21,7 @@ namespace CarWashService.MobileApp
             DependencyService.Register<BranchDataStore>();
             DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ApiRegistrator>();
+            DependencyService.Register<ServiceDataStore>();
             MainPage = new AppShell();
         }
 

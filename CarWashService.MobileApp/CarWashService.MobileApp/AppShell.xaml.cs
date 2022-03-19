@@ -14,6 +14,7 @@ namespace CarWashService.MobileApp
             Routing.RegisterRoute(nameof(AddEditBranchPage), typeof(AddEditBranchPage));
             Routing.RegisterRoute(nameof(AccountPage), typeof(AccountPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(ServicesPage), typeof(ServicesPage));
             if (VersionTracking.IsFirstLaunchForCurrentBuild)
             {
                 SecureStorage.RemoveAll();
@@ -54,7 +55,7 @@ namespace CarWashService.MobileApp
             return SecureStorage.GetAsync("Identity").Result != null;
         }
 
-        public async void SetShellStacksDependingOnRole()
+        public void SetShellStacksDependingOnRole()
         {
             CommonTabBar.Items.Clear();
             switch (AppIdentity.Role)
@@ -68,6 +69,14 @@ namespace CarWashService.MobileApp
                             Title = "Филиалы",
                             ContentTemplate = new DataTemplate(typeof(BranchesPage))
                         });
+                    CommonTabBar
+                       .Items.Add(new ShellContent
+                       {
+                           Route = nameof(ServicesPage),
+                           Icon = "logo",
+                           Title = "Услуги",
+                           ContentTemplate = new DataTemplate(typeof(ServicesPage))
+                       });
                     break;
                 case "Сотрудник":
                     CommonTabBar
@@ -77,6 +86,14 @@ namespace CarWashService.MobileApp
                           Icon = "branch",
                           Title = "Филиалы",
                           ContentTemplate = new DataTemplate(typeof(BranchesPage))
+                      });
+                    CommonTabBar
+                      .Items.Add(new ShellContent
+                      {
+                          Route = nameof(ServicesPage),
+                          Icon = "logo",
+                          Title = "Услуги",
+                          ContentTemplate = new DataTemplate(typeof(ServicesPage))
                       });
                     break;
                 case "Клиент":

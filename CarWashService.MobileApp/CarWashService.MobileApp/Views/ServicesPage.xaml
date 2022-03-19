@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
+             x:DataType="mobileapp:ServicesViewModel"
+             Title="Набор услуг"
+             x:Class="CarWashService.MobileApp.Views.ServicesPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <SearchBar Text="{Binding SearchText}" />
+            <ScrollView>
+                <StackLayout BindableLayout.ItemsSource="{Binding Services}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <material:MaterialCard Elevation="5"
+                                                       Margin="10"
+                                                       x:DataType="serialized:SerializedService"
+                                                       IsClickable="True">
+                                    <StackLayout>
+                                        <Label Text="{Binding Name}"
+                                               FontAttributes="Bold"
+                                               HorizontalTextAlignment="Center"/>
+                                        <BoxView Color="WhiteSmoke"
+                                                 HeightRequest="1" />
+                                        <Label Text="{Binding Description, TargetNullValue='Описание не предоставлено'}"
+                                               HorizontalTextAlignment="Center"/>
+                                        <Label Text="{Binding Price, StringFormat='Цена: {0:F0} руб.'}"
+                                               HorizontalOptions="Center" />
+                                    </StackLayout>
+                                </material:MaterialCard>
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
