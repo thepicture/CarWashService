@@ -1,8 +1,10 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -11,25 +13,31 @@ namespace CarWashService.MobileApp.Services
 {
     public class BranchDataStore : IDataStore<SerializedBranch>
     {
+        private int _responseId;
         public async Task<bool> AddItemAsync(SerializedBranch item)
         {
-            using (WebClient client = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
-                client.Headers.Add(HttpRequestHeader.Authorization,
-                                   await SecureStorage
-                                    .GetAsync("Identity"));
-                client.Headers.Add(HttpRequestHeader.ContentType,
-                                 "application/json");
-                client.BaseAddress = (App.Current as App).BaseUrl;
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic",
+                                                  SecureStorage.GetAsync("Identity")
+                                                  .Result
+                                                  .Split(' ')[1]);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
                 try
                 {
-                    byte[] encodedBranch = Encoding.UTF8
-                        .GetBytes(
-                        JsonConvert.SerializeObject(item));
-                    byte[] response = await client
-                        .UploadDataTaskAsync("api/branches", encodedBranch);
+                    string branchJson = JsonConvert.SerializeObject(item);
+                    HttpResponseMessage response = await client
+                        .PostAsync(new Uri(client.BaseAddress + "branches"),
+                                   new StringContent(branchJson,
+                                                     Encoding.UTF8,
+                                                     "application/json"));
+                    string content = await response.Content.ReadAsStringAsync();
+                    _responseId = Convert.ToInt32(content
+                                     .Replace("\"", "")
+                        );
                 }
-                catch (WebException ex)
+                catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
                     return await Task.FromResult(false);
@@ -50,7 +58,10 @@ namespace CarWashService.MobileApp.Services
 
         public async Task<SerializedBranch> GetItemAsync(string id)
         {
-            return await Task.FromResult<SerializedBranch>(null);
+            return await Task.FromResult(new SerializedBranch
+            {
+                Id = _responseId
+            });
         }
 
         public async Task<IEnumerable<SerializedBranch>> GetItemsAsync

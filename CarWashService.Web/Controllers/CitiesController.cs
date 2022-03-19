@@ -8,7 +8,7 @@ namespace CarWashService.Web.Controllers
 {
     public class CitiesController : ApiController
     {
-        private CarWashBaseEntities db = new CarWashBaseEntities();
+        private readonly CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/Cities
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]

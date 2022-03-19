@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
 
 namespace CarWashService.MobileApp.Models.Serialized
 {
@@ -11,6 +11,7 @@ namespace CarWashService.MobileApp.Models.Serialized
         public string StreetName { get; set; }
         public string CityName { get; set; }
         public int[] ServiceIds { get; set; }
+        public IEnumerable<string> PhoneNumbers { get; set; }
 
     }
 }

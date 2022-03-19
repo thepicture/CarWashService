@@ -12,7 +12,7 @@ namespace CarWashService.Web.Controllers
 {
     public class UsersController : ApiController
     {
-        private CarWashBaseEntities db = new CarWashBaseEntities();
+        private readonly CarWashBaseEntities db = new CarWashBaseEntities();
 
 
         [ResponseType(typeof(User))]

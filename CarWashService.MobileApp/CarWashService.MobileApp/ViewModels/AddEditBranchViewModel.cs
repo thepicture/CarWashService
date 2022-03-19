@@ -1,9 +1,16 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -35,23 +42,38 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
+            if (CurrentBranch.Id != 0)
+            {
+                if (await IsAddingContactsSuccessfulAsync(CurrentBranch.Id))
+                {
+                    await FeedbackService.Inform("Контакты сохранены");
+                    return;
+                }
+                else
+                {
+                    await FeedbackService.Inform("Не удалось " +
+                        "сохранить контакты. " +
+                        "Проверьте подключение к сети");
+                    return;
+                }
+            }
             StringBuilder validationErrors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(Title))
             {
-                validationErrors.AppendLine("Введите наименование " +
+                _ = validationErrors.AppendLine("Введите наименование " +
                     "филиала");
             }
             if (string.IsNullOrWhiteSpace(CityName))
             {
-                validationErrors.AppendLine("Укажите город");
+                _ = validationErrors.AppendLine("Укажите город");
             }
             if (string.IsNullOrWhiteSpace(StreetName))
             {
-                validationErrors.AppendLine("Введите название улицы");
+                _ = validationErrors.AppendLine("Введите название улицы");
             }
             if (WorkFrom >= WorkTo)
             {
-                validationErrors.AppendLine("Время " +
+                _ = validationErrors.AppendLine("Время " +
                     "начала работы должно быть " +
                     "раньше времени окончания работы");
             }
@@ -68,10 +90,12 @@ namespace CarWashService.MobileApp.ViewModels
             CurrentBranch.WorkFrom = WorkFrom.ToString();
             CurrentBranch.WorkTo = WorkTo.ToString();
             bool isSuccessfulAdding;
+            bool isNewBranch;
             try
             {
                 isSuccessfulAdding = await BranchDataStore
                     .AddItemAsync(CurrentBranch);
+                isNewBranch = CurrentBranch.Id == 0;
             }
             catch (Exception ex)
             {
@@ -83,9 +107,15 @@ namespace CarWashService.MobileApp.ViewModels
             }
             if (isSuccessfulAdding)
             {
-                await FeedbackService.Inform($"Филиал {CurrentBranch.Title} " +
-                    "добавлен");
-                await Shell.Current.GoToAsync($"..");
+                if (isNewBranch
+                    && await IsAddingContactsSuccessfulAsync(BranchDataStore
+                        .GetItemAsync(string.Empty)
+                        .Result.Id))
+                {
+                    await FeedbackService.Inform($"Филиал {CurrentBranch.Title} " +
+                        "добавлен");
+                    await Shell.Current.GoToAsync($"..");
+                }
             }
             else
             {
@@ -93,6 +123,36 @@ namespace CarWashService.MobileApp.ViewModels
                     "добавить филиал. " +
                     "Вероятно, политика компании изменилась. " +
                     "Обратитесь к системному администратору");
+            }
+        }
+
+        private async Task<bool> IsAddingContactsSuccessfulAsync(int id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic",
+                                                  SecureStorage.GetAsync("Identity")
+                                                  .Result
+                                                  .Split(' ')[1]);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
+                try
+                {
+                    string serializedPhones = JsonConvert
+                        .SerializeObject(PhoneNumbers
+                            .Select(p => p.PhoneNumber));
+                    HttpResponseMessage response = await client
+                         .PostAsync(new Uri(client.BaseAddress + $"branches/{id}/add/phones"),
+                                   new StringContent(serializedPhones,
+                                                     Encoding.UTF8,
+                                                     "application/json"));
+                    return true;
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    return false;
+                }
             }
         }
 
@@ -116,6 +176,13 @@ namespace CarWashService.MobileApp.ViewModels
                 CityName = CurrentBranch.CityName;
                 WorkFrom = TimeSpan.Parse(CurrentBranch.WorkFrom);
                 WorkTo = TimeSpan.Parse(CurrentBranch.WorkTo);
+                foreach (var phoneNumber in CurrentBranch.PhoneNumbers)
+                {
+                    PhoneNumbers.Add(new PhoneNumberHelper
+                    {
+                        PhoneNumber = phoneNumber
+                    });
+                }
             }
             else
             {
@@ -145,6 +212,11 @@ namespace CarWashService.MobileApp.ViewModels
             get => workTo;
             set => SetProperty(ref workTo, value);
         }
+        public ObservableCollection<PhoneNumberHelper> PhoneNumbers
+        {
+            get;
+            set;
+        } = new ObservableCollection<PhoneNumberHelper>();
 
         private string cityName;
 
@@ -154,12 +226,60 @@ namespace CarWashService.MobileApp.ViewModels
             set => SetProperty(ref cityName, value);
         }
 
-        private IEnumerable<string> branchContacts;
+        private Command addContactCommand;
 
-        public IEnumerable<string> BranchContacts
+        public ICommand AddContactCommand
         {
-            get => branchContacts;
-            set => SetProperty(ref branchContacts, value);
+            get
+            {
+                if (addContactCommand == null)
+                {
+                    addContactCommand = new Command(AddContactAsync);
+                }
+
+                return addContactCommand;
+            }
+        }
+
+        private async void AddContactAsync()
+        {
+            if (string.IsNullOrWhiteSpace(CurrentPhone))
+            {
+                await FeedbackService.InformError("Чтобы добавить "
+                    + "контакт, введите номер телефона "
+                    + "и попробуйте ещё раз");
+                return;
+            }
+            if (PhoneNumbers.Any(p => p.PhoneNumber == CurrentPhone))
+            {
+                await FeedbackService.InformError("Такой " +
+                    "контакт уже есть");
+                return;
+            }
+            if (!Regex.IsMatch(CurrentPhone, @"[0-9]{11}"))
+            {
+                await FeedbackService.Warn("Номер телефона " +
+                    "некорректен. Убедитесь, что вы ввели номер " +
+                    "в формате +7...");
+                return;
+            }
+            PhoneNumbers.Add(new PhoneNumberHelper
+            {
+                PhoneNumber = CurrentPhone
+            });
+            CurrentPhone = string.Empty;
+            await FeedbackService.Inform("Контакт добавлен " +
+                "локально. " +
+                "После нажатия кнопки сохранения " +
+                "информация будет обновлена");
+        }
+
+        private string currentPhone;
+
+        public string CurrentPhone
+        {
+            get => currentPhone;
+            set => SetProperty(ref currentPhone, value);
         }
     }
 }

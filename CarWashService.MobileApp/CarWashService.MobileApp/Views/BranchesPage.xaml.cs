@@ -7,7 +7,7 @@ namespace CarWashService.MobileApp.Views
 {
     public partial class BranchesPage : ContentPage
     {
-        BranchesViewModel _viewModel;
+        readonly BranchesViewModel _viewModel;
         public BranchesPage()
         {
             InitializeComponent();

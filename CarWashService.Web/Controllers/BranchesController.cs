@@ -14,7 +14,7 @@ namespace CarWashService.Web.Controllers
 {
     public class BranchesController : ApiController
     {
-        private CarWashBaseEntities db = new CarWashBaseEntities();
+        private readonly CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/Branches
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
