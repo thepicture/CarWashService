@@ -1,5 +1,4 @@
 ﻿using CarWashService.MobileApp.Services;
-using CarWashService.MobileApp.Views;
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -69,6 +68,7 @@ namespace CarWashService.MobileApp.ViewModels
                 }
                 await FeedbackService.Inform("Вы авторизованы " +
                     $"как {Authenticator.Role}");
+                (App.Current as App).Role = Authenticator.Role;
                 (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
             }
             else

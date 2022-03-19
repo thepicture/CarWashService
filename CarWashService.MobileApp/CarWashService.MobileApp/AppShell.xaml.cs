@@ -55,8 +55,13 @@ namespace CarWashService.MobileApp
 
         public async void SetShellStacksDependingOnRole()
         {
+            string role = null;
             CommonTabBar.Items.Clear();
-            string role = await SecureStorage.GetAsync("Role");
+            role = await SecureStorage.GetAsync("Role");
+            if (role == null)
+            {
+                role = (App.Current as App).Role;
+            }
             switch (role)
             {
                 case "Администратор":
