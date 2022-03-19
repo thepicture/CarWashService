@@ -7,10 +7,12 @@ namespace CarWashService.MobileApp.Views
 {
     public partial class BranchesPage : ContentPage
     {
+        BranchesViewModel _viewModel;
         public BranchesPage()
         {
             InitializeComponent();
-            BindingContext = new BranchesViewModel();
+            _viewModel = new BranchesViewModel();
+            BindingContext = _viewModel;
         }
 
         private void OnPinClicked(object sender, PinClickedEventArgs e)
@@ -18,6 +20,12 @@ namespace CarWashService.MobileApp.Views
             (BindingContext as BranchesViewModel)
               .SelectedLocation = (sender as Pin)
               .BindingContext as LocationHelper;
+        }
+
+        protected override void OnAppearing()
+        {
+            _viewModel.OnAppearing();
+            base.OnAppearing();
         }
     }
 }

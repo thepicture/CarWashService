@@ -21,13 +21,15 @@ namespace CarWashService.MobileApp.ViewModels
     {
         public ObservableCollection<LocationHelper> Locations { get; set; } =
             new ObservableCollection<LocationHelper>();
-        public BranchesViewModel()
+
+        internal void OnAppearing()
         {
             _ = InsertBranchesIntoPositions();
         }
 
         private async Task InsertBranchesIntoPositions()
         {
+            Locations.Clear();
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.Authorization,
