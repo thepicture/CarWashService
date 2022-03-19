@@ -1,7 +1,9 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using Newtonsoft.Json;
+using System;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,36 +13,38 @@ namespace CarWashService.MobileApp.Services
     {
         public async Task<bool> IsRegisteredAsync(SerializedUser identity)
         {
-            using (WebClient client = new WebClient())
+            string jsonIdentity = JsonConvert.SerializeObject(identity);
+            using (HttpClient client = new HttpClient())
             {
-                string jsonIdentity = JsonConvert.SerializeObject(identity);
-                byte[] encodedJsonIdentity = Encoding.UTF8
-                    .GetBytes(jsonIdentity);
-                client.BaseAddress = (App.Current as App).BaseUrl;
-                client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
                 try
                 {
-                    byte[] response = await client
-                        .UploadDataTaskAsync("api/users/register", encodedJsonIdentity);
-                    return true;
-                }
-                catch (WebException ex)
-                {
-                    if ((ex.Response as HttpWebResponse).StatusCode
-                        == HttpStatusCode.BadRequest)
-                    {
-                        Debug.WriteLine(ex.StackTrace);
-                        throw;
-                    }
-                    else if ((ex.Response as HttpWebResponse).StatusCode
-                        == HttpStatusCode.Conflict)
+                    HttpResponseMessage response = await client
+                       .PostAsync(new Uri(client.BaseAddress + "users/register"),
+                                  new StringContent(jsonIdentity,
+                                                    Encoding.UTF8,
+                                                    "application/json"));
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         return false;
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        return false;
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        return true;
+                    }
                     else
                     {
-                        throw;
+                        throw new HttpRequestException();
                     }
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    throw;
                 }
             }
         }

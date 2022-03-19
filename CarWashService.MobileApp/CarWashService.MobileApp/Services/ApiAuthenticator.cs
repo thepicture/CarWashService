@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net;
-using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace CarWashService.MobileApp.Services
@@ -18,29 +20,31 @@ namespace CarWashService.MobileApp.Services
             string encodedLoginAndPassword =
                 new LoginAndPasswordToBasicEncoder()
                 .Encode(login, password);
-            using (WebClient client = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
-                client.Headers.Add(HttpRequestHeader.Authorization,
-                                   encodedLoginAndPassword);
-                client.BaseAddress = (App.Current as App).BaseUrl;
+                client.DefaultRequestHeaders.Authorization =
+                     new AuthenticationHeaderValue("Basic",
+                                                   encodedLoginAndPassword.Split(' ')[1]);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
                 try
                 {
-                    byte[] response = await client
-                        .DownloadDataTaskAsync("api/users/login");
-                    Role = Encoding.UTF8
-                        .GetString(response)
-                        .Replace("\"", "");
-                    return true;
-                }
-                catch (WebException ex)
-                {
-                    if ((ex.Response as HttpWebResponse).StatusCode
-                        != HttpStatusCode.Unauthorized)
+                    HttpResponseMessage response = await client
+                        .GetAsync(new Uri(client.BaseAddress + "users/login"));
+                    if (response.StatusCode != HttpStatusCode.Unauthorized)
                     {
-                        Debug.WriteLine(ex.StackTrace);
-                        throw;
+                        string content = await response.Content.ReadAsStringAsync();
+                        Role = content.Replace("\"", "");
+                        return true;
                     }
-                    return false;
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    throw;
                 }
             }
         }

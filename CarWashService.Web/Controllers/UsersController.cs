@@ -2,6 +2,7 @@
 using CarWashService.Web.Models.Entities.Serialized;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,7 +66,7 @@ namespace CarWashService.Web.Controllers
             db.User.Add(user);
             await db.SaveChangesAsync();
 
-            return StatusCode(System.Net.HttpStatusCode.NoContent);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         [HttpGet]

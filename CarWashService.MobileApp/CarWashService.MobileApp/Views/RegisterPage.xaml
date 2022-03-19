@@ -35,7 +35,6 @@
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
                                         BackgroundColor="White" />
-            <Label  Text="Тип пользователя" />
             <Picker Title="Тип пользователя"
                     ItemsSource="{Binding UserTypes}"
                     ItemDisplayBinding="{Binding Name}"
@@ -60,7 +59,7 @@
                                         HelperText="* Обязательно" />
             <Grid ColumnDefinitions="*,*">
                 <material:MaterialTextField Text="{Binding PassportNumber}"
-                                            Placeholder="Номер паспорта"
+                                            Placeholder="Номер"
                                             LeadingIcon="registration"
                                             InputType="Numeric"
                                             MaxLength="6"
@@ -70,7 +69,7 @@
                                             HelperText="* Обязательно" />
                 <material:MaterialTextField Text="{Binding PassportSeries}"
                                             Grid.Column="1"
-                                            Placeholder="Серия паспорта"
+                                            Placeholder="Серия"
                                             LeadingIcon="registration"
                                             InputType="Numeric"
                                             MaxLength="4"
