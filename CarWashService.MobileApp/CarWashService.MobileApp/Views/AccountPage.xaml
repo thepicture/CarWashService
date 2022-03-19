@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
+             Title="Мой аккаунт"
+             x:DataType="mobileapp:AccountViewModel"
+             x:Class="CarWashService.MobileApp.Views.AccountPage">
+    <ContentPage.Content>
+        <ui:MaterialCard HorizontalOptions="FillAndExpand"
+                         Margin="20"
+                         Elevation="5"
+                         IsClickable="True">
+            <StackLayout>
+                <Label Text="{Binding Login, StringFormat='Привет, {0}.'}"
+                       HorizontalOptions="Center"
+                       FontSize="Title"/>
+                <BoxView Color="WhiteSmoke"
+                         HeightRequest="1"/>
+                <Label Text="{Binding Role, StringFormat='Вы {0}'}" 
+                       HorizontalOptions="Center"/>
+                <ui:MaterialButton Command="{Binding ExitLoginCommand}"
+                                   CornerRadius="50"
+                                   BackgroundColor="{StaticResource Primary}"
+                                   Text="Выйти из аккаунта"
+                                   FontAttributes="None"
+                                   HeightRequest="60"
+                                   VerticalOptions="EndAndExpand" />
+            </StackLayout>
+        </ui:MaterialCard>
+    </ContentPage.Content>
+</ContentPage>

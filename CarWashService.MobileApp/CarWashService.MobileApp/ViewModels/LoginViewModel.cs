@@ -104,7 +104,7 @@ namespace CarWashService.MobileApp.ViewModels
         {
             if (await FeedbackService.Ask("Выйти из приложения?"))
             {
-                App.Current.Quit();
+                System.Environment.Exit(0);
             }
         }
 

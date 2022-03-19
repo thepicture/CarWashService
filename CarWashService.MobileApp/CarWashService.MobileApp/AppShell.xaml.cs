@@ -11,6 +11,8 @@ namespace CarWashService.MobileApp
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(AddEditBranchPage), typeof(AddEditBranchPage));
+            Routing.RegisterRoute(nameof(AccountPage), typeof(AccountPage));
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             if (VersionTracking.IsFirstLaunchForCurrentBuild)
             {
                 SecureStorage.RemoveAll();
@@ -21,23 +23,29 @@ namespace CarWashService.MobileApp
             }
             else
             {
-                CommonTabBar
-                    .Items.Add(new ShellContent
-                    {
-                        Route = "LoginPage",
-                        Title = "Авторизация",
-                        Icon = "authorization",
-                        ContentTemplate = new DataTemplate(typeof(LoginPage))
-                    });
-                CommonTabBar
-                  .Items.Add(new ShellContent
-                  {
-                      Route = "LoginPage",
-                      Title = "Регистрация",
-                      Icon = "registration",
-                      ContentTemplate = new DataTemplate(typeof(RegisterPage))
-                  });
+                LoadLoginAndRegisterShell();
             }
+        }
+
+        public void LoadLoginAndRegisterShell()
+        {
+            CommonTabBar.Items.Clear();
+            CommonTabBar
+                .Items.Add(new ShellContent
+                {
+                    Route = nameof(LoginPage),
+                    Icon = "authorization",
+                    Title = "Авторизация",
+                    ContentTemplate = new DataTemplate(typeof(LoginPage))
+                });
+            CommonTabBar
+              .Items.Add(new ShellContent
+              {
+                  Route = nameof(LoginPage),
+                  Icon = "registration",
+                  Title = "Регистрация",
+                  ContentTemplate = new DataTemplate(typeof(RegisterPage))
+              });
         }
 
         private bool IsLoggedIn()
@@ -55,9 +63,9 @@ namespace CarWashService.MobileApp
                     CommonTabBar
                         .Items.Add(new ShellContent
                         {
-                            Route = "BranchesPage",
-                            Title = "Филиалы",
+                            Route = nameof(BranchesPage),
                             Icon = "branch",
+                            Title = "Филиалы",
                             ContentTemplate = new DataTemplate(typeof(BranchesPage))
                         });
                     break;
@@ -65,9 +73,9 @@ namespace CarWashService.MobileApp
                     CommonTabBar
                       .Items.Add(new ShellContent
                       {
-                          Route = "BranchesPage",
-                          Title = "Филиалы",
+                          Route = nameof(BranchesPage),
                           Icon = "branch",
+                          Title = "Филиалы",
                           ContentTemplate = new DataTemplate(typeof(BranchesPage))
                       });
                     break;
@@ -76,6 +84,14 @@ namespace CarWashService.MobileApp
                 default:
                     break;
             }
+            CommonTabBar
+                 .Items.Add(new ShellContent
+                 {
+                     Route = nameof(AccountPage),
+                     Icon = "profile",
+                     Title = "Профиль",
+                     ContentTemplate = new DataTemplate(typeof(AccountPage))
+                 });
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

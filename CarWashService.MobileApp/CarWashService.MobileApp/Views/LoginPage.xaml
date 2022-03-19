@@ -19,7 +19,7 @@
                 <StackLayout VerticalOptions="Center">
                     <Label Text="АВТОМОЙКА"
                            Grid.Column="1"
-                           FontSize="35"
+                           FontSize="25"
                            FontAttributes="Bold"
                            TextColor="Black" />
                     <Label Text="Всемирная сеть"
