@@ -1,6 +1,7 @@
 ﻿using CarWashService.Web.Models.Entities;
 using CarWashService.Web.Models.Entities.Serialized;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -235,6 +236,38 @@ namespace CarWashService.Web.Controllers
                 BranchId = branchId,
                 ServiceId = serviceId
             });
+        }
+        [Authorize(Roles = "Администратор")]
+        [Route("api/branches/{branchId}/add/phones")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AssignPhone(int branchId,
+                                                         List<string> phones)
+        {
+            Branch branch = await db.Branch.FindAsync(branchId);
+            if (branch == null)
+            {
+                return NotFound();
+            }
+
+            foreach (string phone in phones)
+            {
+                BranchPhone phoneFromDb = await db.BranchPhone
+                    .FirstOrDefaultAsync(p => p.PhoneNumber == phone);
+                if (phoneFromDb != null)
+                {
+                    continue;
+                }
+                BranchPhone newPhone = new BranchPhone
+                {
+                    PhoneNumber = phone,
+                    BranchId = branchId
+                };
+                db.BranchPhone.Add(newPhone);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace CarWashService.Web.Models.Entities.Serialized
             StreetName = branch.Address.StreetName;
             CityName = branch.Address.City.Name;
             ServiceIds = branch.Service.Select(s => s.Id);
+            PhoneNumbers = branch.BranchPhone.Select(p => p.PhoneNumber);
         }
 
         public int Id { get; set; }
@@ -27,6 +28,7 @@ namespace CarWashService.Web.Models.Entities.Serialized
         public string StreetName { get; set; }
         public string CityName { get; set; }
         public IEnumerable<int> ServiceIds { get; set; }
+        public IEnumerable<string> PhoneNumbers { get; set; }
     }
 
 }

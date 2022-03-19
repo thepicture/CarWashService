@@ -1,5 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
@@ -151,6 +152,14 @@ namespace CarWashService.MobileApp.ViewModels
         {
             get => cityName;
             set => SetProperty(ref cityName, value);
+        }
+
+        private IEnumerable<string> branchContacts;
+
+        public IEnumerable<string> BranchContacts
+        {
+            get => branchContacts;
+            set => SetProperty(ref branchContacts, value);
         }
     }
 }

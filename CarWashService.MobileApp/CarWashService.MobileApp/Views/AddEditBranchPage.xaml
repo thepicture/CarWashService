@@ -64,6 +64,21 @@
                                          FontAttributes="None"
                                          HeightRequest="60"
                                          VerticalOptions="EndAndExpand" />
+                <Label Text="Контакты" />
+                <ListView ItemsSource="{Binding BranchContacts}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <material:MaterialCard Elevation="5">
+                                        <Label Text="{Binding .}"
+                                               HorizontalOptions="Center" />
+                                    </material:MaterialCard>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
             <StackLayout>
                 <StackLayout.Style>
@@ -82,9 +97,10 @@
                 </StackLayout.Style>
                 <Label Text="Название филиала"
                        FontSize="Body"
-                       FontAttributes="Bold"/>
+                       FontAttributes="Bold" />
                 <Label Text="{Binding CurrentBranch.Title}" />
-                <BoxView Color="WhiteSmoke" HeightRequest="1"/>
+                <BoxView Color="WhiteSmoke"
+                         HeightRequest="1" />
                 <Label Text="Город филиала"
                        FontSize="Body"
                        FontAttributes="Bold" />
