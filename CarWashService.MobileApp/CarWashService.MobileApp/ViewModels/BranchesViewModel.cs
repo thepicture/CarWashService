@@ -1,5 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
+using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
 using Newtonsoft.Json;
 using System;
@@ -7,11 +8,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -30,22 +30,23 @@ namespace CarWashService.MobileApp.ViewModels
         private async Task InsertBranchesIntoPositions()
         {
             Locations.Clear();
-            using (WebClient client = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
-                client.Headers.Add(HttpRequestHeader.Authorization,
-                                   await SecureStorage
-                                    .GetAsync("Identity"));
-                client.BaseAddress = (App.Current as App).BaseUrl;
+                client.DefaultRequestHeaders.Authorization =
+                  new AuthenticationHeaderValue("Basic",
+                                                AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
                 try
                 {
-                    byte[] response = client
-                        .DownloadData("api/branches");
-                    string branchesJsonString = Encoding.UTF8
-                        .GetString(response);
+                    string response = await client
+                        .GetAsync("branches")
+                        .Result
+                        .Content
+                        .ReadAsStringAsync();
                     IEnumerable<SerializedBranch> branches = JsonConvert
                         .DeserializeObject
                         <IEnumerable<SerializedBranch>>
-                        (branchesJsonString);
+                        (response);
                     Geocoder geoCoder = new Geocoder();
                     foreach (SerializedBranch branch in branches)
                     {
@@ -72,7 +73,7 @@ namespace CarWashService.MobileApp.ViewModels
                         });
                     }
                 }
-                catch (WebException ex)
+                catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
                 }

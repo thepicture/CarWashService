@@ -6,7 +6,7 @@ namespace CarWashService.MobileApp
 {
     public partial class App : Application
     {
-        public string BaseUrl { get; set; } = "https://carwashservice-web.conveyor.cloud/api";
+        public string BaseUrl { get; set; } = "https://carwashservice-web.conveyor.cloud/api/";
         public SerializedBranch CurrentBranch { get; set; }
         public string Role { get; set; }
         public string Identity { get; set; }
@@ -19,11 +19,9 @@ namespace CarWashService.MobileApp
 
             DependencyService.Register<ToastFeedbackService>();
             DependencyService.Register<BranchDataStore>();
-            DependencyService.Register<CityDataStore>();
             DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ApiRegistrator>();
             MainPage = new AppShell();
-            Shell.Current.GoToAsync("//LoginPage");
         }
 
         protected override void OnStart()

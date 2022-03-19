@@ -1,4 +1,5 @@
-﻿using CarWashService.MobileApp.Views;
+﻿using CarWashService.MobileApp.Services;
+using CarWashService.MobileApp.Views;
 using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -55,18 +56,8 @@ namespace CarWashService.MobileApp
 
         public async void SetShellStacksDependingOnRole()
         {
-            string role = null;
             CommonTabBar.Items.Clear();
-            role = await SecureStorage.GetAsync("Role");
-            if ((App.Current as App).Role == null)
-            {
-                role = await SecureStorage.GetAsync("Role");
-            }
-            else
-            {
-                role = (App.Current as App).Role;
-            }
-            switch (role)
+            switch (AppIdentity.Role)
             {
                 case "Администратор":
                     CommonTabBar

@@ -20,10 +20,8 @@ namespace CarWashService.MobileApp.Services
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
-                                                  SecureStorage.GetAsync("Identity")
-                                                  .Result
-                                                  .Split(' ')[1]);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
+                                                  AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
                 try
                 {
                     string branchJson = JsonConvert.SerializeObject(item);

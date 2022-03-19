@@ -1,4 +1,5 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
@@ -132,10 +133,8 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
-                                                  SecureStorage.GetAsync("Identity")
-                                                  .Result
-                                                  .Split(' ')[1]);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
+                                                  AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
                 try
                 {
                     string serializedPhones = JsonConvert

@@ -10,8 +10,7 @@ namespace CarWashService.MobileApp.Services
             string loginAndPassword = string.Format("{0}:{1}",
                                            login,
                                            password);
-            string encodedLoginAndPassword = "Basic "
-                + Convert.ToBase64String(
+            string encodedLoginAndPassword = Convert.ToBase64String(
                 Encoding.UTF8.GetBytes(loginAndPassword));
             return encodedLoginAndPassword;
         }

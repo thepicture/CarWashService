@@ -16,7 +16,7 @@ namespace CarWashService.MobileApp.Services
             string jsonIdentity = JsonConvert.SerializeObject(identity);
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
                 try
                 {
                     HttpResponseMessage response = await client

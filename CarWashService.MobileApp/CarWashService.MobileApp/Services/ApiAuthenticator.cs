@@ -24,8 +24,8 @@ namespace CarWashService.MobileApp.Services
             {
                 client.DefaultRequestHeaders.Authorization =
                      new AuthenticationHeaderValue("Basic",
-                                                   encodedLoginAndPassword.Split(' ')[1]);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl + "/");
+                                                   encodedLoginAndPassword);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
                 try
                 {
                     HttpResponseMessage response = await client

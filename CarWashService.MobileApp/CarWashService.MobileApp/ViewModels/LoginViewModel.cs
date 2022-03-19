@@ -24,11 +24,11 @@ namespace CarWashService.MobileApp.ViewModels
             StringBuilder validationErrors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(Login))
             {
-                validationErrors.AppendLine("Введите логин");
+                _ = validationErrors.AppendLine("Введите логин");
             }
             if (string.IsNullOrWhiteSpace(Password))
             {
-                validationErrors.AppendLine("Введите пароль");
+                _ = validationErrors.AppendLine("Введите пароль");
             }
 
             if (validationErrors.Length > 0)
