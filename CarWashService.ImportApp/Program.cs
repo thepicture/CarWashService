@@ -80,13 +80,13 @@ namespace CarWashService.ImportApp
         private static readonly Random random = new Random();
         static void Main()
         {
-            InsertBranchesIntoDb(5);
-            InsertServicesIntoDb(25);
-            InsertTypesOfServicesIntoDb(1, 2);
-            InsertServicesDiscounts(5);
-            InsertUsersIntoDb(5);
-            InsertOrdersIntoBranchesIntoDb(1, 5);
-            InsertServicesIntoOrdersIntoDb(1, 5);
+            //InsertBranchesIntoDb(5);
+            //InsertServicesIntoDb(25);
+            //InsertTypesOfServicesIntoDb(1, 2);
+            InsertServicesDiscounts(25);
+            //InsertUsersIntoDb(5);
+            //InsertOrdersIntoBranchesIntoDb(1, 5);
+            //InsertServicesIntoOrdersIntoDb(1, 5);
         }
 
         private static void InsertServicesIntoOrdersIntoDb(

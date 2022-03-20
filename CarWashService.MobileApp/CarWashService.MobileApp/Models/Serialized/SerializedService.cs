@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.Models.Serialized
 {

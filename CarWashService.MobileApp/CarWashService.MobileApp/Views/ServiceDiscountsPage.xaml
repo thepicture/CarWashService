@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
+             x:DataType="viewmodels:ServiceDiscountsViewModel"
+             Title="{Binding Source={x:Static Application.Current}, 
+                             Path=CurrentService.Name, 
+                             StringFormat='Скидки услуги {0}'}"
+             x:Class="CarWashService.MobileApp.Views.ServiceDiscountsPage">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <material:MaterialButton Command="{Binding GoToAddDiscountPage}"
+                                     CornerRadius="50"
+                                     BackgroundColor="{StaticResource Primary}"
+                                     Text="Добавить скидку"
+                                     FontAttributes="None"
+                                     HeightRequest="60"
+                                     VerticalOptions="EndAndExpand" />
+            <ScrollView Grid.Row="1">
+                <StackLayout BindableLayout.ItemsSource="{Binding Discounts}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <material:MaterialCard Elevation="5"
+                                                       Margin="10"
+                                                       x:DataType="serialized:SerializedDiscount"
+                                                       IsClickable="True">
+                                    <StackLayout>
+                                        <Label Text="{Binding DiscountPercent, StringFormat='Скидка {0}%'}"
+                                               FontAttributes="Bold"
+                                               FontSize="Medium"
+                                               HorizontalTextAlignment="Center" />
+                                        <BoxView Color="WhiteSmoke"
+                                                 HeightRequest="1" />
+                                        <Label Text="{Binding Description, StringFormat='Описание: {0}', TargetNullValue='Описание: нет'}"
+                                               HorizontalTextAlignment="Center" />
+                                        <BoxView Color="WhiteSmoke"
+                                                 HeightRequest="1" />
+                                        <Label Text="{Binding WorkFromAsDate, StringFormat='Действует с: {0:yyyy/MM/dd hh:mm}'}"
+                                               HorizontalTextAlignment="Center" />
+                                        <Label Text="{Binding WorkToAsDate, StringFormat='Заканчивается: {0:yyyy/MM/dd hh:mm}'}"
+                                               HorizontalTextAlignment="Center" />
+                                    </StackLayout>
+                                </material:MaterialCard>
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

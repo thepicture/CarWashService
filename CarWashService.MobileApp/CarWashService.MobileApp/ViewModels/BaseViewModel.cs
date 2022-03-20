@@ -16,6 +16,8 @@ namespace CarWashService.MobileApp.ViewModels
             DependencyService.Get<IFeedbackService>();
         public IDataStore<SerializedService> ServiceDataStore =>
           DependencyService.Get<IDataStore<SerializedService>>();
+        public IDataStore<SerializedDiscount> DiscountDataStore =>
+        DependencyService.Get<IDataStore<SerializedDiscount>>();
 
         bool isBusy = false;
         public bool IsBusy

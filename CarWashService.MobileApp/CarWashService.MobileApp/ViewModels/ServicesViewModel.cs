@@ -95,9 +95,12 @@ namespace CarWashService.MobileApp
             }
         }
 
-        private void GoToDiscountsAsync(object parameter)
+        private async void GoToDiscountsAsync(object parameter)
         {
-
+            (App.Current as App).CurrentService = 
+                parameter as SerializedService;
+            await Shell.Current.GoToAsync(
+                $"{nameof(ServiceDiscountsPage)}");
         }
     }
 }

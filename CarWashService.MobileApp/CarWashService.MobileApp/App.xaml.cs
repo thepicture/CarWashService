@@ -8,6 +8,7 @@ namespace CarWashService.MobileApp
     {
         public string BaseUrl { get; set; } = "https://carwashservice-web.conveyor.cloud/api/";
         public SerializedBranch CurrentBranch { get; set; }
+        public SerializedService CurrentService { get; set; }
         public string Role { get; set; }
         public string Identity { get; set; }
 
@@ -22,6 +23,7 @@ namespace CarWashService.MobileApp
             DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ApiRegistrator>();
             DependencyService.Register<ServiceDataStore>();
+            DependencyService.Register<DiscountDataStore>();
             MainPage = new AppShell();
         }
 
