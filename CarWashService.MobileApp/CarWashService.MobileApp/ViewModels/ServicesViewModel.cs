@@ -75,5 +75,26 @@ namespace CarWashService.MobileApp
         {
             await Shell.Current.GoToAsync($"{nameof(AddServicePage)}");
         }
+
+
+        private Command goToDiscountsCommand;
+
+        public ICommand GoToDiscountsCommand
+        {
+            get
+            {
+                if (goToDiscountsCommand == null)
+                {
+                    goToDiscountsCommand = new Command(GoToDiscountsAsync);
+                }
+
+                return goToDiscountsCommand;
+            }
+        }
+
+        private void GoToDiscountsAsync(object parameter)
+        {
+
+        }
     }
 }
