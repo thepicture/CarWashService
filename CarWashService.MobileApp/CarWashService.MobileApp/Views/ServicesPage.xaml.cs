@@ -1,5 +1,6 @@
 ﻿
 using CarWashService.MobileApp.Services;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,13 +16,36 @@ namespace CarWashService.MobileApp.Views
             BindingContext = _viewModel = new ServicesViewModel();
             if (AppIdentity.Role == "Клиент")
             {
-                ToolbarItems.Clear();
+                ToolbarItem itemToRemove = ToolbarItems
+                    .First(t => t.Text == "Добавить");
+                ToolbarItems.Remove(itemToRemove);
+            }
+            if (AppIdentity.Role == "Сотрудник" ||
+                AppIdentity.Role == "Администратор")
+            {
+                ToolbarItem itemToRemove = ToolbarItems
+                    .First(t => t.Text == "Оформить");
+                ToolbarItems.Remove(itemToRemove);
             }
         }
         protected override void OnAppearing()
         {
             _viewModel.OnAppearing();
             base.OnAppearing();
+        }
+
+        private void OnToggle(object sender, System.EventArgs e)
+        {
+            if ((sender as Button).Text == "В корзину")
+            {
+                (sender as Button).Text = "Удалить из корзины";
+                (sender as Button).BackgroundColor = Color.Red;
+            }
+            else
+            {
+                (sender as Button).Text = "В корзину";
+                (sender as Button).BackgroundColor = (Color)App.Current.Resources["Primary"];
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -8,7 +9,9 @@ namespace CarWashService.MobileApp
     {
         public string BaseUrl { get; set; } = "https://carwashservice-web.conveyor.cloud/api/";
         public SerializedBranch CurrentBranch { get; set; }
+        public IEnumerable<SerializedService> CurrentServices { get; set; }
         public SerializedService CurrentService { get; set; }
+        public SerializedOrder CurrentOrder { get; set; }
         public string Role { get; set; }
         public string Identity { get; set; }
 
@@ -24,6 +27,7 @@ namespace CarWashService.MobileApp
             DependencyService.Register<ApiRegistrator>();
             DependencyService.Register<ServiceDataStore>();
             DependencyService.Register<DiscountDataStore>();
+            DependencyService.Register<OrderDataStore>();
             MainPage = new AppShell();
         }
 

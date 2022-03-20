@@ -1,7 +1,9 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.ViewModels;
 using CarWashService.MobileApp.Views;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,6 +13,8 @@ namespace CarWashService.MobileApp
 {
     public class ServicesViewModel : BaseViewModel
     {
+        public string Role => AppIdentity.Role;
+
         private string searchText;
 
         public string SearchText
@@ -38,6 +42,7 @@ namespace CarWashService.MobileApp
 
         internal void OnAppearing()
         {
+            SelectedServices = new ObservableCollection<SerializedService>();
             Task.Run(() => LoadServicesAsync());
         }
 
@@ -118,11 +123,39 @@ namespace CarWashService.MobileApp
             }
         }
 
-        private async void GoToMakeOrderAsync(object parameter)
+        private async void GoToMakeOrderAsync()
         {
-            (App.Current as App).CurrentService =
-              parameter as SerializedService;
+            (App.Current as App).CurrentServices = SelectedServices;
             await Shell.Current.GoToAsync($"{nameof(MakeOrderPage)}");
+        }
+
+        public ObservableCollection<SerializedService> SelectedServices { get; set; }
+
+        private Command toggleServiceCommand;
+
+        public ICommand ToggleServiceCommand
+        {
+            get
+            {
+                if (toggleServiceCommand == null)
+                {
+                    toggleServiceCommand = new Command(ToggleService);
+                }
+
+                return toggleServiceCommand;
+            }
+        }
+
+        private void ToggleService(object parameter)
+        {
+            if (SelectedServices.Contains(parameter as SerializedService))
+            {
+                SelectedServices.Remove(parameter as SerializedService);
+            }
+            else
+            {
+                SelectedServices.Add(parameter as SerializedService);
+            }
         }
     }
 }

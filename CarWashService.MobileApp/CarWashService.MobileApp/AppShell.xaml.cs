@@ -11,11 +11,24 @@ namespace CarWashService.MobileApp
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(AddEditBranchPage), typeof(AddEditBranchPage));
-            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            Routing.RegisterRoute(nameof(AddServicePage), typeof(AddServicePage));
-            Routing.RegisterRoute(nameof(ServiceDiscountsPage), typeof(ServiceDiscountsPage));
-            Routing.RegisterRoute(nameof(AddDiscountPage), typeof(AddDiscountPage));
+            Routing.RegisterRoute(
+                nameof(AddEditBranchPage),
+                typeof(AddEditBranchPage));
+            Routing.RegisterRoute(
+                nameof(LoginPage),
+                typeof(LoginPage));
+            Routing.RegisterRoute(
+                nameof(AddServicePage),
+                typeof(AddServicePage));
+            Routing.RegisterRoute(
+                nameof(ServiceDiscountsPage),
+                typeof(ServiceDiscountsPage));
+            Routing.RegisterRoute(
+                nameof(AddDiscountPage),
+                typeof(AddDiscountPage));
+            Routing.RegisterRoute(
+               nameof(MakeOrderPage),
+               typeof(MakeOrderPage));
             if (VersionTracking.IsFirstLaunchForCurrentBuild)
             {
                 SecureStorage.RemoveAll();

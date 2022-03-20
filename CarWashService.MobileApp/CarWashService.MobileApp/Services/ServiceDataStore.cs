@@ -45,13 +45,35 @@ namespace CarWashService.MobileApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<SerializedService> GetItemAsync(string id)
+        public async Task<SerializedService> GetItemAsync(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                      new AuthenticationHeaderValue("Basic",
+                                                    AppIdentity.AuthorizationValue);
+                    client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                    string response = await client
+                      .GetAsync("branches")
+                      .Result
+                      .Content
+                      .ReadAsStringAsync();
+                    SerializedService service = JsonConvert
+                        .DeserializeObject<SerializedService>(response);
+                    return service;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+                return null;
+            };
         }
 
         public async Task<IEnumerable<SerializedService>> GetItemsAsync
-            (bool forceRefresh = false)
+        (bool forceRefresh = false)
         {
             using (HttpClient client = new HttpClient())
             {

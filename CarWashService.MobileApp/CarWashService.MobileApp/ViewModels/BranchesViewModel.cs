@@ -68,9 +68,11 @@ namespace CarWashService.MobileApp.ViewModels
                             Address = $"{branch.StreetName}, " +
                             $"{branch.CityName}",
                             Description = "С "
-                            + TimeSpan.Parse(branch.WorkFrom).ToString(@"hh\:mm")
+                            + TimeSpan.Parse(branch.WorkFrom)
+                            .ToString(@"hh\:mm")
                             + " по "
-                            + TimeSpan.Parse(branch.WorkTo).ToString(@"hh\:mm"),
+                            + TimeSpan.Parse(branch.WorkTo)
+                            .ToString(@"hh\:mm"),
                             Position = position,
                             Branch = branch
                         });

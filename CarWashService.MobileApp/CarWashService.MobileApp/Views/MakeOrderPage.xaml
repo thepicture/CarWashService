@@ -1,12 +1,76 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CarWashService.MobileApp.Views.MakeOrderPage">
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
+             xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
+             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
+             x:DataType="mobileapp:MakeOrderViewModel"
+             x:Class="CarWashService.MobileApp.Views.MakeOrderPage"
+             Title="Оформление заказа">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView Margin="10,10,10,0">
+            <StackLayout>
+                <Picker Title="* Укажите филиал"
+                        ItemDisplayBinding="{Binding Title}"
+                        ItemsSource="{Binding Branches}"
+                        SelectedItem="{Binding CurrentBranch}" />
+                <Label Text="* Укажите дату назначения" />
+                <material:MaterialDatePicker Date="{Binding AppointmentDate}"/>
+                <Label Text="* Укажите время назначения" />
+                <material:MaterialTimePicker Time="{Binding AppointmentTime}" />
+                <BoxView HeightRequest="1"
+                         Color="WhiteSmoke"
+                         Margin="0,10,0,10" />
+                <Label Text="Услуги заказа"
+                       FontSize="Small" />
+                <StackLayout BindableLayout.ItemsSource="{Binding ServicesOfOrder}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Grid x:DataType="serialized:SerializedService">
+                                <material:MaterialCard Elevation="5"
+                                                       Margin="10">
+                                    <StackLayout>
+                                    <Label Text="{Binding Name}"
+                                           HorizontalOptions="Center" 
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"/>
+                                    <BoxView Color="WhiteSmoke" HeightRequest="1"/>
+                                        <Label Text="{Binding Price, StringFormat='{}{0:F0} руб.'}"
+                                               HorizontalOptions="Center" />
+                                    </StackLayout>
+                                </material:MaterialCard>
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+                <Label Text="{Binding TotalPrice, StringFormat='ИТОГО: {0:F0} руб.'}"
+                       FontSize="Title"
+                       HorizontalTextAlignment="Center"/>
+                <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                         CornerRadius="50"
+                                         BackgroundColor="{StaticResource Primary}"
+                                         Text="Оформить"
+                                         Margin="0,0,0,50"
+                                         FontAttributes="None"
+                                         HeightRequest="60"
+                                         VerticalOptions="EndAndExpand">
+                    <material:MaterialButton.Style>
+                        <Style TargetType="material:MaterialButton">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                            <Style.Triggers>
+                                <DataTrigger TargetType="material:MaterialButton"
+                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                             Value="Клиент">
+                                    <Setter Property="IsVisible"
+                                            Value="True" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </material:MaterialButton.Style>
+                </material:MaterialButton>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

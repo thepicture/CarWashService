@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 
 namespace CarWashService.MobileApp.Services
 {
@@ -65,7 +64,26 @@ namespace CarWashService.MobileApp.Services
         public async Task<IEnumerable<SerializedBranch>> GetItemsAsync
             (bool forceRefresh = false)
         {
-            return await Task.FromResult<IEnumerable<SerializedBranch>>(null);
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic",
+                                                  AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                try
+                {
+                    HttpResponseMessage response = await client
+                        .GetAsync("branches");
+                    string content = await response.Content.ReadAsStringAsync();
+                    return JsonConvert
+                        .DeserializeObject<IEnumerable<SerializedBranch>>(content);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    return null;
+                }
+            }
         }
     }
 }

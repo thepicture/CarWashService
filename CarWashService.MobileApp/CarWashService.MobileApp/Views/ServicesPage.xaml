@@ -9,9 +9,28 @@
              x:DataType="mobileapp:ServicesViewModel"
              Title="Набор услуг"
              x:Class="CarWashService.MobileApp.Views.ServicesPage">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="LightSkyBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Добавить"
                      Command="{Binding GoToAddServicePage}" />
+        <ToolbarItem Text="Оформить выбранное"
+                     Command="{Binding GoToMakeOrderCommand}" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
@@ -62,20 +81,22 @@
                                         <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
                                                                  Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                    AncestorType={x:Type pages:ServicesPage}}, 
-                                                                                   Path=BindingContext.GoToMakeOrderCommand}"
+                                                                                   Path=BindingContext.ToggleServiceCommand}"
                                                                  CornerRadius="50"
                                                                  BackgroundColor="{StaticResource Primary}"
-                                                                 Text="Записаться"
                                                                  FontAttributes="None"
                                                                  HeightRequest="60"
-                                                                 VerticalOptions="EndAndExpand">
+                                                                 Text="В корзину"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Clicked="OnToggle">
                                             <material:MaterialButton.Style>
                                                 <Style TargetType="material:MaterialButton">
                                                     <Setter Property="IsVisible"
                                                             Value="False" />
                                                     <Style.Triggers>
                                                         <DataTrigger TargetType="material:MaterialButton"
-                                                                     Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                                     Binding="{Binding Source={RelativeSource Mode=FindAncestor, AncestorType={x:Type pages:ServicesPage}}, 
+                                                                                       Path=BindingContext.Role}"
                                                                      Value="Клиент">
                                                             <Setter Property="IsVisible"
                                                                     Value="True" />
