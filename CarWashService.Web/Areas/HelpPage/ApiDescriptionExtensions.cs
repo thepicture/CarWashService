@@ -26,12 +26,12 @@ namespace CarWashService.Web.Areas.HelpPage
             }
 
             StringBuilder friendlyPath = new StringBuilder();
-            friendlyPath.AppendFormat("{0}-{1}",
+            _ = friendlyPath.AppendFormat("{0}-{1}",
                 description.HttpMethod.Method,
                 localPath.Replace("/", "-").Replace("{", String.Empty).Replace("}", String.Empty));
             if (queryKeyString != null)
             {
-                friendlyPath.AppendFormat("_{0}", queryKeyString.Replace('.', '-'));
+                _ = friendlyPath.AppendFormat("_{0}", queryKeyString.Replace('.', '-'));
             }
             return friendlyPath.ToString();
         }

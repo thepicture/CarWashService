@@ -63,8 +63,8 @@ namespace CarWashService.Web.Controllers
                 return Conflict();
             }
 
-            db.User.Add(user);
-            await db.SaveChangesAsync();
+            _ = db.User.Add(user);
+            _ = await db.SaveChangesAsync();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -86,14 +86,14 @@ namespace CarWashService.Web.Controllers
         [Authorize(Roles = "Администратор, Сотрудник")]
         public async Task<IHttpActionResult> GetContacts(int userId)
         {
-            var user = await db
+            User user = await db
                 .User
                 .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
                 return NotFound();
             }
-            var phones = user.UserPhone.Select(p => p.PhoneNumber);
+            System.Collections.Generic.IEnumerable<string> phones = user.UserPhone.Select(p => p.PhoneNumber);
             var addresses = user.UserAddress.Select(u => new
             {
                 u.Address.StreetName,
@@ -112,7 +112,7 @@ namespace CarWashService.Web.Controllers
         public async Task<IHttpActionResult> PostContacts(int userId,
                                                           SerializedContacts contacts)
         {
-            var user = await db
+            User user = await db
                 .User
                 .FirstOrDefaultAsync(u => u.Id == userId);
             int totalChangesCount = 0;
@@ -144,7 +144,7 @@ namespace CarWashService.Web.Controllers
                 {
                     continue;
                 }
-                var cityFromDb = await db.City
+                City cityFromDb = await db.City
                     .FirstOrDefaultAsync(c => c.Name == address.City.Name);
                 if (cityFromDb == null)
                 {
@@ -152,10 +152,10 @@ namespace CarWashService.Web.Controllers
                     {
                         Name = address.City.Name
                     };
-                    db.City.Add(cityFromDb);
+                    _ = db.City.Add(cityFromDb);
                 }
 
-                var addressFromDb = await db.Address
+                Address addressFromDb = await db.Address
                     .FirstOrDefaultAsync(b => b.StreetName == address.StreetName);
                 if (addressFromDb == null)
                 {
@@ -172,7 +172,7 @@ namespace CarWashService.Web.Controllers
                 });
                 totalChangesCount++;
             }
-            await db.SaveChangesAsync();
+            _ = await db.SaveChangesAsync();
             return Ok(totalChangesCount);
         }
 
@@ -181,11 +181,11 @@ namespace CarWashService.Web.Controllers
         [Authorize(Roles = "Сотрудник, Клиент")]
         public async Task<IHttpActionResult> GetMyOrders()
         {
-            var user = await db
+            User user = await db
                 .User
                 .FirstOrDefaultAsync(u => u.Login == Thread.CurrentPrincipal.Identity.Name);
-            var identity = (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
-            var role = identity.FindFirst(ClaimTypes.Role).Value;
+            ClaimsIdentity identity = (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
+            string role = identity.FindFirst(ClaimTypes.Role).Value;
             switch (role)
             {
                 case "Сотрудник":

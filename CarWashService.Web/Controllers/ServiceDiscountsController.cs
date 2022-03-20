@@ -65,7 +65,7 @@ namespace CarWashService.Web.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                _ = await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -92,8 +92,8 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.ServiceDiscount.Add(serviceDiscount);
-            await db.SaveChangesAsync();
+            _ = db.ServiceDiscount.Add(serviceDiscount);
+            _ = await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = serviceDiscount.Id }, serviceDiscount.Id);
         }
@@ -109,8 +109,8 @@ namespace CarWashService.Web.Controllers
                 return NotFound();
             }
 
-            db.ServiceDiscount.Remove(serviceDiscount);
-            await db.SaveChangesAsync();
+            _ = db.ServiceDiscount.Remove(serviceDiscount);
+            _ = await db.SaveChangesAsync();
 
             return Ok(new SerializedDiscount(serviceDiscount));
         }

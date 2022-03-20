@@ -190,7 +190,7 @@ namespace CarWashService.Web.Areas.HelpPage
         /// <param name="sampleGenerator">The help page sample generator.</param>
         public static void SetHelpPageSampleGenerator(this HttpConfiguration config, HelpPageSampleGenerator sampleGenerator)
         {
-            config.Properties.AddOrUpdate(
+            _ = config.Properties.AddOrUpdate(
                 typeof(HelpPageSampleGenerator),
                 k => sampleGenerator,
                 (k, o) => sampleGenerator);
@@ -227,7 +227,7 @@ namespace CarWashService.Web.Areas.HelpPage
                 if (apiDescription != null)
                 {
                     model = GenerateApiModel(apiDescription, config);
-                    config.Properties.TryAdd(modelId, model);
+                    _ = config.Properties.TryAdd(modelId, model);
                 }
             }
 
@@ -321,7 +321,7 @@ namespace CarWashService.Web.Areas.HelpPage
                         // when source is FromUri. Ignored in request model and among resource parameters but listed
                         // as a simple string here.
                         ModelDescription modelDescription = modelGenerator.GetOrCreateModelDescription(typeof(string));
-                        AddParameterDescription(apiModel, apiParameter, modelDescription);
+                        _ = AddParameterDescription(apiModel, apiParameter, modelDescription);
                     }
                 }
             }
@@ -390,13 +390,13 @@ namespace CarWashService.Web.Areas.HelpPage
         {
             try
             {
-                foreach (var item in sampleGenerator.GetSampleRequests(apiModel.ApiDescription))
+                foreach (KeyValuePair<MediaTypeHeaderValue, object> item in sampleGenerator.GetSampleRequests(apiModel.ApiDescription))
                 {
                     apiModel.SampleRequests.Add(item.Key, item.Value);
                     LogInvalidSampleAsError(apiModel, item.Value);
                 }
 
-                foreach (var item in sampleGenerator.GetSampleResponses(apiModel.ApiDescription))
+                foreach (KeyValuePair<MediaTypeHeaderValue, object> item in sampleGenerator.GetSampleResponses(apiModel.ApiDescription))
                 {
                     apiModel.SampleResponses.Add(item.Key, item.Value);
                     LogInvalidSampleAsError(apiModel, item.Value);
@@ -449,7 +449,7 @@ namespace CarWashService.Web.Areas.HelpPage
                 Type parameterType;
                 if (TryGetResourceParameter(api, config, out parameterDescription, out parameterType))
                 {
-                    modelGenerator.GetOrCreateModelDescription(parameterType);
+                    _ = modelGenerator.GetOrCreateModelDescription(parameterType);
                 }
             }
             return modelGenerator;

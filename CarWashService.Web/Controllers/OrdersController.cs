@@ -1,6 +1,7 @@
 ﻿using CarWashService.Web.Models.Entities;
 using CarWashService.Web.Models.Entities.Serialized;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -14,13 +15,13 @@ namespace CarWashService.Web.Controllers
 {
     public class OrdersController : ApiController
     {
-        private CarWashBaseEntities db = new CarWashBaseEntities();
+        private readonly CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/Orders
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public IHttpActionResult GetOrder()
         {
-            var orders = db.Order.ToList();
+            List<Order> orders = db.Order.ToList();
             string userName = HttpContext.Current.User.Identity.Name;
             if (db.User.First(u => u.Login == userName).UserType.Name == "Клиент")
             {
@@ -71,7 +72,7 @@ namespace CarWashService.Web.Controllers
            == HttpContext.Current.User.Identity.Name.ToLower());
             order.SellerId = user.Id;
 
-            await db.SaveChangesAsync();
+            _ = await db.SaveChangesAsync();
 
             return Ok(new SerializedOrder(order));
         }
@@ -94,7 +95,7 @@ namespace CarWashService.Web.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                _ = await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -145,8 +146,8 @@ namespace CarWashService.Web.Controllers
                 }
             }
 
-            db.Order.Add(order);
-            await db.SaveChangesAsync();
+            _ = db.Order.Add(order);
+            _ = await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi",
                                   new { id = order.Id },
@@ -163,8 +164,8 @@ namespace CarWashService.Web.Controllers
                 return NotFound();
             }
 
-            db.Order.Remove(order);
-            await db.SaveChangesAsync();
+            _ = db.Order.Remove(order);
+            _ = await db.SaveChangesAsync();
 
             return Ok(order);
         }

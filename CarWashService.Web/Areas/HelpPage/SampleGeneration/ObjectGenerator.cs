@@ -262,7 +262,7 @@ namespace CarWashService.Web.Areas.HelpPage
                 if (!containsKey)
                 {
                     object newValue = objectGenerator.GenerateObject(typeV, createdObjectReferences);
-                    addMethod.Invoke(result, new object[] { newKey, newValue });
+                    _ = addMethod.Invoke(result, new object[] { newKey, newValue });
                 }
             }
 
@@ -318,7 +318,7 @@ namespace CarWashService.Web.Areas.HelpPage
             for (int i = 0; i < size; i++)
             {
                 object element = objectGenerator.GenerateObject(type, createdObjectReferences);
-                addMethod.Invoke(result, new object[] { element });
+                _ = addMethod.Invoke(result, new object[] { element });
                 areAllElementsNull &= element == null;
             }
 

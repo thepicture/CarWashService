@@ -15,7 +15,7 @@ namespace CarWashService.Web.Areas.HelpPage
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            context.MapRoute(
+            _ = context.MapRoute(
                 "HelpPage_Default",
                 "Help/{action}/{apiId}",
                 new { controller = "Help", action = "Index", apiId = UrlParameter.Optional });

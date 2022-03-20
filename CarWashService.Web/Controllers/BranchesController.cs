@@ -20,7 +20,7 @@ namespace CarWashService.Web.Controllers
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public IHttpActionResult GetBranch()
         {
-            var branches = db.Branch
+            List<SerializedBranch> branches = db.Branch
                 .ToList()
                 .ConvertAll(b => new SerializedBranch(b));
             return Ok(branches);
@@ -70,7 +70,7 @@ namespace CarWashService.Web.Controllers
                 return BadRequest();
             }
 
-            var city = await db.City
+            City city = await db.City
               .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
             if (city == null)
             {
@@ -78,10 +78,10 @@ namespace CarWashService.Web.Controllers
                 {
                     Name = serializedBranch.CityName
                 };
-                db.City.Add(city);
+                _ = db.City.Add(city);
             }
 
-            var address = await db.Address
+            Address address = await db.Address
                 .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
             if (address == null)
             {
@@ -92,7 +92,7 @@ namespace CarWashService.Web.Controllers
                 };
             }
 
-            var branchToPut = new Branch
+            Branch branchToPut = new Branch
             {
                 Id = serializedBranch.Id,
                 Title = serializedBranch.Title,
@@ -101,7 +101,7 @@ namespace CarWashService.Web.Controllers
                 WorkTo = TimeSpan.Parse(serializedBranch.WorkTo)
             };
 
-            var branchFromDb = db.Branch.Find(serializedBranch.Id);
+            Branch branchFromDb = db.Branch.Find(serializedBranch.Id);
 
             db.Entry(branchFromDb)
                 .CurrentValues
@@ -109,7 +109,7 @@ namespace CarWashService.Web.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                _ = await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -137,7 +137,7 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var city = await db.City
+            City city = await db.City
                 .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
             if (city == null)
             {
@@ -145,10 +145,10 @@ namespace CarWashService.Web.Controllers
                 {
                     Name = serializedBranch.CityName
                 };
-                db.City.Add(city);
+                _ = db.City.Add(city);
             }
 
-            var address = await db.Address
+            Address address = await db.Address
                 .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
             if (address == null)
             {
@@ -159,7 +159,7 @@ namespace CarWashService.Web.Controllers
                 };
             }
 
-            var branchToAdd = new Branch
+            Branch branchToAdd = new Branch
             {
                 Title = serializedBranch.Title,
                 Address = address,
@@ -167,8 +167,8 @@ namespace CarWashService.Web.Controllers
                 WorkTo = TimeSpan.Parse(serializedBranch.WorkTo)
             };
 
-            db.Branch.Add(branchToAdd);
-            await db.SaveChangesAsync();
+            _ = db.Branch.Add(branchToAdd);
+            _ = await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi",
                                   new { id = branchToAdd.Id },
@@ -186,8 +186,8 @@ namespace CarWashService.Web.Controllers
                 return NotFound();
             }
 
-            db.Branch.Remove(branch);
-            await db.SaveChangesAsync();
+            _ = db.Branch.Remove(branch);
+            _ = await db.SaveChangesAsync();
 
             return Ok(branch);
         }
@@ -229,7 +229,7 @@ namespace CarWashService.Web.Controllers
             }
 
             branch.Service.Add(service);
-            await db.SaveChangesAsync();
+            _ = await db.SaveChangesAsync();
 
             return Ok(new
             {
@@ -262,10 +262,10 @@ namespace CarWashService.Web.Controllers
                     PhoneNumber = phone,
                     BranchId = branchId
                 };
-                db.BranchPhone.Add(newPhone);
+                _ = db.BranchPhone.Add(newPhone);
             }
 
-            await db.SaveChangesAsync();
+            _ = await db.SaveChangesAsync();
 
             return Ok();
         }

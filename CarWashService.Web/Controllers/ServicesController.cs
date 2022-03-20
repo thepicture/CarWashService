@@ -13,20 +13,20 @@ namespace CarWashService.Web.Controllers
 {
     public class ServicesController : ApiController
     {
-        private CarWashBaseEntities db = new CarWashBaseEntities();
+        private readonly CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/Services
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public IHttpActionResult GetService()
         {
-            var services = db.Service
+            List<SerializedService> services = db.Service
                 .ToList()
                 .ConvertAll(s => new SerializedService(s));
             return Ok(services);
         }
 
         // GET: api/Services/5
-        [ResponseType(typeof(Service))]
+        [ResponseType(typeof(SerializedService))]
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public async Task<IHttpActionResult> GetService(int id)
         {
@@ -74,7 +74,7 @@ namespace CarWashService.Web.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                _ = await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -101,22 +101,22 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var service = new Service
+            Service service = new Service
             {
                 Name = serializedService.Name,
                 Price = serializedService.Price,
                 Description = serializedService.Description,
             };
 
-            var types = new List<ServiceType>();
-            foreach (var typeName in serializedService.ServiceTypes)
+            List<ServiceType> types = new List<ServiceType>();
+            foreach (string typeName in serializedService.ServiceTypes)
             {
                 service.ServiceType.Add(
                     db.ServiceType.First(t => t.TypeName == typeName));
             }
 
-            db.Service.Add(service);
-            await db.SaveChangesAsync();
+            _ = db.Service.Add(service);
+            _ = await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi",
                                   new { id = service.Id },
@@ -134,8 +134,8 @@ namespace CarWashService.Web.Controllers
                 return NotFound();
             }
 
-            db.Service.Remove(service);
-            await db.SaveChangesAsync();
+            _ = db.Service.Remove(service);
+            _ = await db.SaveChangesAsync();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
