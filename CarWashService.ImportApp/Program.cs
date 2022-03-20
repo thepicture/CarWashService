@@ -181,15 +181,20 @@ namespace CarWashService.ImportApp
                     {
                         Order order = new Order
                         {
-                            SellerId = adminIds.ElementAt(
-                                random.Next(0,
-                                            adminIds.Count())),
                             ClientId = clientIds.ElementAt(
                                 random.Next(0,
                                             clientIds.Count())),
-                            Date = DateTime.Now.AddDays(random.Next(-365, 365)),
-                            IsConfirmed = random.NextDouble() > 0
+                            CreationDate = DateTime.Now,
+                            AppointmentDate = DateTime.Now.AddDays(
+                                random.Next(5, 10)),
+                            IsConfirmed = random.NextDouble() > 0.5
                         };
+                        if (order.IsConfirmed)
+                        {
+                            order.SellerId = adminIds.ElementAt(
+                              random.Next(0,
+                                          adminIds.Count()));
+                        }
                         branch.Order.Add(order);
                     }
                 }
@@ -276,7 +281,6 @@ namespace CarWashService.ImportApp
             "Делаем быстро, качественно",
             "Делаем качественно, за день",
             "В выходные услуга не оказывается",
-            "Не доступно для некоторых марок",
             "Только для класса A",
             "Оплата по требованию",
             "Доступно и быстро",
