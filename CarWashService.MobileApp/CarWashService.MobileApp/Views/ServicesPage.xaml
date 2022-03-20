@@ -15,44 +15,44 @@
     <ContentPage.Content>
         <StackLayout>
             <SearchBar Text="{Binding SearchText}" />
-            <ScrollView>
-                <StackLayout BindableLayout.ItemsSource="{Binding Services}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <material:MaterialCard Elevation="5"
-                                                       Margin="10"
-                                                       x:DataType="serialized:SerializedService"
-                                                       IsClickable="True">
-                                    <StackLayout>
-                                        <Label Text="{Binding Name}"
-                                               FontAttributes="Bold"
-                                               HorizontalTextAlignment="Center" />
-                                        <BoxView Color="WhiteSmoke"
-                                                 HeightRequest="1" />
-                                        <Label Text="{Binding Description, TargetNullValue='Описание не предоставлено'}"
-                                               HorizontalTextAlignment="Center" />
-                                        <Label Text="{Binding Price, StringFormat='Цена: {0:F0} руб.'}"
-                                               HorizontalOptions="Center" />
-                                        <BoxView Color="WhiteSmoke"
-                                                 HeightRequest="1" />
-                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
-                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                <ScrollView>
+                    <StackLayout BindableLayout.ItemsSource="{Binding Services}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <material:MaterialCard Elevation="5"
+                                                           Margin="10"
+                                                           x:DataType="serialized:SerializedService"
+                                                           IsClickable="True">
+                                        <StackLayout>
+                                            <Label Text="{Binding Name}"
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center" />
+                                            <BoxView Color="WhiteSmoke"
+                                                     HeightRequest="1" />
+                                            <Label Text="{Binding Description, TargetNullValue='Описание не предоставлено'}"
+                                                   HorizontalTextAlignment="Center" />
+                                            <Label Text="{Binding Price, StringFormat='Цена: {0:F0} руб.'}"
+                                                   HorizontalOptions="Center" />
+                                            <BoxView Color="WhiteSmoke"
+                                                     HeightRequest="1" />
+                                            <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
+                                                                     Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                    AncestorType={x:Type pages:ServicesPage}}, 
                                                                                    Path=BindingContext.GoToDiscountsCommand}"
-                                                                 CornerRadius="50"
-                                                                 BackgroundColor="{StaticResource Primary}"
-                                                                 Text="Акции"
-                                                                 FontAttributes="None"
-                                                                 HeightRequest="60"
-                                                                 VerticalOptions="EndAndExpand" />
-                                    </StackLayout>
-                                </material:MaterialCard>
-                            </Grid>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
-            </ScrollView>
+                                                                     CornerRadius="50"
+                                                                     BackgroundColor="{StaticResource Primary}"
+                                                                     Text="Акции"
+                                                                     FontAttributes="None"
+                                                                     HeightRequest="60"
+                                                                     VerticalOptions="EndAndExpand" />
+                                        </StackLayout>
+                                    </material:MaterialCard>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

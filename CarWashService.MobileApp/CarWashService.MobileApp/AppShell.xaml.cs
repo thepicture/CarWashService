@@ -12,11 +12,10 @@ namespace CarWashService.MobileApp
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(AddEditBranchPage), typeof(AddEditBranchPage));
-            Routing.RegisterRoute(nameof(AccountPage), typeof(AccountPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            Routing.RegisterRoute(nameof(ServicesPage), typeof(ServicesPage));
             Routing.RegisterRoute(nameof(AddServicePage), typeof(AddServicePage));
             Routing.RegisterRoute(nameof(ServiceDiscountsPage), typeof(ServiceDiscountsPage));
+            Routing.RegisterRoute(nameof(AddDiscountPage), typeof(AddDiscountPage));
             if (VersionTracking.IsFirstLaunchForCurrentBuild)
             {
                 SecureStorage.RemoveAll();

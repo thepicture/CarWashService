@@ -4,7 +4,6 @@
              x:Class="CarWashService.MobileApp.Views.BranchesPage"
              Title="Филиалы"
              xmlns:local="clr-namespace:CarWashService.MobileApp.ViewModels"
-             xmlns:model="clr-namespace:CarWashService.MobileApp.Models"
              xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"

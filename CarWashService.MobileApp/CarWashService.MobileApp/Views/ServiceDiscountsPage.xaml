@@ -38,13 +38,16 @@
                                                HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
-                                        <Label Text="{Binding Description, StringFormat='Описание: {0}', TargetNullValue='Описание: нет'}"
+                                        <Label Text="{Binding Description, StringFormat='Описание: {0}',
+                                                                           TargetNullValue='Описание: нет'}"
                                                HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
-                                        <Label Text="{Binding WorkFromAsDate, StringFormat='Действует с: {0:yyyy/MM/dd hh:mm}'}"
+                                        <Label Text="{Binding WorkFromAsDate, 
+                                                              StringFormat='Действует с: {0:yyyy/MM/dd hh:mm}'}"
                                                HorizontalTextAlignment="Center" />
-                                        <Label Text="{Binding WorkToAsDate, StringFormat='Заканчивается: {0:yyyy/MM/dd hh:mm}'}"
+                                        <Label Text="{Binding WorkToAsDate, 
+                                                              StringFormat='Заканчивается: {0:yyyy/MM/dd hh:mm}'}"
                                                HorizontalTextAlignment="Center" />
                                     </StackLayout>
                                 </material:MaterialCard>

@@ -28,7 +28,7 @@ namespace CarWashService.MobileApp
 
         public AccountViewModel()
         {
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 string[] loginAndPassword = new LoginAndPasswordFromBasicDecoder()
                     .Decode();

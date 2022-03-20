@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
+             x:DataType="viewmodels:AddDiscountViewModel"
+             x:Class="CarWashService.MobileApp.Views.AddDiscountPage"
+             Title="Добавление скидки">
+    <ContentPage.Content>
+        <ScrollView Margin="10,10,10,0">
+            <StackLayout>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <material:MaterialTextField Text="{Binding DiscountPercent}"
+                                                Placeholder="Введите процент скидки"
+                                                LeadingIcon="branch"
+                                                InputType="Numeric"
+                                                MaxLength="50"
+                                                AlwaysShowUnderline="True"
+                                                TintColor="{StaticResource Primary}"
+                                                BackgroundColor="White"
+                                                HelperText="* Обязательно" />
+                    <Label Text="%"
+                           Grid.Column="1"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+                <material:MaterialTextField Text="{Binding CurrentDiscount.Description}"
+                                            Placeholder="Введите описание скидки"
+                                            LeadingIcon="icon_about"
+                                            InputType="Text"
+                                            MaxLength="50"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            BackgroundColor="White"
+                                            HelperText="* можно оставить пустым" />
+                <Label Text="* Укажите дату начала" />
+                <material:MaterialDatePicker Date="{Binding WorkFrom}" />
+                <Label Text="* Укажите дату окончания" />
+                <material:MaterialDatePicker Date="{Binding WorkTo}" />
+                <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                         CornerRadius="50"
+                                         BackgroundColor="{StaticResource Primary}"
+                                         Text="Сохранить"
+                                         FontAttributes="None"
+                                         HeightRequest="60"
+                                         VerticalOptions="EndAndExpand" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

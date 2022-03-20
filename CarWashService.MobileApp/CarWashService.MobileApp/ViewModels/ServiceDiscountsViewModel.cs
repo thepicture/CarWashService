@@ -1,5 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
+using CarWashService.MobileApp.Views;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -68,15 +69,17 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 if (goToAddDiscountPage == null)
                 {
-                    goToAddDiscountPage = new Command(PerformGoToAddDiscountPage);
+                    goToAddDiscountPage = new Command(PerformGoToAddDiscountPageAsync);
                 }
 
                 return goToAddDiscountPage;
             }
         }
 
-        private void PerformGoToAddDiscountPage()
+        private async void PerformGoToAddDiscountPageAsync()
         {
+            await Shell.Current.GoToAsync(
+                $"{nameof(AddDiscountPage)}");
         }
     }
 }
