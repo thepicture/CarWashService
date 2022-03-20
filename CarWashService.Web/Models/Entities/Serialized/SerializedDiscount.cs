@@ -9,7 +9,7 @@
         public SerializedDiscount(ServiceDiscount serviceDiscount)
         {
             Id = serviceDiscount.Id;
-            ServiceId = serviceDiscount.Id;
+            ServiceId = serviceDiscount.ServiceId;
             DiscountPercent = serviceDiscount.DiscountPercent;
             Description = serviceDiscount.Description;
             WorkFrom = serviceDiscount.WorkFrom

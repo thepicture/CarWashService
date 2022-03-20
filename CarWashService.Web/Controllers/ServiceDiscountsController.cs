@@ -1,5 +1,6 @@
 ﻿using CarWashService.Web.Models.Entities;
 using CarWashService.Web.Models.Entities.Serialized;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -18,23 +19,32 @@ namespace CarWashService.Web.Controllers
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public IHttpActionResult GetServiceDiscount()
         {
-            var discounts = db.ServiceDiscount
+            IList<SerializedDiscount> discounts = db.ServiceDiscount
                 .ToList()
                 .ConvertAll(sd => new SerializedDiscount(sd));
             return Ok(discounts);
         }
 
-        // GET: api/ServiceDiscounts/5
+        // GET: api/ServiceDiscounts?serviceId=5
         [ResponseType(typeof(ServiceDiscount))]
-        public async Task<IHttpActionResult> GetServiceDiscount(int id)
+        [Route("api/servicediscounts/{serviceId}")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetServiceDiscounts(int serviceId)
         {
-            ServiceDiscount serviceDiscount = await db.ServiceDiscount.FindAsync(id);
-            if (serviceDiscount == null)
+            Service service = await db.Service.FindAsync(serviceId);
+            if (service == null)
             {
                 return NotFound();
             }
 
-            return Ok(serviceDiscount);
+            return Ok(
+                service.ServiceDiscount
+                .ToList()
+                .ConvertAll(sd =>
+                {
+                    return new SerializedDiscount(sd);
+                }));
         }
 
         // PUT: api/ServiceDiscounts/5
