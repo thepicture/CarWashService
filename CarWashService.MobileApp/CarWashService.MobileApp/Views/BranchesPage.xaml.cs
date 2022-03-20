@@ -1,5 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.ViewModelHelpers;
 using CarWashService.MobileApp.ViewModels;
+using Plugin.Geolocator;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -22,9 +23,15 @@ namespace CarWashService.MobileApp.Views
               .BindingContext as LocationHelper;
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             _viewModel.OnAppearing();
+            Plugin.Geolocator.Abstractions.Position position =
+                await CrossGeolocator.Current.GetPositionAsync();
+            BranchesMap.MoveToRegion(
+                MapSpan.FromCenterAndRadius(
+                    new Position(position.Latitude, position.Longitude),
+                    Distance.FromKilometers(1)));
             base.OnAppearing();
         }
     }

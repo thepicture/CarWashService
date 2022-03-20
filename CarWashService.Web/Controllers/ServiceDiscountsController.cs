@@ -13,7 +13,7 @@ namespace CarWashService.Web.Controllers
 {
     public class ServiceDiscountsController : ApiController
     {
-        private CarWashBaseEntities db = new CarWashBaseEntities();
+        private readonly CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/ServiceDiscounts
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
