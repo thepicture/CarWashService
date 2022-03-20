@@ -97,10 +97,32 @@ namespace CarWashService.MobileApp
 
         private async void GoToDiscountsAsync(object parameter)
         {
-            (App.Current as App).CurrentService = 
+            (App.Current as App).CurrentService =
                 parameter as SerializedService;
             await Shell.Current.GoToAsync(
                 $"{nameof(ServiceDiscountsPage)}");
+        }
+
+        private Command goToMakeOrderCommand;
+
+        public ICommand GoToMakeOrderCommand
+        {
+            get
+            {
+                if (goToMakeOrderCommand == null)
+                {
+                    goToMakeOrderCommand = new Command(GoToMakeOrderAsync);
+                }
+
+                return goToMakeOrderCommand;
+            }
+        }
+
+        private async void GoToMakeOrderAsync(object parameter)
+        {
+            (App.Current as App).CurrentService =
+              parameter as SerializedService;
+            await Shell.Current.GoToAsync($"{nameof(MakeOrderPage)}");
         }
     }
 }

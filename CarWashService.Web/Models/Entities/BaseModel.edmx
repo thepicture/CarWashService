@@ -43,11 +43,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SellerId" Type="int" Nullable="false" />
+          <Property Name="SellerId" Type="int" />
           <Property Name="ClientId" Type="int" Nullable="false" />
           <Property Name="BranchId" Type="int" Nullable="false" />
-          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" />
           <Property Name="IsConfirmed" Type="bit" Nullable="false" />
+          <Property Name="AppointmentDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Service">
           <Key>
@@ -195,7 +196,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Order_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -578,11 +579,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SellerId" Type="Int32" Nullable="false" />
+          <Property Name="SellerId" Type="Int32" />
           <Property Name="ClientId" Type="Int32" Nullable="false" />
           <Property Name="BranchId" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="AppointmentDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Branch" Relationship="CarWashBaseModel.FK_Order_Branch" FromRole="Order" ToRole="Branch" />
           <NavigationProperty Name="User" Relationship="CarWashBaseModel.FK_Order_User" FromRole="Order" ToRole="User" />
           <NavigationProperty Name="User1" Relationship="CarWashBaseModel.FK_Order_User1" FromRole="Order" ToRole="User" />
@@ -739,7 +741,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Order_User">
-          <End Type="CarWashBaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="CarWashBaseModel.User" Role="User" Multiplicity="0..1" />
           <End Type="CarWashBaseModel.Order" Role="Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -880,8 +882,9 @@
           <EntitySetMapping Name="Order">
             <EntityTypeMapping TypeName="CarWashBaseModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
                 <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="SellerId" ColumnName="SellerId" />

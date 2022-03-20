@@ -21,11 +21,12 @@ namespace CarWashService.Web.Models.Entities
         }
     
         public int Id { get; set; }
-        public int SellerId { get; set; }
+        public Nullable<int> SellerId { get; set; }
         public int ClientId { get; set; }
         public int BranchId { get; set; }
-        public System.DateTime Date { get; set; }
+        public System.DateTime CreationDate { get; set; }
         public bool IsConfirmed { get; set; }
+        public System.DateTime AppointmentDate { get; set; }
     
         public virtual Branch Branch { get; set; }
         public virtual User User { get; set; }
