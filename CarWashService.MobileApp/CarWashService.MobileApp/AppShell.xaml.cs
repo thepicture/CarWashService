@@ -98,6 +98,22 @@ namespace CarWashService.MobileApp
                       });
                     break;
                 case "Клиент":
+                    CommonTabBar
+                      .Items.Add(new ShellContent
+                      {
+                          Route = nameof(BranchesPage),
+                          Icon = "branch",
+                          Title = "Филиалы",
+                          ContentTemplate = new DataTemplate(typeof(BranchesPage))
+                      });
+                    CommonTabBar
+                   .Items.Add(new ShellContent
+                   {
+                       Route = nameof(ServicesPage),
+                       Icon = "logo",
+                       Title = "Услуги",
+                       ContentTemplate = new DataTemplate(typeof(ServicesPage))
+                   });
                     break;
                 default:
                     break;
