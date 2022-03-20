@@ -128,7 +128,7 @@ namespace CarWashService.MobileApp.ViewModels
                 UserTypeId = userType.Id
             };
 
-            bool isRegistered = false;
+            bool isRegistered;
             try
             {
                 isRegistered = await Registrator
@@ -160,24 +160,6 @@ namespace CarWashService.MobileApp.ViewModels
 
         public RegisterViewModel()
         {
-            UserTypes = new List<UserTypeHelper>
-            {
-                new UserTypeHelper
-                {
-                    Id = 1,
-                    Name = "Администратор",
-                },
-                  new UserTypeHelper
-                {
-                    Id = 2,
-                    Name = "Клиент",
-                },
-                    new UserTypeHelper
-                {
-                    Id = 3,
-                    Name = "Сотрудник",
-                }
-            };
         }
 
         public string Login { get => login; set => SetProperty(ref login, value); }
@@ -185,13 +167,5 @@ namespace CarWashService.MobileApp.ViewModels
         private string email;
 
         public string Email { get => email; set => SetProperty(ref email, value); }
-
-        private IEnumerable<UserTypeHelper> userTypes;
-
-        public IEnumerable<UserTypeHelper> UserTypes
-        {
-            get => userTypes;
-            set => SetProperty(ref userTypes, value);
-        }
     }
 }

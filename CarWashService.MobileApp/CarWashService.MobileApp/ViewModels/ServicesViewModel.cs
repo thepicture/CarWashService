@@ -20,7 +20,10 @@ namespace CarWashService.MobileApp
             {
                 if (SetProperty(ref searchText, value))
                 {
-                    _ = LoadServicesAsync();
+                    Task.Run(() =>
+                    {
+                        return LoadServicesAsync();
+                    });
                 }
             }
         }
@@ -35,7 +38,7 @@ namespace CarWashService.MobileApp
 
         internal void OnAppearing()
         {
-            _ = LoadServicesAsync();
+            Task.Run(() => LoadServicesAsync());
         }
 
         private async Task LoadServicesAsync()

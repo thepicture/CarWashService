@@ -36,9 +36,25 @@
                                         TintColor="{StaticResource Primary}"
                                         BackgroundColor="White" />
             <Picker Title="Тип пользователя"
-                    ItemsSource="{Binding UserTypes}"
                     ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding UserType}"/>
+                    SelectedItem="{Binding UserType}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type viewmodelhelpers:UserTypeHelper}">
+                        <viewmodelhelpers:UserTypeHelper>
+                            <viewmodelhelpers:UserTypeHelper.Id>1</viewmodelhelpers:UserTypeHelper.Id>
+                            <viewmodelhelpers:UserTypeHelper.Name>Администратор</viewmodelhelpers:UserTypeHelper.Name>
+                        </viewmodelhelpers:UserTypeHelper>
+                        <viewmodelhelpers:UserTypeHelper>
+                            <viewmodelhelpers:UserTypeHelper.Id>2</viewmodelhelpers:UserTypeHelper.Id>
+                            <viewmodelhelpers:UserTypeHelper.Name>Клиент</viewmodelhelpers:UserTypeHelper.Name>
+                        </viewmodelhelpers:UserTypeHelper>
+                        <viewmodelhelpers:UserTypeHelper>
+                            <viewmodelhelpers:UserTypeHelper.Id>3</viewmodelhelpers:UserTypeHelper.Id>
+                            <viewmodelhelpers:UserTypeHelper.Name>Сотрудник</viewmodelhelpers:UserTypeHelper.Name>
+                        </viewmodelhelpers:UserTypeHelper>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
             <material:MaterialTextField Text="{Binding Login}"
                                         Placeholder="Введите логин"
                                         LeadingIcon="authorization"

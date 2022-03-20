@@ -1,5 +1,6 @@
 ﻿using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.ViewModels;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -27,11 +28,14 @@ namespace CarWashService.MobileApp
 
         public AccountViewModel()
         {
-            string[] loginAndPassword = new LoginAndPasswordFromBasicDecoder()
-                .Decode();
-            Login = loginAndPassword[0];
+            Task.Run(async () =>
+            {
+                string[] loginAndPassword = new LoginAndPasswordFromBasicDecoder()
+                    .Decode();
+                Login = loginAndPassword[0];
 
-            Role = AppIdentity.Role;
+                Role = AppIdentity.Role;
+            });
         }
 
         public ICommand ExitLoginCommand
