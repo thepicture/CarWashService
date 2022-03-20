@@ -132,6 +132,14 @@ namespace CarWashService.MobileApp
                     break;
             }
             CommonTabBar
+               .Items.Add(new ShellContent
+               {
+                   Route = nameof(OrdersPage),
+                   Icon = "icon_feed",
+                   Title = "Заказы",
+                   ContentTemplate = new DataTemplate(typeof(OrdersPage))
+               });
+            CommonTabBar
                  .Items.Add(new ShellContent
                  {
                      Route = nameof(AccountPage),

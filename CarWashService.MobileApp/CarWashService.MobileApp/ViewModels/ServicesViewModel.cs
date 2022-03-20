@@ -13,7 +13,6 @@ namespace CarWashService.MobileApp
 {
     public class ServicesViewModel : BaseViewModel
     {
-        public string Role => AppIdentity.Role;
 
         private string searchText;
 

@@ -3,8 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Headers;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,9 +48,30 @@ namespace CarWashService.MobileApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<SerializedOrder>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<SerializedOrder>> GetItemsAsync(bool forceRefresh = false)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic",
+                                                  AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                try
+                {
+                    string response = await client
+                        .GetAsync("orders")
+                        .Result
+                        .Content
+                        .ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject
+                        <IEnumerable<SerializedOrder>>(response);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    return null;
+                }
+            }
         }
 
         public Task<bool> UpdateItemAsync(SerializedOrder item)

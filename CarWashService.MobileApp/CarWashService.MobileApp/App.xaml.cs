@@ -28,6 +28,7 @@ namespace CarWashService.MobileApp
             DependencyService.Register<ServiceDataStore>();
             DependencyService.Register<DiscountDataStore>();
             DependencyService.Register<OrderDataStore>();
+
             MainPage = new AppShell();
         }
 

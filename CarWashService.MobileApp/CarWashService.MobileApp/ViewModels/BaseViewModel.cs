@@ -20,6 +20,7 @@ namespace CarWashService.MobileApp.ViewModels
         DependencyService.Get<IDataStore<SerializedDiscount>>();
         public IDataStore<SerializedOrder> OrderDataStore =>
       DependencyService.Get<IDataStore<SerializedOrder>>();
+        public string Role => AppIdentity.Role;
 
         bool isBusy = false;
         public bool IsBusy
