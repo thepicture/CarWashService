@@ -24,7 +24,7 @@ namespace CarWashService.MobileApp.Views
                 AppIdentity.Role == "Администратор")
             {
                 ToolbarItem itemToRemove = ToolbarItems
-                    .First(t => t.Text == "Оформить");
+                    .First(t => t.Text == "Оформить выбранное");
                 _ = ToolbarItems.Remove(itemToRemove);
             }
         }
