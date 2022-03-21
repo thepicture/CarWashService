@@ -4,7 +4,6 @@
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
-             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              x:DataType="viewmodels:ServiceDiscountsViewModel"
              Title="{Binding Source={x:Static Application.Current}, 
                              Path=CurrentService.Name, 
@@ -17,29 +16,22 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <material:MaterialButton Command="{Binding GoToAddDiscountPage}"
-                                     CornerRadius="50"
-                                     BackgroundColor="{StaticResource Primary}"
                                      Text="Добавить скидку"
-                                     FontAttributes="None"
-                                     HeightRequest="60"
-                                     VerticalOptions="EndAndExpand">
-                <material:MaterialButton.Style>
-                    <Style TargetType="material:MaterialButton">
-                        <Style.Triggers>
-                            <DataTrigger TargetType="material:MaterialButton"
-                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                         Value="Клиент">
-                                <Setter Property="IsVisible"
-                                        Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </material:MaterialButton.Style>
+                                     VerticalOptions="EndAndExpand"
+                                     Style="{StaticResource BaseButton}">
+                <material:MaterialButton.Triggers>
+                    <DataTrigger TargetType="material:MaterialButton"
+                                 Binding="{Binding Role}"
+                                 Value="Клиент">
+                        <Setter Property="IsVisible"
+                                Value="False" />
+                    </DataTrigger>
+                </material:MaterialButton.Triggers>
             </material:MaterialButton>
             <ScrollView Grid.Row="1">
                 <StackLayout BindableLayout.ItemsSource="{Binding Discounts}">
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="serialized:SerializedDiscount">
                             <Grid>
                                 <material:MaterialCard Elevation="5"
                                                        Margin="10"

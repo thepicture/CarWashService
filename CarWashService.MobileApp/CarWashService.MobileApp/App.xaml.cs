@@ -18,7 +18,6 @@ namespace CarWashService.MobileApp
         public App()
         {
             InitializeComponent();
-
             XF.Material.Forms.Material.Init(this);
 
             DependencyService.Register<ToastFeedbackService>();

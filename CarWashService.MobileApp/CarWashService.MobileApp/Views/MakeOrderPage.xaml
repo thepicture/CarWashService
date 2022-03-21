@@ -8,7 +8,8 @@
              x:Class="CarWashService.MobileApp.Views.MakeOrderPage"
              Title="Оформление заказа">
     <ContentPage.Content>
-        <ScrollView Margin="10,10,10,0">
+        <ScrollView Margin="10,10,10,0"
+                    x:DataType="viewmodels:MakeOrderViewModel">
             <StackLayout>
                 <StackLayout.Style>
                     <Style TargetType="StackLayout">
@@ -40,7 +41,7 @@
                 <StackLayout BindableLayout.ItemsSource="{Binding ServicesOfOrder}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="serialized:SerializedService">
-                            <Grid x:DataType="serialized:SerializedService">
+                            <Grid>
                                 <material:MaterialCard Elevation="5"
                                                        Margin="10">
                                     <StackLayout>
@@ -50,7 +51,8 @@
                                                HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
-                                        <Label Text="{Binding Price, StringFormat='{}{0:F0} руб.'}"
+                                        <Label Text="{Binding Price, 
+                                                              StringFormat='{}{0:F0} руб.'}"
                                                HorizontalOptions="Center" />
                                     </StackLayout>
                                 </material:MaterialCard>
@@ -58,32 +60,16 @@
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
-                <Label Text="{Binding TotalPrice, StringFormat='ИТОГО: {0:F0} руб.'}"
+                <Label Text="{Binding TotalPrice, 
+                                      StringFormat='ИТОГО: {0:F0} руб.'}"
                        FontSize="Title"
                        HorizontalTextAlignment="Center" />
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
-                                         CornerRadius="50"
-                                         BackgroundColor="{StaticResource Primary}"
                                          Text="Оформить"
                                          Margin="0,0,0,50"
-                                         FontAttributes="None"
-                                         HeightRequest="60"
-                                         VerticalOptions="EndAndExpand">
-                    <material:MaterialButton.Style>
-                        <Style TargetType="material:MaterialButton">
-                            <Setter Property="IsVisible"
-                                    Value="False" />
-                            <Style.Triggers>
-                                <DataTrigger TargetType="material:MaterialButton"
-                                             Binding="{Binding CurrentBranch.Id}"
-                                             Value="0">
-                                    <Setter Property="IsVisible"
-                                            Value="True" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </material:MaterialButton.Style>
-                </material:MaterialButton>
+                                         VerticalOptions="EndAndExpand"
+                                         IsVisible="{Binding IsNew}"
+                                         Style="{StaticResource BaseButton}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

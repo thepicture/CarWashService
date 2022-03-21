@@ -9,7 +9,7 @@
              Title="{Binding Title}"
              x:Class="CarWashService.MobileApp.Views.AddEditBranchPage">
     <ScrollView Margin="10,10,10,0">
-        <StackLayout>
+        <StackLayout x:DataType="viewmodels:AddEditBranchViewModel">
             <Grid>
                 <StackLayout>
                     <StackLayout.Style>
@@ -33,7 +33,6 @@
                                                 MaxLength="50"
                                                 AlwaysShowUnderline="True"
                                                 TintColor="{StaticResource Primary}"
-                                                BackgroundColor="White"
                                                 HelperText="* Обязательно" />
                     <material:MaterialTextField Text="{Binding CityName}"
                                                 Placeholder="Введите город филиала"
@@ -129,17 +128,13 @@
                                             MaxLength="20"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
-                                            BackgroundColor="White"
                                             HelperText="* Обязательно"
                                             Grid.Column="1" />
 
                 <material:MaterialButton Command="{Binding AddContactCommand}"
-                                         CornerRadius="50"
-                                         BackgroundColor="{StaticResource Primary}"
                                          Text="Добавить контакт"
-                                         FontAttributes="None"
-                                         HeightRequest="60"
-                                         VerticalOptions="EndAndExpand" />
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
                 <BoxView HeightRequest="1"
                          Color="WhiteSmoke"
                          Margin="0,10,0,10" />
@@ -160,24 +155,17 @@
                 </BindableLayout.ItemTemplate>
             </StackLayout>
             <material:MaterialButton Command="{Binding SaveChangesCommand}"
-                                     CornerRadius="50"
-                                     BackgroundColor="{StaticResource Primary}"
                                      Text="Сохранить"
-                                     FontAttributes="None"
-                                     HeightRequest="60"
-                                     VerticalOptions="EndAndExpand">
-                <material:MaterialButton.Style>
-                    <Style TargetType="material:MaterialButton">
-                        <Style.Triggers>
-                            <DataTrigger TargetType="material:MaterialButton"
-                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                         Value="Клиент">
-                                <Setter Property="IsVisible"
-                                        Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </material:MaterialButton.Style>
+                                     VerticalOptions="EndAndExpand"
+                                     Style="{StaticResource BaseButton}">
+                <material:MaterialButton.Triggers>
+                    <DataTrigger TargetType="material:MaterialButton"
+                                 Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                 Value="Клиент">
+                        <Setter Property="IsVisible"
+                                Value="False" />
+                    </DataTrigger>
+                </material:MaterialButton.Triggers>
             </material:MaterialButton>
         </StackLayout>
     </ScrollView>

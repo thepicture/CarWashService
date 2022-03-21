@@ -16,7 +16,6 @@
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White"
                                         HelperText="* Обязательно" />
             <material:MaterialTextField Text="{Binding LastName}"
                                         Placeholder="Введите вашу фамилию"
@@ -25,7 +24,6 @@
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White"
                                         HelperText="* Обязательно" />
             <material:MaterialTextField Text="{Binding Patronymic}"
                                         Placeholder="Введите ваше отчество"
@@ -33,11 +31,13 @@
                                         InputType="Text"
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White" />
+                                        TintColor="{StaticResource Primary}" />
             <Picker Title="Тип пользователя"
-                    ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding UserType}">
+                <Picker.ItemDisplayBinding>
+                    <Binding Path="Name"
+                             x:DataType="viewmodelhelpers:UserTypeHelper" />
+                </Picker.ItemDisplayBinding>
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type viewmodelhelpers:UserTypeHelper}">
                         <viewmodelhelpers:UserTypeHelper>
@@ -62,7 +62,6 @@
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White"
                                         HelperText="* Обязательно" />
             <material:MaterialTextField Text="{Binding Password}"
                                         Placeholder="Введите пароль"
@@ -71,7 +70,6 @@
                                         MaxLength="50"
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White"
                                         HelperText="* Обязательно" />
             <Grid ColumnDefinitions="*,*">
                 <material:MaterialTextField Text="{Binding PassportNumber}"
@@ -81,7 +79,6 @@
                                             MaxLength="6"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
-                                            BackgroundColor="White"
                                             HelperText="* Обязательно" />
                 <material:MaterialTextField Text="{Binding PassportSeries}"
                                             Grid.Column="1"
@@ -91,7 +88,6 @@
                                             MaxLength="4"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
-                                            BackgroundColor="White"
                                             HelperText="* Обязательно" />
             </Grid>
             <material:MaterialTextField Text="{Binding Email}"
@@ -101,15 +97,11 @@
                                         MaxLength="100"
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}"
-                                        BackgroundColor="White"
                                         HelperText="* Обязательно" />
             <material:MaterialButton Command="{Binding RegisterCommand}"
-                                     CornerRadius="50"
-                                     BackgroundColor="{StaticResource Primary}"
                                      Text="Зарегистрироваться"
-                                     FontAttributes="None"
-                                     HeightRequest="60"
-                                     VerticalOptions="EndAndExpand" />
+                                     VerticalOptions="EndAndExpand"
+                                     Style="{StaticResource BaseButton}"/>
             <Label Text="* Нажимая 'Зарегистрироваться', вы соглашаетесь на обработку персональных данных"
                    HorizontalTextAlignment="Center"
                    Padding="10" />

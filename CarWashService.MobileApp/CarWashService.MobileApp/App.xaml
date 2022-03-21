@@ -3,34 +3,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              x:Class="CarWashService.MobileApp.App">
-    <!--
-        Define global resources and styles here, that apply to all pages in your app.
-    -->
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Primary">#2196F3</Color>
-            <Style TargetType="Button">
-                <Setter Property="TextColor"
-                        Value="White"></Setter>
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor"
-                                            Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Disabled">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor"
-                                            Value="#332196F3" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <Color x:Key="Primary">#2196F3</Color>
+                    <Style TargetType="Button">
+                        <Setter Property="TextColor"
+                                Value="White"></Setter>
+                        <Setter Property="VisualStateManager.VisualStateGroups">
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor"
+                                                    Value="{StaticResource Primary}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor"
+                                                    Value="#332196F3" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </Setter>
+                    </Style>
+                </ResourceDictionary>
+                <ResourceDictionary>
+                    <Style TargetType="material:MaterialButton"
+                           x:Key="BaseButton">
+                        <Setter Property="CornerRadius"
+                                Value="50" />
+                        <Setter Property="FontAttributes"
+                                Value="None" />
+                        <Setter Property="HeightRequest"
+                                Value="60" />
+                        <Setter Property="BackgroundColor"
+                                Value="{StaticResource Primary}" />
+                    </Style>
+                    <Style TargetType="material:MaterialButton"
+                           x:Key="BackgroundButton">
+                        <Setter Property="CornerRadius"
+                                Value="50" />
+                        <Setter Property="BackgroundColor"
+                                Value="Transparent" />
+                        <Setter Property="FontAttributes"
+                                Value="None" />
+                        <Setter Property="HeightRequest"
+                                Value="60" />
+                        <Setter Property="BorderColor"
+                                Value="{StaticResource Primary}" />
+                        <Setter Property="BorderWidth"
+                                Value="1" />
+                        <Setter Property="TextColor"
+                                Value="{StaticResource Primary}" />
+                    </Style>
+                    <Style TargetType="material:MaterialTextField">
+                        <Setter Property="BackgroundColor"
+                                Value="White" />
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

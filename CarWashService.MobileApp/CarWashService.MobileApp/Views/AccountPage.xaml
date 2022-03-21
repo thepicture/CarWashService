@@ -10,7 +10,8 @@
         <ui:MaterialCard HorizontalOptions="FillAndExpand"
                          Margin="20"
                          Elevation="5"
-                         IsClickable="True">
+                         IsClickable="True"
+                         x:DataType="mobileapp:AccountViewModel">
             <StackLayout>
                 <Label Text="{Binding Login, StringFormat='Привет, {0}.'}"
                        HorizontalOptions="Center"

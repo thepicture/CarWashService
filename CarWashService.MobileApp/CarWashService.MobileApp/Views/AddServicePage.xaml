@@ -11,7 +11,8 @@
         <viewmodels:AddServiceViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <ScrollView Margin="10,10,10,0">
+        <ScrollView Margin="10,10,10,0"
+                    x:DataType="viewmodels:AddServiceViewModel">
             <StackLayout>
                 <material:MaterialTextField Text="{Binding CurrentService.Name}"
                                             Placeholder="Введите название"
@@ -20,37 +21,27 @@
                                             MaxLength="50"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
-                                            BackgroundColor="White"
                                             HelperText="* Обязательно" />
                 <Picker Title="Тип услуги"
-                        SelectedItem="{Binding CurrentType}"
-                        ItemDisplayBinding="{Binding Name}">
+                        SelectedItem="{Binding CurrentType}">
+                    <Picker.ItemDisplayBinding>
+                        <Binding Path="Name"
+                                 x:DataType="helpers:ServiceTypeHelper" />
+                    </Picker.ItemDisplayBinding>
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type helpers:ServiceTypeHelper}">
-                            <helpers:ServiceTypeHelper>
-                                <helpers:ServiceTypeHelper.Id>1</helpers:ServiceTypeHelper.Id>
-                                <helpers:ServiceTypeHelper.Name>Мойка двигателя</helpers:ServiceTypeHelper.Name>
-                            </helpers:ServiceTypeHelper>
-                            <helpers:ServiceTypeHelper>
-                                <helpers:ServiceTypeHelper.Id>2</helpers:ServiceTypeHelper.Id>
-                                <helpers:ServiceTypeHelper.Name>Уборка салона</helpers:ServiceTypeHelper.Name>
-                            </helpers:ServiceTypeHelper>
-                            <helpers:ServiceTypeHelper>
-                                <helpers:ServiceTypeHelper.Id>3</helpers:ServiceTypeHelper.Id>
-                                <helpers:ServiceTypeHelper.Name>Ополаскивание</helpers:ServiceTypeHelper.Name>
-                            </helpers:ServiceTypeHelper>
-                            <helpers:ServiceTypeHelper>
-                                <helpers:ServiceTypeHelper.Id>4</helpers:ServiceTypeHelper.Id>
-                                <helpers:ServiceTypeHelper.Name>Полировка кузова</helpers:ServiceTypeHelper.Name>
-                            </helpers:ServiceTypeHelper>
-                            <helpers:ServiceTypeHelper>
-                                <helpers:ServiceTypeHelper.Id>5</helpers:ServiceTypeHelper.Id>
-                                <helpers:ServiceTypeHelper.Name>Химчистка салона</helpers:ServiceTypeHelper.Name>
-                            </helpers:ServiceTypeHelper>
-                            <helpers:ServiceTypeHelper>
-                                <helpers:ServiceTypeHelper.Id>6</helpers:ServiceTypeHelper.Id>
-                                <helpers:ServiceTypeHelper.Name>Чистка колесных дисков</helpers:ServiceTypeHelper.Name>
-                            </helpers:ServiceTypeHelper>
+                            <helpers:ServiceTypeHelper Id="1"
+                                                       Name="Мойка двигателя" />
+                            <helpers:ServiceTypeHelper Id="2"
+                                                       Name="Уборка салона" />
+                            <helpers:ServiceTypeHelper Id="3"
+                                                       Name="Ополаскивание" />
+                            <helpers:ServiceTypeHelper Id="4"
+                                                       Name="Полировка кузова" />
+                            <helpers:ServiceTypeHelper Id="5"
+                                                       Name="Химчистка салона" />
+                            <helpers:ServiceTypeHelper Id="6"
+                                                       Name="Чистка колесных дисков" />
                         </x:Array>
                     </Picker.ItemsSource>
                 </Picker>
@@ -60,7 +51,6 @@
                                             InputType="Text"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
-                                            BackgroundColor="White"
                                             HelperText="* можно оставить пустым" />
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -74,19 +64,15 @@
                                                 MaxLength="50"
                                                 AlwaysShowUnderline="True"
                                                 TintColor="{StaticResource Primary}"
-                                                BackgroundColor="White"
                                                 HelperText="* Обязательно" />
                     <Label Text="руб."
                            Grid.Column="1"
                            VerticalTextAlignment="Center" />
                 </Grid>
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
-                                         CornerRadius="50"
-                                         BackgroundColor="{StaticResource Primary}"
                                          Text="Сохранить"
-                                         FontAttributes="None"
-                                         HeightRequest="60"
-                                         VerticalOptions="EndAndExpand" />
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

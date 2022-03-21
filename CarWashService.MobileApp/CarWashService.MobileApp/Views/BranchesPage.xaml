@@ -10,7 +10,8 @@
              xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              x:DataType="local:BranchesViewModel">
     <ContentPage.Content>
-        <Grid RowDefinitions="7*,2*">
+        <Grid RowDefinitions="7*,2*"
+              x:DataType="local:BranchesViewModel">
             <maps:Map ItemsSource="{Binding Locations}"
                       IsShowingUser="True"
                       x:Name="BranchesMap">
@@ -41,33 +42,22 @@
                              HorizontalOptions="Center"
                              Grid.Row="1">
                     <material:MaterialButton Command="{Binding GoToSelectedBranchPageCommand}"
-                                             CornerRadius="50"
-                                             BackgroundColor="{StaticResource Primary}"
                                              Text="Подробнее"
                                              IsEnabled="{Binding CanGoToSelectedBranchPageExecute}"
-                                             FontAttributes="None"
                                              FontSize="10"
-                                             HeightRequest="60" />
+                                             Style="{StaticResource BaseButton}" />
                     <material:MaterialButton Command="{Binding GoToAddBranchPageCommand}"
-                                             CornerRadius="50"
-                                             BackgroundColor="Transparent"
                                              Text="Добавить филиал"
-                                             FontAttributes="None"
-                                             Padding="5"
                                              FontSize="10"
-                                             TextColor="{StaticResource Primary}">
-                        <material:MaterialButton.Style>
-                            <Style TargetType="material:MaterialButton">
-                                <Style.Triggers>
-                                    <DataTrigger TargetType="material:MaterialButton"
-                                                 Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                                 Value="Клиент">
-                                        <Setter Property="IsVisible"
-                                                Value="False" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </material:MaterialButton.Style>
+                                             Style="{StaticResource BackgroundButton}">
+                        <material:MaterialButton.Triggers>
+                            <DataTrigger TargetType="material:MaterialButton"
+                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                         Value="Клиент">
+                                <Setter Property="IsVisible"
+                                        Value="False" />
+                            </DataTrigger>
+                        </material:MaterialButton.Triggers>
                     </material:MaterialButton>
                 </StackLayout>
             </StackLayout>

@@ -12,19 +12,19 @@
             <Setter Property="Title"
                     Value="Отслеживание заказов клиентов" />
             <Style.Triggers>
-        <DataTrigger TargetType="ContentPage"
-                     Binding="{Binding Role}"
-                     Value="Клиент">
-            <Setter Property="Title"
-                    Value="Отслеживание моих заказов" />
-        </DataTrigger>
-    </Style.Triggers>
+                <DataTrigger TargetType="ContentPage"
+                             Binding="{Binding Role}"
+                             Value="Клиент">
+                    <Setter Property="Title"
+                            Value="Отслеживание моих заказов" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </ContentPage.Style>
     <ContentPage.Content>
         <StackLayout>
             <SearchBar Text="{Binding SearchText}"
-                       Placeholder="Поиск по ФИО"/>
+                       Placeholder="Поиск по ФИО" />
             <ScrollView>
                 <StackLayout BindableLayout.ItemsSource="{Binding Orders}">
                     <BindableLayout.ItemTemplate>
@@ -52,44 +52,34 @@
                                                                  Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                    AncestorType={x:Type pages:OrdersPage}}, 
                                                                                    Path=BindingContext.AcceptOrderCommand}"
-                                                                 CornerRadius="50"
-                                                                 BackgroundColor="{StaticResource Primary}"
                                                                  Text="Подтвердить"
-                                                                 FontAttributes="None"
-                                                                 HeightRequest="60"
-                                                                 VerticalOptions="EndAndExpand">
-                                            <material:MaterialButton.Style>
-                                                <Style TargetType="material:MaterialButton">
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BaseButton}">
+                                            <material:MaterialButton.Triggers>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                                                              AncestorType={x:Type pages:OrdersPage}}, 
+                                                                                                              Path=BindingContext.Role}"
+                                                             Value="Клиент">
                                                     <Setter Property="IsVisible"
-                                                            Value="True" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger TargetType="material:MaterialButton"
-                                                                     Binding="{Binding Source={RelativeSource Mode=FindAncestor, AncestorType={x:Type pages:OrdersPage}}, 
-                                                                                       Path=BindingContext.Role}"
-                                                                     Value="Клиент">
-                                                            <Setter Property="IsVisible"
-                                                                    Value="False" />
-                                                        </DataTrigger>
-                                                        <DataTrigger TargetType="material:MaterialButton"
-                                                                     Binding="{Binding IsConfirmed}"
-                                                                     Value="True">
-                                                            <Setter Property="IsVisible"
-                                                                    Value="False" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </material:MaterialButton.Style>
+                                                            Value="False" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding IsConfirmed}"
+                                                             Value="True">
+                                                    <Setter Property="IsVisible"
+                                                            Value="False" />
+                                                </DataTrigger>
+                                            </material:MaterialButton.Triggers>
                                         </material:MaterialButton>
-                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"
+                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                                            Path=BindingContext}"
                                                                  Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                    AncestorType={x:Type pages:OrdersPage}}, 
                                                                                    Path=BindingContext.GoToOrderPageCommand}"
-                                                                 CornerRadius="50"
-                                                                 BackgroundColor="{StaticResource Primary}"
-                                                                 FontAttributes="None"
-                                                                 HeightRequest="60"
                                                                  Text="Подробнее"
-                                                                 VerticalOptions="EndAndExpand">
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BackgroundButton}">
                                         </material:MaterialButton>
                                     </StackLayout>
                                 </material:MaterialCard>

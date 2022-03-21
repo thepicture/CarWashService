@@ -17,7 +17,7 @@ namespace CarWashService.MobileApp.ViewModels
     public class MakeOrderViewModel : BaseViewModel
     {
         private DateTime appointmentDate = DateTime.Now;
-
+        private bool isNew;
         public DateTime AppointmentDate
         {
             get => appointmentDate;
@@ -28,12 +28,14 @@ namespace CarWashService.MobileApp.ViewModels
 
         internal void OnAppearing()
         {
+            IsNew = (App.Current as App).CurrentOrder == null;
             if ((App.Current as App).CurrentOrder != null)
             {
                 _ = Task.WhenAll(new List<Task> {
                     LoadServicesOfOrderAsync(),
                     LoadBranchesAsync()
-                }).ContinueWith((task) =>
+                })
+                    .ContinueWith((task) =>
                 {
                     TotalPrice = ServicesOfOrder.Sum(s => s.Price);
                 });
@@ -197,6 +199,11 @@ namespace CarWashService.MobileApp.ViewModels
         {
             get => totalPrice;
             set => SetProperty(ref totalPrice, value);
+        }
+        public bool IsNew
+        {
+            get => isNew;
+            set => SetProperty(ref isNew, value);
         }
     }
 }

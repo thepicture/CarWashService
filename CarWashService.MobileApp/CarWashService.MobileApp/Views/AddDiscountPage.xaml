@@ -7,7 +7,8 @@
              x:Class="CarWashService.MobileApp.Views.AddDiscountPage"
              Title="Добавление скидки">
     <ContentPage.Content>
-        <ScrollView Margin="10,10,10,0">
+        <ScrollView Margin="10,10,10,0"
+                    x:DataType="viewmodels:AddDiscountViewModel">
             <StackLayout>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -21,7 +22,6 @@
                                                 MaxLength="50"
                                                 AlwaysShowUnderline="True"
                                                 TintColor="{StaticResource Primary}"
-                                                BackgroundColor="White"
                                                 HelperText="* Обязательно" />
                     <Label Text="%"
                            Grid.Column="1"
@@ -34,19 +34,15 @@
                                             MaxLength="50"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
-                                            BackgroundColor="White"
                                             HelperText="* можно оставить пустым" />
                 <Label Text="* Укажите дату начала" />
                 <material:MaterialDatePicker Date="{Binding WorkFrom}" />
                 <Label Text="* Укажите дату окончания" />
                 <material:MaterialDatePicker Date="{Binding WorkTo}" />
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
-                                         CornerRadius="50"
-                                         BackgroundColor="{StaticResource Primary}"
                                          Text="Сохранить"
-                                         FontAttributes="None"
-                                         HeightRequest="60"
-                                         VerticalOptions="EndAndExpand" />
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

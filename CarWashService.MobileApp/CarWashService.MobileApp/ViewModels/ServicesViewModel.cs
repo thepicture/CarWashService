@@ -1,5 +1,4 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
-using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.ViewModels;
 using CarWashService.MobileApp.Views;
 using System.Collections.Generic;
@@ -128,10 +127,21 @@ namespace CarWashService.MobileApp
             (App.Current as App).CurrentServices = SelectedServices;
             await Shell.Current.GoToAsync($"{nameof(MakeOrderPage)}");
         }
+        public bool IsAbleToMakeOrder
+        {
+            get => isAbleToMakeOrder;
+            set => SetProperty(ref isAbleToMakeOrder, value);
+        }
 
-        public ObservableCollection<SerializedService> SelectedServices { get; set; }
+        public ObservableCollection<SerializedService> SelectedServices
+        {
+            get => selectedServices;
+            set => SetProperty(ref selectedServices, value);
+        }
 
         private Command toggleServiceCommand;
+        private ObservableCollection<SerializedService> selectedServices;
+        private bool isAbleToMakeOrder;
 
         public ICommand ToggleServiceCommand
         {
@@ -156,6 +166,7 @@ namespace CarWashService.MobileApp
             {
                 SelectedServices.Add(parameter as SerializedService);
             }
+            IsAbleToMakeOrder = SelectedServices.Count > 0;
         }
     }
 }
