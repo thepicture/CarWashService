@@ -23,10 +23,10 @@ namespace CarWashService.MobileApp
             {
                 if (SetProperty(ref searchText, value))
                 {
-                    Task.Run(() =>
-                    {
-                        return LoadServicesAsync();
-                    });
+                    _ = Task.Run(() =>
+                      {
+                          return LoadServicesAsync();
+                      });
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace CarWashService.MobileApp
         internal void OnAppearing()
         {
             SelectedServices = new ObservableCollection<SerializedService>();
-            Task.Run(() => LoadServicesAsync());
+            _ = Task.Run(() => LoadServicesAsync());
         }
 
         private async Task LoadServicesAsync()
@@ -124,6 +124,7 @@ namespace CarWashService.MobileApp
 
         private async void GoToMakeOrderAsync()
         {
+            (App.Current as App).CurrentOrder = null;
             (App.Current as App).CurrentServices = SelectedServices;
             await Shell.Current.GoToAsync($"{nameof(MakeOrderPage)}");
         }
@@ -149,7 +150,7 @@ namespace CarWashService.MobileApp
         {
             if (SelectedServices.Contains(parameter as SerializedService))
             {
-                SelectedServices.Remove(parameter as SerializedService);
+                _ = SelectedServices.Remove(parameter as SerializedService);
             }
             else
             {

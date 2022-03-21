@@ -42,7 +42,7 @@ namespace CarWashService.Web.Controllers
 
         // GET: api/Orders/5
         [ResponseType(typeof(Order))]
-        [Authorize(Roles = "Администратор, Сотрудник")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public async Task<IHttpActionResult> GetOrder(int id)
         {
             Order order = await db.Order.FindAsync(id);

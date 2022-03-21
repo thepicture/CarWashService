@@ -17,10 +17,10 @@ namespace CarWashService.MobileApp.ViewModels
     {
         internal void OnAppearing()
         {
-            Task.Run(() =>
-            {
-                LoadDiscounts();
-            });
+            _ = Task.Run(() =>
+              {
+                  LoadDiscounts();
+              });
         }
 
         private async void LoadDiscounts()

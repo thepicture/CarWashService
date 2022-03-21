@@ -16,26 +16,16 @@ namespace CarWashService.MobileApp
             set => SetProperty(ref login, value);
         }
 
-        private string role;
-
-        public string Role
-        {
-            get => role;
-            set => SetProperty(ref role, value);
-        }
-
         private Command exitLoginCommand;
 
         public AccountViewModel()
         {
-            Task.Run(() =>
-            {
-                string[] loginAndPassword = new LoginAndPasswordFromBasicDecoder()
-                    .Decode();
-                Login = loginAndPassword[0];
-
-                Role = AppIdentity.Role;
-            });
+            _ = Task.Run(() =>
+              {
+                  string[] loginAndPassword = new LoginAndPasswordFromBasicDecoder()
+                      .Decode();
+                  Login = loginAndPassword[0];
+              });
         }
 
         public ICommand ExitLoginCommand

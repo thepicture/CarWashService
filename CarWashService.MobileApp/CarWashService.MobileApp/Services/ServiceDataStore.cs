@@ -56,7 +56,7 @@ namespace CarWashService.MobileApp.Services
                                                     AppIdentity.AuthorizationValue);
                     client.BaseAddress = new Uri((App.Current as App).BaseUrl);
                     string response = await client
-                      .GetAsync("branches")
+                      .GetAsync($"services/{id}")
                       .Result
                       .Content
                       .ReadAsStringAsync();

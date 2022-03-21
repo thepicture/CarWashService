@@ -2,21 +2,34 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
-             xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
+             xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
-             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
-             x:DataType="mobileapp:MakeOrderViewModel"
+             x:DataType="viewmodels:MakeOrderViewModel"
              x:Class="CarWashService.MobileApp.Views.MakeOrderPage"
              Title="Оформление заказа">
     <ContentPage.Content>
         <ScrollView Margin="10,10,10,0">
             <StackLayout>
+                <StackLayout.Style>
+                    <Style TargetType="StackLayout">
+                        <Setter Property="InputTransparent"
+                                Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger TargetType="StackLayout"
+                                         Binding="{Binding CurrentBranchId}"
+                                         Value="0">
+                                <Setter Property="InputTransparent"
+                                        Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackLayout.Style>
                 <Picker Title="* Укажите филиал"
                         ItemDisplayBinding="{Binding Title}"
                         ItemsSource="{Binding Branches}"
                         SelectedItem="{Binding CurrentBranch}" />
                 <Label Text="* Укажите дату назначения" />
-                <material:MaterialDatePicker Date="{Binding AppointmentDate}"/>
+                <material:MaterialDatePicker Date="{Binding AppointmentDate}" />
                 <Label Text="* Укажите время назначения" />
                 <material:MaterialTimePicker Time="{Binding AppointmentTime}" />
                 <BoxView HeightRequest="1"
@@ -26,16 +39,17 @@
                        FontSize="Small" />
                 <StackLayout BindableLayout.ItemsSource="{Binding ServicesOfOrder}">
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="serialized:SerializedService">
                             <Grid x:DataType="serialized:SerializedService">
                                 <material:MaterialCard Elevation="5"
                                                        Margin="10">
                                     <StackLayout>
-                                    <Label Text="{Binding Name}"
-                                           HorizontalOptions="Center" 
-                                           FontAttributes="Bold"
-                                           HorizontalTextAlignment="Center"/>
-                                    <BoxView Color="WhiteSmoke" HeightRequest="1"/>
+                                        <Label Text="{Binding Name}"
+                                               HorizontalOptions="Center"
+                                               FontAttributes="Bold"
+                                               HorizontalTextAlignment="Center" />
+                                        <BoxView Color="WhiteSmoke"
+                                                 HeightRequest="1" />
                                         <Label Text="{Binding Price, StringFormat='{}{0:F0} руб.'}"
                                                HorizontalOptions="Center" />
                                     </StackLayout>
@@ -46,7 +60,7 @@
                 </StackLayout>
                 <Label Text="{Binding TotalPrice, StringFormat='ИТОГО: {0:F0} руб.'}"
                        FontSize="Title"
-                       HorizontalTextAlignment="Center"/>
+                       HorizontalTextAlignment="Center" />
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
                                          CornerRadius="50"
                                          BackgroundColor="{StaticResource Primary}"
@@ -61,8 +75,8 @@
                                     Value="False" />
                             <Style.Triggers>
                                 <DataTrigger TargetType="material:MaterialButton"
-                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                             Value="Клиент">
+                                             Binding="{Binding CurrentBranch.Id}"
+                                             Value="0">
                                     <Setter Property="IsVisible"
                                             Value="True" />
                                 </DataTrigger>

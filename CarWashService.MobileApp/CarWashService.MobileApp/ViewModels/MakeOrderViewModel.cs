@@ -1,6 +1,5 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
-using CarWashService.MobileApp.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace CarWashService.MobileApp
+namespace CarWashService.MobileApp.ViewModels
 {
     public class MakeOrderViewModel : BaseViewModel
     {
@@ -31,20 +30,23 @@ namespace CarWashService.MobileApp
         {
             if ((App.Current as App).CurrentOrder != null)
             {
-                Task.Run(async () =>
+                _ = Task.WhenAll(new List<Task> {
+                    LoadServicesOfOrderAsync(),
+                    LoadBranchesAsync()
+                }).ContinueWith((task) =>
                 {
-                    await LoadServicesOfOrderAsync();
+                    TotalPrice = ServicesOfOrder.Sum(s => s.Price);
                 });
             }
             else
             {
                 ServicesOfOrder = (App.Current as App).CurrentServices;
                 TotalPrice = ServicesOfOrder.Sum(s => s.Price);
+                _ = Task.Run(async () =>
+                  {
+                      await LoadBranchesAsync();
+                  });
             }
-            Task.Run(async () =>
-            {
-                await LoadBranchesAsync();
-            });
         }
 
         private async Task LoadServicesOfOrderAsync()
@@ -74,6 +76,7 @@ namespace CarWashService.MobileApp
                                 .ToString()));
                     }
                     ServicesOfOrder = currentServices;
+                    CurrentBranchId = order.BranchId;
                 }
                 catch (HttpRequestException ex)
                 {
@@ -85,12 +88,21 @@ namespace CarWashService.MobileApp
         private async Task LoadBranchesAsync()
         {
             Branches = await BranchDataStore.GetItemsAsync();
+            if (CurrentBranchId > 0)
+            {
+                CurrentBranch = Branches.First(b => b.Id == CurrentBranchId);
+            }
         }
 
         public IEnumerable<SerializedService> ServicesOfOrder
         {
             get => servicesOfOrder;
             set => SetProperty(ref servicesOfOrder, value);
+        }
+        public int CurrentBranchId
+        {
+            get => currentBranchId;
+            set => SetProperty(ref currentBranchId, value);
         }
 
         private Command saveChangesCommand;
@@ -179,6 +191,7 @@ namespace CarWashService.MobileApp
         }
 
         private decimal totalPrice;
+        private int currentBranchId;
 
         public decimal TotalPrice
         {

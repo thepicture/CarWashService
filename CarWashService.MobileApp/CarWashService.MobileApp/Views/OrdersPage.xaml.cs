@@ -13,7 +13,7 @@ namespace CarWashService.MobileApp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class OrdersPage : ContentPage
     {
-        private OrdersViewModel _viewModel;
+        private readonly OrdersViewModel _viewModel;
         public OrdersPage()
         {
             InitializeComponent();

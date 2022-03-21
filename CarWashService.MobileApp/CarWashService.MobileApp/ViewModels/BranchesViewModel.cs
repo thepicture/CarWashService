@@ -24,10 +24,10 @@ namespace CarWashService.MobileApp.ViewModels
 
         internal void OnAppearing()
         {
-            Task.Run(() =>
-            {
-                return InsertBranchesIntoPositions();
-            });
+            _ = Task.Run(() =>
+              {
+                  return InsertBranchesIntoPositions();
+              });
         }
 
         private async Task InsertBranchesIntoPositions()

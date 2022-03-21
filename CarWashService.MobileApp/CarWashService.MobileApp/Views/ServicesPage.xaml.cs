@@ -18,14 +18,14 @@ namespace CarWashService.MobileApp.Views
             {
                 ToolbarItem itemToRemove = ToolbarItems
                     .First(t => t.Text == "Добавить");
-                ToolbarItems.Remove(itemToRemove);
+                _ = ToolbarItems.Remove(itemToRemove);
             }
             if (AppIdentity.Role == "Сотрудник" ||
                 AppIdentity.Role == "Администратор")
             {
                 ToolbarItem itemToRemove = ToolbarItems
                     .First(t => t.Text == "Оформить");
-                ToolbarItems.Remove(itemToRemove);
+                _ = ToolbarItems.Remove(itemToRemove);
             }
         }
         protected override void OnAppearing()

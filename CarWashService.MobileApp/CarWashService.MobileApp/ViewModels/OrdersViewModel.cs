@@ -1,4 +1,5 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,10 +20,10 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 if (SetProperty(ref searchText, value))
                 {
-                    Task.Run(() =>
-                    {
-                        LoadOrdersAsync();
-                    });
+                    _ = Task.Run(() =>
+                      {
+                          LoadOrdersAsync();
+                      });
                 }
             }
         }
@@ -62,10 +63,10 @@ namespace CarWashService.MobileApp.ViewModels
         internal void OnAppearing()
         {
             Orders = new ObservableCollection<SerializedOrder>();
-            Task.Run(() =>
-            {
-                LoadOrdersAsync();
-            });
+            _ = Task.Run(() =>
+              {
+                  LoadOrdersAsync();
+              });
         }
 
         public ObservableCollection<SerializedOrder> Orders
@@ -73,7 +74,7 @@ namespace CarWashService.MobileApp.ViewModels
             get => orders;
             set
             {
-                SetProperty(ref orders, value);
+                _ = SetProperty(ref orders, value);
             }
         }
 
@@ -112,8 +113,11 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
-        private async void GoToOrderPageAsync()
+        private async void GoToOrderPageAsync(object parameter)
         {
+            (App.Current as App).CurrentOrder = parameter as SerializedOrder;
+            await Shell.Current.GoToAsync(
+                $"{nameof(MakeOrderPage)}");
         }
     }
 }

@@ -22,11 +22,11 @@ namespace CarWashService.MobileApp.Services
                 (App.Current as App).Role = value;
                 if (value == null)
                 {
-                    SecureStorage.Remove("Role");
+                    _ = SecureStorage.Remove("Role");
                 }
                 else
                 {
-                    SecureStorage.SetAsync("Role", value);
+                    _ = SecureStorage.SetAsync("Role", value);
                 }
             }
         }
@@ -48,11 +48,11 @@ namespace CarWashService.MobileApp.Services
                 (App.Current as App).Identity = value;
                 if (value == null)
                 {
-                    SecureStorage.Remove("Identity");
+                    _ = SecureStorage.Remove("Identity");
                 }
                 else
                 {
-                    SecureStorage.SetAsync("Identity", value);
+                    _ = SecureStorage.SetAsync("Identity", value);
                 }
             }
         }
