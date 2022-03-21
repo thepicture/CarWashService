@@ -22,17 +22,14 @@ namespace CarWashService.MobileApp
             {
                 if (SetProperty(ref searchText, value))
                 {
-                    _ = Task.Run(() =>
-                      {
-                          return LoadServicesAsync();
-                      });
+                    LoadServicesAsync();
                 }
             }
         }
 
-        private IEnumerable<SerializedService> services;
+        private ObservableCollection<SerializedService> services;
 
-        public IEnumerable<SerializedService> Services
+        public ObservableCollection<SerializedService> Services
         {
             get => services;
             set => SetProperty(ref services, value);
@@ -41,11 +38,14 @@ namespace CarWashService.MobileApp
         internal void OnAppearing()
         {
             SelectedServices = new ObservableCollection<SerializedService>();
-            _ = Task.Run(() => LoadServicesAsync());
+            Services = new ObservableCollection<SerializedService>();
+            LoadServicesAsync();
         }
 
         private async Task LoadServicesAsync()
         {
+            Services.Clear();
+            SelectedServices.Clear();
             IEnumerable<SerializedService> currentServices =
                 await ServiceDataStore
                     .GetItemsAsync();
@@ -59,7 +59,11 @@ namespace CarWashService.MobileApp
                             SearchText.ToLower());
                     });
             }
-            Services = currentServices;
+            foreach (SerializedService service in currentServices)
+            {
+                await Task.Delay(200);
+                Services.Add(service);
+            }
         }
 
         private Command goToAddServicePage;

@@ -26,7 +26,6 @@
                 <StackLayout BindableLayout.ItemsSource="{Binding Services}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="serialized:SerializedService">
-                            <Grid>
                                 <material:MaterialCard Elevation="5"
                                                        Margin="10"
                                                        IsClickable="True">
@@ -84,7 +83,6 @@
                                         </material:MaterialButton>
                                     </StackLayout>
                                 </material:MaterialCard>
-                            </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>

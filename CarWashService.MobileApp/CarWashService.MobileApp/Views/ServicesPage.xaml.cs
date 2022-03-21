@@ -44,7 +44,8 @@ namespace CarWashService.MobileApp.Views
             else
             {
                 (sender as Button).Text = "В корзину";
-                (sender as Button).BackgroundColor = (Color)App.Current.Resources["Primary"];
+                (sender as Button).BackgroundColor = (Color)App.Current
+                    .Resources["Primary"];
             }
         }
     }
