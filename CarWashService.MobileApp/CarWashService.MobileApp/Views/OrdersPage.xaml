@@ -28,7 +28,7 @@
             <ScrollView>
                 <StackLayout BindableLayout.ItemsSource="{Binding Orders}">
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="serialized:SerializedOrder">
                             <Grid>
                                 <material:MaterialCard Elevation="5"
                                                        Margin="10"
@@ -50,7 +50,7 @@
                                         <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                             Path=BindingContext}"
                                                                  Command="{Binding Source={RelativeSource Mode=FindAncestor, 
-                                                                                   AncestorType={x:Type pages:ServicesPage}}, 
+                                                                                   AncestorType={x:Type pages:OrdersPage}}, 
                                                                                    Path=BindingContext.AcceptOrderCommand}"
                                                                  CornerRadius="50"
                                                                  BackgroundColor="{StaticResource Primary}"
@@ -67,6 +67,12 @@
                                                                      Binding="{Binding Source={RelativeSource Mode=FindAncestor, AncestorType={x:Type pages:OrdersPage}}, 
                                                                                        Path=BindingContext.Role}"
                                                                      Value="Клиент">
+                                                            <Setter Property="IsVisible"
+                                                                    Value="False" />
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="material:MaterialButton"
+                                                                     Binding="{Binding IsConfirmed}"
+                                                                     Value="True">
                                                             <Setter Property="IsVisible"
                                                                     Value="False" />
                                                         </DataTrigger>

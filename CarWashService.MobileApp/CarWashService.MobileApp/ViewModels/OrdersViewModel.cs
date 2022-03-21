@@ -1,8 +1,14 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -93,8 +99,40 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
-        private async void AcceptOrderAsync()
+        private async void AcceptOrderAsync(object parameter)
         {
+            int orderId = (parameter as SerializedOrder).Id;
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                     new AuthenticationHeaderValue("Basic",
+                                                   AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                try
+                {
+                    HttpResponseMessage response = await client
+                        .GetAsync(new Uri(client.BaseAddress + $"orders/{orderId}/confirm"));
+                    if (response.StatusCode != HttpStatusCode.Unauthorized)
+                    {
+                        await FeedbackService
+                            .Inform("Заказ успешно подтверждён");
+                        LoadOrdersAsync();
+                    }
+                    else
+                    {
+                        await FeedbackService
+                            .InformError("Не удалось подтвердить заказ. " +
+                            "Обратитесь в службу поддержки");
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    await FeedbackService
+                          .Inform("Проверьте подключение к сети " +
+                          "и попробуйте ещё раз");
+                }
+            }
         }
 
         private Command goToOrderPageCommand;
