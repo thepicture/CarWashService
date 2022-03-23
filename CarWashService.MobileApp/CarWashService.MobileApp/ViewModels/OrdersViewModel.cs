@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -40,30 +41,39 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 Orders.Clear();
             });
-            IEnumerable<SerializedOrder> items = await OrderDataStore
-                    .GetItemsAsync();
-            if (!string.IsNullOrWhiteSpace(SearchText))
+            try
             {
-                items = items
-                    .Where(s =>
-                    {
-                        bool isClientApproves = s.ClientFullName.ToLower()
-                        .Contains(
-                            SearchText.ToLower());
-                        bool isSellerApproves = s.SellerFullName != null
-                            && s.SellerFullName.ToLower()
-                       .Contains(
-                           SearchText.ToLower());
-                        return isClientApproves || isSellerApproves;
-                    });
-            }
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                foreach (SerializedOrder item in items)
+                IEnumerable<SerializedOrder> items = await OrderDataStore
+                        .GetItemsAsync();
+                if (!string.IsNullOrWhiteSpace(SearchText))
                 {
-                    Orders.Add(item);
+                    items = items
+                        .Where(s =>
+                        {
+                            bool isClientApproves = s.ClientFullName.ToLower()
+                            .Contains(
+                                SearchText.ToLower());
+                            bool isSellerApproves = s.SellerFullName != null
+                                && s.SellerFullName.ToLower()
+                           .Contains(
+                               SearchText.ToLower());
+                            return isClientApproves || isSellerApproves;
+                        });
                 }
-            });
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    foreach (SerializedOrder item in items)
+                    {
+                        Orders.Add(item);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+                await FeedbackService.Inform("У вас нет интернет " +
+                    "подключения. Включён оффлайн-режим");
+            }
         }
 
         internal void OnAppearing()

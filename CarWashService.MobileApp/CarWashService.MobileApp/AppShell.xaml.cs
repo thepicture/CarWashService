@@ -11,6 +11,7 @@ namespace CarWashService.MobileApp
         public AppShell()
         {
             InitializeComponent();
+
             Routing.RegisterRoute(
                 nameof(AddEditBranchPage),
                 typeof(AddEditBranchPage));
@@ -29,10 +30,6 @@ namespace CarWashService.MobileApp
             Routing.RegisterRoute(
                nameof(MakeOrderPage),
                typeof(MakeOrderPage));
-            if (VersionTracking.IsFirstLaunchForCurrentBuild)
-            {
-                SecureStorage.RemoveAll();
-            }
             if (IsLoggedIn())
             {
                 SetShellStacksDependingOnRole();
