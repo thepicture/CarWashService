@@ -36,49 +36,73 @@ namespace CarWashService.MobileApp.ViewModels
                     try
                     {
                         int serviceId = (App.Current as App).CurrentService.Id;
-                        string response = await client
-                            .GetAsync(new Uri(client.BaseAddress + $"servicediscounts/{serviceId}"))
-                            .Result
-                            .Content
-                            .ReadAsStringAsync();
+                        HttpResponseMessage response = await client
+                            .GetAsync(new Uri(client.BaseAddress + $"servicediscounts/{serviceId}"));
+                        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                FeedbackService.InformError("Сервер "
+                                    + "ответил ошибкой "
+                                    + response.StatusCode);
+                            });
+                            return new List<SerializedDiscount>();
+                        }
                         try
                         {
                             return JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedDiscount>>(response);
+                        <IEnumerable<SerializedDiscount>>(
+                                await response.Content.ReadAsStringAsync());
                         }
                         catch (Exception ex)
                         {
-                            await FeedbackService.InformError("Не удалось " +
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                FeedbackService.InformError("Не удалось " +
                                 "разобрать ответ сервера: " + ex.StackTrace);
+                            });
                             return new List<SerializedDiscount>();
                         }
                     }
                     catch (HttpRequestException ex)
                     {
                         Debug.WriteLine(ex.StackTrace);
-                        await DependencyService.Get<IFeedbackService>()
-                            .InformError("Ошибка запроса: " + ex.StackTrace);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            FeedbackService.InformError("Ошибка запроса: "
+                            + ex.StackTrace);
+                        });
                         return new List<SerializedDiscount>();
                     }
                     catch (TaskCanceledException ex)
                     {
                         Debug.WriteLine(ex.StackTrace);
-                        await DependencyService.Get<IFeedbackService>()
-                            .InformError("Запрос отменён: " + ex.StackTrace);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            FeedbackService.InformError("Запрос отменён: "
+                                + ex.StackTrace);
+                        });
                         return new List<SerializedDiscount>();
                     }
                     catch (ArgumentNullException ex)
                     {
                         Debug.WriteLine(ex.StackTrace);
-                        await DependencyService.Get<IFeedbackService>()
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            FeedbackService
                             .InformError("Запрос был пустой: " + ex.StackTrace);
+                        });
                         return new List<SerializedDiscount>();
                     }
                     catch (InvalidOperationException ex)
                     {
                         Debug.WriteLine(ex.StackTrace);
-                        await DependencyService.Get<IFeedbackService>()
-                            .InformError("Акции получены больше одного раза: " + ex.StackTrace);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            FeedbackService
+                            .InformError("Акции получены " +
+                            "больше одного раза: " + ex.StackTrace);
+                        });
                         return new List<SerializedDiscount>();
                     }
                 }
