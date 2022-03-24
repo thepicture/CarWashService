@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CarWashService.MobileApp.Services
 {
-    class DiscountDataStore : IDataStore<SerializedDiscount>
+    public class DiscountDataStore : IDataStore<SerializedDiscount>
     {
         public async Task<bool> AddItemAsync(SerializedDiscount item)
         {

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.Services
 {
@@ -33,6 +34,29 @@ namespace CarWashService.MobileApp.Services
                 catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
+                    await DependencyService.Get<IFeedbackService>()
+                        .InformError("Ошибка запроса: " + ex.StackTrace);
+                    return await Task.FromResult(false);
+                }
+                catch (TaskCanceledException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    await DependencyService.Get<IFeedbackService>()
+                        .InformError("Транзакция отменена: " + ex.StackTrace);
+                    return await Task.FromResult(false);
+                }
+                catch (ArgumentNullException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    await DependencyService.Get<IFeedbackService>()
+                        .InformError("Запрос был пустой: " + ex.StackTrace);
+                    return await Task.FromResult(false);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    await DependencyService.Get<IFeedbackService>()
+                        .InformError("Транзакция уже началась: " + ex.StackTrace);
                     return await Task.FromResult(false);
                 }
             }

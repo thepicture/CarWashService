@@ -41,13 +41,45 @@ namespace CarWashService.MobileApp.ViewModels
                             .Result
                             .Content
                             .ReadAsStringAsync();
-                        return JsonConvert.DeserializeObject
+                        try
+                        {
+                            return JsonConvert.DeserializeObject
                         <IEnumerable<SerializedDiscount>>(response);
+                        }
+                        catch (Exception ex)
+                        {
+                            await FeedbackService.InformError("Не удалось " +
+                                "разобрать ответ сервера: " + ex.StackTrace);
+                            return new List<SerializedDiscount>();
+                        }
                     }
                     catch (HttpRequestException ex)
                     {
                         Debug.WriteLine(ex.StackTrace);
-                        return null;
+                        await DependencyService.Get<IFeedbackService>()
+                            .InformError("Ошибка запроса: " + ex.StackTrace);
+                        return new List<SerializedDiscount>();
+                    }
+                    catch (TaskCanceledException ex)
+                    {
+                        Debug.WriteLine(ex.StackTrace);
+                        await DependencyService.Get<IFeedbackService>()
+                            .InformError("Запрос отменён: " + ex.StackTrace);
+                        return new List<SerializedDiscount>();
+                    }
+                    catch (ArgumentNullException ex)
+                    {
+                        Debug.WriteLine(ex.StackTrace);
+                        await DependencyService.Get<IFeedbackService>()
+                            .InformError("Запрос был пустой: " + ex.StackTrace);
+                        return new List<SerializedDiscount>();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Debug.WriteLine(ex.StackTrace);
+                        await DependencyService.Get<IFeedbackService>()
+                            .InformError("Акции получены больше одного раза: " + ex.StackTrace);
+                        return new List<SerializedDiscount>();
                     }
                 }
             });
