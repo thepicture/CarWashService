@@ -1,4 +1,5 @@
-﻿using CarWashService.MobileApp.Models.Serialized;
+﻿using CarWashService.MobileApp.Models;
+using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
 using CarWashService.MobileApp.Services;
 using Newtonsoft.Json;
@@ -9,7 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -249,13 +249,14 @@ namespace CarWashService.MobileApp.ViewModels
                     + "и попробуйте ещё раз");
                 return;
             }
-            if (PhoneNumbers.Any(p => p.PhoneNumber == CurrentPhone))
+            if (PhoneNumbers.Any(
+                p => p.PhoneNumber == MaskDeleter.DeleteMask(CurrentPhone)))
             {
                 await FeedbackService.InformError("Такой " +
                     "контакт уже есть");
                 return;
             }
-            if (!Regex.IsMatch(CurrentPhone, @"[0-9]{11}"))
+            if (CurrentPhone.Length != 18)
             {
                 await FeedbackService.Warn("Номер телефона " +
                     "некорректен. Убедитесь, что вы ввели номер " +
@@ -264,7 +265,7 @@ namespace CarWashService.MobileApp.ViewModels
             }
             PhoneNumbers.Add(new PhoneNumberHelper
             {
-                PhoneNumber = CurrentPhone
+                PhoneNumber = MaskDeleter.DeleteMask(CurrentPhone)
             });
             CurrentPhone = string.Empty;
             await FeedbackService.Inform("Контакт добавлен " +

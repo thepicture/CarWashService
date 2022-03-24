@@ -5,6 +5,7 @@
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
+             xmlns:behaviors="clr-namespace:CarWashService.MobileApp.Behaviors"
              x:DataType="viewmodels:AddEditBranchViewModel"
              Title="{Binding Title}"
              x:Class="CarWashService.MobileApp.Views.AddEditBranchPage">
@@ -125,11 +126,15 @@
                                             Placeholder="Введите номер телефона"
                                             LeadingIcon="add"
                                             InputType="Telephone"
-                                            MaxLength="20"
+                                            MaxLength="18"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
                                             HelperText="* Обязательно"
-                                            Grid.Column="1" />
+                                            Grid.Column="1">
+                    <material:MaterialTextField.Behaviors>
+                        <behaviors:MaskedBehavior Mask="+X (XXX) XXX XX-XX"/>
+                    </material:MaterialTextField.Behaviors>
+                </material:MaterialTextField>
 
                 <material:MaterialButton Command="{Binding AddContactCommand}"
                                          Text="Добавить контакт"
