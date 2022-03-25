@@ -16,13 +16,7 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class MakeOrderViewModel : BaseViewModel
     {
-        private DateTime appointmentDate = DateTime.Now;
         private bool isNew;
-        public DateTime AppointmentDate
-        {
-            get => appointmentDate;
-            set => SetProperty(ref appointmentDate, value);
-        }
 
         private IEnumerable<SerializedService> servicesOfOrder;
 
@@ -38,6 +32,8 @@ namespace CarWashService.MobileApp.ViewModels
                     .ContinueWith((task) =>
                 {
                     TotalPrice = ServicesOfOrder.Sum(s => s.Price);
+                    AppointmentDateTime = DateTime.Parse(
+                        (App.Current as App).CurrentOrder.AppointmentDate);
                 });
             }
             else
@@ -130,15 +126,15 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 _ = validationErrors.AppendLine("Укажите филиал");
             }
-            else if (AppointmentTime < DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay
-              || AppointmentTime > DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay)
+            else if (AppointmentDateTime.TimeOfDay < DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay
+              || AppointmentDateTime.TimeOfDay > DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay)
             {
                 _ = validationErrors.AppendLine("В указанное вами время " +
                     "филиал не работает. Он работает с " +
                     $"{DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay:hh\\:mm} до " +
                     $"{DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay:hh\\:mm}");
             }
-            if (AppointmentDate < DateTime.Now)
+            if (AppointmentDateTime < DateTime.Now)
             {
                 _ = validationErrors.AppendLine("Дата назначения " +
                     "должна быть позднее текущей даты");
@@ -151,7 +147,7 @@ namespace CarWashService.MobileApp.ViewModels
             }
             SerializedOrder order = new SerializedOrder
             {
-                AppointmentDate = (AppointmentDate + AppointmentTime)
+                AppointmentDate = AppointmentDateTime
                     .ToString(),
                 Services = ServicesOfOrder.Select(s => s.Id),
                 BranchId = CurrentBranch.Id
@@ -160,11 +156,6 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 await FeedbackService.Inform("Заказ оформлен");
                 await Shell.Current.GoToAsync("..");
-            }
-            else
-            {
-                await FeedbackService.Inform("Не удалось " +
-                    "оформить заказ. Проверьте подключение к интернету");
             }
         }
 
@@ -184,12 +175,12 @@ namespace CarWashService.MobileApp.ViewModels
             set => SetProperty(ref currentBranch, value);
         }
 
-        private TimeSpan appointmentTime = TimeSpan.FromHours(12);
+        private DateTime appointmentDateTime = DateTime.Now.AddHours(1);
 
-        public TimeSpan AppointmentTime
+        public DateTime AppointmentDateTime
         {
-            get => appointmentTime;
-            set => SetProperty(ref appointmentTime, value);
+            get => appointmentDateTime;
+            set => SetProperty(ref appointmentDateTime, value);
         }
 
         private decimal totalPrice;

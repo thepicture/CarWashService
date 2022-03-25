@@ -5,5 +5,6 @@ Profile icons created by Icongeek26 - Flaticon
 Smart key icons created by Freepik - Flaticon
 Delivery icons created by Vitaly Gorbachev - Flaticon
 Plus icons created by srip - Flaticon
-BindableToolbarItem from https://forums.xamarin.com/discussion/comment/168974/#Comment_168974
-MaskedBehavior' from https://www.xamarinhelp.com/masked-entry-in-xamarin-for
+BindableToolbarItem is from https://forums.xamarin.com/discussion/comment/168974/#Comment_168974
+MaskedBehavior is from https://www.xamarinhelp.com/masked-entry-in-xamarin-for
+DateTimePicker is from https://stackoverflow.com/a/60808944

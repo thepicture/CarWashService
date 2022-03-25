@@ -105,6 +105,16 @@ namespace CarWashService.MobileApp.ViewModels
                         });
                         return new List<SerializedDiscount>();
                     }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.StackTrace);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            FeedbackService
+                            .InformError("Неизвестная ошибка: " + ex.StackTrace);
+                        });
+                        return new List<SerializedDiscount>();
+                    }
                 }
             });
         }

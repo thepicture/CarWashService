@@ -11,7 +11,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -88,10 +87,7 @@ namespace CarWashService.MobileApp.ViewModels
         public ObservableCollection<SerializedOrder> Orders
         {
             get => orders;
-            set
-            {
-                _ = SetProperty(ref orders, value);
-            }
+            set => _ = SetProperty(ref orders, value);
         }
 
         private Command acceptOrderCommand;

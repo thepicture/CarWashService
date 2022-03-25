@@ -71,6 +71,16 @@ namespace CarWashService.MobileApp.Services
                     });
                     return await Task.FromResult(false);
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        DependencyService.Get<IFeedbackService>()
+                        .InformError("Неизвестная ошибка: " + ex.StackTrace);
+                    });
+                    return await Task.FromResult(false);
+                }
             }
         }
 
