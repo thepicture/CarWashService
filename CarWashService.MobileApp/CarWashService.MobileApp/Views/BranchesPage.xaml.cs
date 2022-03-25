@@ -48,8 +48,7 @@ namespace CarWashService.MobileApp.Views
             try
             {
                 Plugin.Geolocator.Abstractions.Position position =
-                    await CrossGeolocator.Current.GetPositionAsync(
-                        timeout: TimeSpan.FromSeconds(10));
+                    await CrossGeolocator.Current.GetPositionAsync();
                 BranchesMap.MoveToRegion(
                     MapSpan.FromCenterAndRadius(
                         new Position(position.Latitude, position.Longitude),
