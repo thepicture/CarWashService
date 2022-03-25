@@ -15,6 +15,20 @@
             <maps:Map ItemsSource="{Binding Locations}"
                       IsShowingUser="True"
                       x:Name="BranchesMap">
+                <x:Arguments>
+                    <maps:MapSpan>
+                        <x:Arguments>
+                            <maps:Position>
+                                <x:Arguments>
+                                    <x:Double>55.751244</x:Double>
+                                    <x:Double>37.618423</x:Double>
+                                </x:Arguments>
+                            </maps:Position>
+                            <x:Double>0.01</x:Double>
+                            <x:Double>0.01</x:Double>
+                        </x:Arguments>
+                    </maps:MapSpan>
+                </x:Arguments>
                 <maps:Map.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type helpers:LocationHelper}">
                         <maps:Pin Position="{Binding Position}"
