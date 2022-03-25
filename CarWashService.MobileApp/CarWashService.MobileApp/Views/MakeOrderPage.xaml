@@ -42,18 +42,19 @@
                         <DataTemplate x:DataType="serialized:SerializedService">
                             <Grid>
                                 <material:MaterialCard Elevation="5"
-                                                       Margin="10">
-                                    <StackLayout>
+                                                       Margin="5">
+                                    <Grid RowDefinitions="*, auto, *">
                                         <Label Text="{Binding Name}"
-                                               HorizontalOptions="Center"
                                                FontAttributes="Bold"
                                                HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
-                                                 HeightRequest="1" />
+                                                 HeightRequest="1" 
+                                                 Grid.Row="1"/>
                                         <Label Text="{Binding Price, 
                                                               StringFormat='{}{0:F0} руб.'}"
-                                               HorizontalOptions="Center" />
-                                    </StackLayout>
+                                               HorizontalTextAlignment="Center" 
+                                               Grid.Row="2"/>
+                                    </Grid>
                                 </material:MaterialCard>
                             </Grid>
                         </DataTemplate>
@@ -62,7 +63,8 @@
                 <Label Text="{Binding TotalPrice, 
                                       StringFormat='ИТОГО: {0:F0} руб.'}"
                        FontSize="Title"
-                       HorizontalTextAlignment="Center" />
+                       HorizontalTextAlignment="Center" 
+                       Padding="0,0,0,20"/>
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
                                          Text="Оформить"
                                          Margin="0,0,0,50"
