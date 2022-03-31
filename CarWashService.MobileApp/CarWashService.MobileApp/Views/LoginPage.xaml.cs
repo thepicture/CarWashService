@@ -10,7 +10,13 @@ namespace CarWashService.MobileApp.Views
         public LoginPage()
         {
             InitializeComponent();
-            this.BindingContext = new LoginViewModel();
+            BindingContext = new LoginViewModel();
+            MessagingCenter.Subscribe<LoginViewModel>(this, "ReloadCaptcha", OnReloadCaptcha);
+        }
+
+        private void OnReloadCaptcha(LoginViewModel obj)
+        {
+            Captcha.Text = (BindingContext as LoginViewModel).CaptchaService.Text;
         }
     }
 }

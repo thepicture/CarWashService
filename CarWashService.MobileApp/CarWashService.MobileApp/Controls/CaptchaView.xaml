@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:CarWashService.MobileApp.Models.Captcha"
+             x:Class="CarWashService.MobileApp.Controls.CaptchaView">
+    <ContentView.Content>
+        <Frame BorderColor="Black">
+        <StackLayout Orientation="Horizontal"
+                     BindableLayout.ItemsSource="{Binding TextItems}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type controls:CaptchaLetter}">
+                        <Label Text="{Binding Letter}"
+                               FontSize="Large"
+                               FontAttributes="Bold"
+                               TextDecorations="Strikethrough"
+                               HorizontalOptions="CenterAndExpand">
+                        </Label>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </StackLayout>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

@@ -8,6 +8,7 @@ namespace CarWashService.MobileApp
 {
     public partial class AppShell : Shell
     {
+        public TabBar ShellTabBar => CommonTabBar;
         public AppShell()
         {
             InitializeComponent();

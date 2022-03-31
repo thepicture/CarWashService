@@ -5,10 +5,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
+             xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
              x:DataType="viewmodels:LoginViewModel"
+             x:Name="Page"
              mc:Ignorable="d"
              x:Class="CarWashService.MobileApp.Views.LoginPage"
-             Title="Авторизация">
+             Title="Авторизация"
+             IsEnabled="{Binding IsNotBlocked}">
+    <ContentView>
     <ScrollView Margin="0,40,0,0">
         <StackLayout Padding="10,0,10,0"
                      VerticalOptions="Fill">
@@ -43,6 +47,29 @@
                                         LeadingIcon="key"
                                         AlwaysShowUnderline="True"
                                         TintColor="{StaticResource Primary}" />
+            <StackLayout IsVisible="False">
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout"
+                                 Binding="{Binding CountOfIncorrectAttempts}"
+                                 Value="3">
+                        <Setter Property="IsVisible"
+                                Value="True" />
+                    </DataTrigger>
+                </StackLayout.Triggers>
+                <controls:CaptchaView x:Name="Captcha"
+                                      HorizontalOptions="Fill"/>
+                <material:MaterialButton Command="{Binding RegenerateCaptchaCommand}"
+                                         Text="Сгенерировать капчу"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
+                <material:MaterialTextField Text="{Binding CaptchaText}"
+                                            Placeholder="Введите капчу"
+                                            InputType="Text"
+                                            MaxLength="6"
+                                            LeadingIcon="key"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}" />
+            </StackLayout>
             <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
                                        Text="Запомнить меня" />
             <material:MaterialButton Command="{Binding LoginCommand}"
@@ -55,4 +82,5 @@
                                      Style="{StaticResource BackgroundButton}" />
         </StackLayout>
     </ScrollView>
+    </ContentView>
 </ContentPage>

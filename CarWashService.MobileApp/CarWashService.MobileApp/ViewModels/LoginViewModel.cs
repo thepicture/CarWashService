@@ -1,6 +1,7 @@
 ﻿using CarWashService.MobileApp.Services;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -10,6 +11,11 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
+        public int CountOfIncorrectAttempts
+        {
+            get => countOfIncorrectAttempts;
+            set => SetProperty(ref countOfIncorrectAttempts, value);
+        }
         public IAuthenticator Authenticator =>
             DependencyService.Get<IAuthenticator>();
         public Command LoginCommand { get; }
@@ -29,12 +35,35 @@ namespace CarWashService.MobileApp.ViewModels
             if (string.IsNullOrWhiteSpace(Password))
             {
                 _ = validationErrors.AppendLine("Введите пароль");
+
+            }
+            if (string.IsNullOrWhiteSpace(CaptchaText) && CountOfIncorrectAttempts > 2)
+            {
+                _ = validationErrors.AppendLine("Введите captcha");
             }
 
             if (validationErrors.Length > 0)
             {
                 await FeedbackService.InformError(
                     validationErrors.ToString());
+                return;
+            }
+
+            if (CaptchaText != null && !CaptchaText.Equals(CaptchaService.Text,
+                                   StringComparison.OrdinalIgnoreCase))
+            {
+                _ = FeedbackService.InformError("Неверная captcha. " +
+                    "Интерфейс заблокирован на 10 секунд");
+                IsNotBlocked = false;
+                Device.StartTimer(TimeSpan.FromSeconds(10), () =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        FeedbackService.Inform("Интерфейс разблокирован");
+                        IsNotBlocked = true;
+                    });
+                    return false;
+                });
                 return;
             }
 
@@ -74,13 +103,21 @@ namespace CarWashService.MobileApp.ViewModels
                 await FeedbackService.Inform("Вы авторизованы " +
                     $"как {Authenticator.Role.ToLower()}");
                 (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
+                CountOfIncorrectAttempts = 0;
+                CaptchaService.Invalidate();
             }
             else
             {
                 await FeedbackService.InformError("Неверный логин или пароль");
+                CountOfIncorrectAttempts++;
+                if (CountOfIncorrectAttempts == 3)
+                {
+                    CaptchaService.GenerateNew();
+                    MessagingCenter.Send(this, "ReloadCaptcha");
+                }
             }
         }
-
+        private MemoryStream captchaImage;
         private string login;
 
         public string Login
@@ -121,11 +158,51 @@ namespace CarWashService.MobileApp.ViewModels
         }
 
         private bool isRememberMe = false;
+        private int countOfIncorrectAttempts = 0;
 
         public bool IsRememberMe
         {
             get => isRememberMe;
             set => SetProperty(ref isRememberMe, value);
+        }
+        public MemoryStream CaptchaImage
+        {
+            get => captchaImage;
+            set => SetProperty(ref captchaImage, value);
+        }
+
+        private Command regenerateCaptchaCommand;
+        private string captchaText;
+        private bool isNotBlocked = true;
+
+        public ICommand RegenerateCaptchaCommand
+        {
+            get
+            {
+                if (regenerateCaptchaCommand == null)
+                {
+                    regenerateCaptchaCommand = new Command(RegenerateCaptcha);
+                }
+
+                return regenerateCaptchaCommand;
+            }
+        }
+
+        public string CaptchaText
+        {
+            get => captchaText;
+            set => SetProperty(ref captchaText, value);
+        }
+        public bool IsNotBlocked
+        {
+            get => isNotBlocked;
+            set => SetProperty(ref isNotBlocked, value);
+        }
+
+        private void RegenerateCaptcha()
+        {
+            CaptchaService.GenerateNew();
+            MessagingCenter.Send(this, "ReloadCaptcha");
         }
     }
 }

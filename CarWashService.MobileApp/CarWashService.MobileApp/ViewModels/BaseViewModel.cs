@@ -15,11 +15,13 @@ namespace CarWashService.MobileApp.ViewModels
         public IFeedbackService FeedbackService =>
             DependencyService.Get<IFeedbackService>();
         public IDataStore<SerializedService> ServiceDataStore =>
-          DependencyService.Get<IDataStore<SerializedService>>();
+            DependencyService.Get<IDataStore<SerializedService>>();
         public IDataStore<SerializedDiscount> DiscountDataStore =>
-        DependencyService.Get<IDataStore<SerializedDiscount>>();
+            DependencyService.Get<IDataStore<SerializedDiscount>>();
         public IDataStore<SerializedOrder> OrderDataStore =>
-      DependencyService.Get<IDataStore<SerializedOrder>>();
+            DependencyService.Get<IDataStore<SerializedOrder>>();
+        public ICaptchaService CaptchaService =>
+            DependencyService.Get<ICaptchaService>();
         public string Role => AppIdentity.Role;
         public bool IsCanDelete => "Администратор, Сотрудник".Contains(Role);
 

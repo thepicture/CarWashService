@@ -5,7 +5,6 @@
        xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
        Title="CarWashService.MobileApp"
        x:Class="CarWashService.MobileApp.AppShell">
-
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle"
@@ -84,5 +83,5 @@
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
-    <TabBar x:Name="CommonTabBar" />
+    <TabBar x:Name="CommonTabBar"/>
 </Shell>
