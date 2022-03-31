@@ -58,6 +58,10 @@ namespace CarWashService.MobileApp.ViewModels
                     "начала работы должно быть " +
                     "раньше времени окончания работы");
             }
+            if (PhoneNumbers.Count == 0)
+            {
+                _ = validationErrors.AppendLine("Укажите хотя бы один контакт");
+            }
 
             if (validationErrors.Length > 0)
             {
