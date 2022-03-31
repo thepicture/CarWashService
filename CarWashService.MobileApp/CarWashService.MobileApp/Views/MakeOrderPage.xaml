@@ -16,25 +16,18 @@
     <ContentPage.Content>
         <ScrollView Margin="10,10,10,0"
                     x:DataType="viewmodels:MakeOrderViewModel">
-            <StackLayout>
-                <StackLayout.Style>
-                    <Style TargetType="StackLayout">
+            <StackLayout InputTransparent="True">
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout"
+                                 Binding="{Binding IsNew}"
+                                 Value="True">
                         <Setter Property="InputTransparent"
-                                Value="True" />
-                        <Style.Triggers>
-                            <DataTrigger TargetType="StackLayout"
-                                         Binding="{Binding CurrentBranchId}"
-                                         Value="0">
-                                <Setter Property="InputTransparent"
-                                        Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackLayout.Style>
-                <Picker Title="* Укажите филиал"
-                        ItemDisplayBinding="{Binding Title}"
-                        ItemsSource="{Binding Branches}"
-                        SelectedItem="{Binding CurrentBranch}" />
+                                Value="False" />
+                    </DataTrigger>
+                </StackLayout.Triggers>
+                <Label Text="{Binding Source={Static Application.Current}, 
+                                      Path=CurrentBranch.Title,
+                                      StringFormat='{}Филиал: {0}'}"/>
                 <Label Text="* Укажите дату и время назначения">
                     <Label.Triggers>
                         <DataTrigger TargetType="Label"

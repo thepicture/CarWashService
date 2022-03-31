@@ -117,7 +117,7 @@
                     <Style TargetType="StackLayout">
                         <Style.Triggers>
                             <DataTrigger TargetType="StackLayout"
-                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                         Binding="{Binding Role}"
                                          Value="Клиент">
                                 <Setter Property="IsVisible"
                                         Value="False" />
@@ -171,10 +171,24 @@
                                      Style="{StaticResource BaseButton}">
                 <material:MaterialButton.Triggers>
                     <DataTrigger TargetType="material:MaterialButton"
-                                 Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                 Binding="{Binding Role}"
                                  Value="Клиент">
                         <Setter Property="IsVisible"
                                 Value="False" />
+                    </DataTrigger>
+                </material:MaterialButton.Triggers>
+            </material:MaterialButton>
+            <material:MaterialButton Command="{Binding GoToServicesForOrderPageCommand}"
+                                     Text="Заказать услуги"
+                                     VerticalOptions="EndAndExpand"
+                                     Style="{StaticResource BaseButton}"
+                                     IsVisible="False">
+                <material:MaterialButton.Triggers>
+                    <DataTrigger TargetType="material:MaterialButton"
+                                 Binding="{Binding Role}"
+                                 Value="Клиент">
+                        <Setter Property="IsVisible"
+                                Value="True" />
                     </DataTrigger>
                 </material:MaterialButton.Triggers>
             </material:MaterialButton>

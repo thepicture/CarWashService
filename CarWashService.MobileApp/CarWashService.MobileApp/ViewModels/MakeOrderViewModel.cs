@@ -25,9 +25,9 @@ namespace CarWashService.MobileApp.ViewModels
             IsNew = (App.Current as App).CurrentOrder == null;
             if ((App.Current as App).CurrentOrder != null)
             {
-                _ = Task.WhenAll(new List<Task> {
-                    LoadServicesOfOrderAsync(),
-                    LoadBranchesAsync()
+                _ = Task.Run(() =>
+                {
+                    _ = LoadServicesOfOrderAsync();
                 })
                     .ContinueWith((task) =>
                 {
@@ -40,10 +40,6 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 ServicesOfOrder = (App.Current as App).CurrentServices;
                 TotalPrice = ServicesOfOrder.Sum(s => s.Price);
-                _ = Task.Run(async () =>
-                  {
-                      await LoadBranchesAsync();
-                  });
             }
         }
 
@@ -74,7 +70,6 @@ namespace CarWashService.MobileApp.ViewModels
                                 .ToString()));
                     }
                     ServicesOfOrder = currentServices;
-                    CurrentBranchId = order.BranchId;
                 }
                 catch (HttpRequestException ex)
                 {
@@ -83,24 +78,10 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
-        private async Task LoadBranchesAsync()
-        {
-            Branches = await BranchDataStore.GetItemsAsync();
-            if (CurrentBranchId > 0)
-            {
-                CurrentBranch = Branches.First(b => b.Id == CurrentBranchId);
-            }
-        }
-
         public IEnumerable<SerializedService> ServicesOfOrder
         {
             get => servicesOfOrder;
             set => SetProperty(ref servicesOfOrder, value);
-        }
-        public int CurrentBranchId
-        {
-            get => currentBranchId;
-            set => SetProperty(ref currentBranchId, value);
         }
 
         private Command saveChangesCommand;
@@ -121,12 +102,7 @@ namespace CarWashService.MobileApp.ViewModels
         private async void SaveChangesAsync()
         {
             StringBuilder validationErrors = new StringBuilder();
-
-            if (CurrentBranch == null)
-            {
-                _ = validationErrors.AppendLine("Укажите филиал");
-            }
-            else if (AppointmentDateTime.TimeOfDay < DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay
+            if (AppointmentDateTime.TimeOfDay < DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay
               || AppointmentDateTime.TimeOfDay > DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay)
             {
                 _ = validationErrors.AppendLine("В указанное вами время " +
@@ -167,13 +143,7 @@ namespace CarWashService.MobileApp.ViewModels
             set => SetProperty(ref branches, value);
         }
 
-        private SerializedBranch currentBranch;
-
-        public SerializedBranch CurrentBranch
-        {
-            get => currentBranch;
-            set => SetProperty(ref currentBranch, value);
-        }
+        public SerializedBranch CurrentBranch => (App.Current as App).CurrentBranch;
 
         private DateTime appointmentDateTime = DateTime.Now.AddHours(1);
 
@@ -184,7 +154,6 @@ namespace CarWashService.MobileApp.ViewModels
         }
 
         private decimal totalPrice;
-        private int currentBranchId;
 
         public decimal TotalPrice
         {

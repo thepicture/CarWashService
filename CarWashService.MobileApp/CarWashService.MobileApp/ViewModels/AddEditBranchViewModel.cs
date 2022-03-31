@@ -1,6 +1,7 @@
 ﻿using CarWashService.MobileApp.Models;
 using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
+using CarWashService.MobileApp.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -272,6 +273,30 @@ namespace CarWashService.MobileApp.ViewModels
                     await FeedbackService.InformError("Не удалось удалить филиал");
                 }
             }
+        }
+
+        private Command goToServicesForOrderPageCommand;
+
+        public ICommand GoToServicesForOrderPageCommand
+        {
+            get
+            {
+                if (goToServicesForOrderPageCommand == null)
+                {
+                    goToServicesForOrderPageCommand =
+                        new Command(PerformGoToServicesForOrderPageAsync);
+                }
+
+                return goToServicesForOrderPageCommand;
+            }
+        }
+
+        private async void PerformGoToServicesForOrderPageAsync()
+        {
+            (App.Current as App).CurrentBranch = CurrentBranch;
+            await Shell.Current.Navigation.PushAsync(
+                new ServicesPage(
+                    new ServicesViewModel(isForOrder: true)));
         }
     }
 }

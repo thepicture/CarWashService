@@ -12,6 +12,8 @@ namespace CarWashService.MobileApp
 {
     public class ServicesViewModel : BaseViewModel
     {
+        public bool IsClientCheckingForOrder => IsForOrder && !IsCanDelete;
+
 
         private string searchText;
 
@@ -147,6 +149,11 @@ namespace CarWashService.MobileApp
         private ObservableCollection<SerializedService> selectedServices;
         private bool isAbleToMakeOrder;
 
+        public ServicesViewModel(bool isForOrder)
+        {
+            IsForOrder = isForOrder;
+        }
+
         public ICommand ToggleServiceCommand
         {
             get
@@ -160,6 +167,8 @@ namespace CarWashService.MobileApp
             }
         }
 
+        public bool IsForOrder { get; }
+
         private void ToggleService(object parameter)
         {
             if (SelectedServices.Contains(parameter as SerializedService))
@@ -170,7 +179,7 @@ namespace CarWashService.MobileApp
             {
                 SelectedServices.Add(parameter as SerializedService);
             }
-            IsAbleToMakeOrder = SelectedServices.Count > 0;
+            IsAbleToMakeOrder = SelectedServices.Count > 0 && IsClientCheckingForOrder;
         }
     }
 }

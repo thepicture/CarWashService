@@ -4,7 +4,6 @@
              xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
-             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              xmlns:views="clr-namespace:CarWashService.MobileApp.Views"
              xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
              x:DataType="mobileapp:ServicesViewModel"
@@ -82,12 +81,21 @@
                                             <material:MaterialButton.Triggers>
                                                 <DataTrigger TargetType="material:MaterialButton"
                                                              Binding="{Binding Source={RelativeSource Mode=FindAncestor,
-                                                                                                              AncestorType={x:Type views:ServicesPage}}, Path=BindingContext.Role}"
+                                                                                                      AncestorType={x:Type views:ServicesPage}},
+                                                                               Path=BindingContext.Role}"
                                                              Value="Клиент">
                                                     <Setter Property="IsVisible"
                                                             Value="True" />
                                                 </DataTrigger>
-                                            </material:MaterialButton.Triggers>
+                                            <DataTrigger TargetType="material:MaterialButton"
+                                                         Binding="{Binding Source={RelativeSource Mode=FindAncestor,
+                                                                                                  AncestorType={x:Type views:ServicesPage}}, 
+                                                                           Path=BindingContext.IsClientCheckingForOrder}"
+                                                         Value="False">
+                                                <Setter Property="IsVisible"
+                                                        Value="False" />
+                                            </DataTrigger>
+                                        </material:MaterialButton.Triggers>
                                         </material:MaterialButton>
                                     </StackLayout>
                                 </material:MaterialCard>

@@ -13,7 +13,7 @@ namespace CarWashService.MobileApp.Views
         public ServicesPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new ServicesViewModel();
+            BindingContext = _viewModel = new ServicesViewModel(isForOrder: false);
             if (AppIdentity.Role == "Клиент")
             {
                 ToolbarItem itemToRemove = ToolbarItems
@@ -28,6 +28,26 @@ namespace CarWashService.MobileApp.Views
                 _ = ToolbarItems.Remove(itemToRemove);
             }
         }
+
+        public ServicesPage(ServicesViewModel servicesViewModel)
+        {
+            InitializeComponent();
+            BindingContext = _viewModel = servicesViewModel;
+            if (AppIdentity.Role == "Клиент")
+            {
+                ToolbarItem itemToRemove = ToolbarItems
+                    .First(t => t.Text == "Добавить");
+                _ = ToolbarItems.Remove(itemToRemove);
+            }
+            if (AppIdentity.Role == "Сотрудник" ||
+                AppIdentity.Role == "Администратор")
+            {
+                ToolbarItem itemToRemove = ToolbarItems
+                    .First(t => t.Text == "Оформить выбранное");
+                _ = ToolbarItems.Remove(itemToRemove);
+            }
+        }
+
         protected override void OnAppearing()
         {
             _viewModel.OnAppearing();
