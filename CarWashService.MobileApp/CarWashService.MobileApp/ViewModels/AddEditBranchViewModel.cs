@@ -236,5 +236,42 @@ namespace CarWashService.MobileApp.ViewModels
             get => currentPhone;
             set => SetProperty(ref currentPhone, value);
         }
+
+        public bool IsCanDeleteBranch => IsCanDelete && !IsNotInReadMode;
+
+        private Command deleteBranchCommand;
+
+        public ICommand DeleteBranchCommand
+        {
+            get
+            {
+                if (deleteBranchCommand == null)
+                {
+                    deleteBranchCommand = new Command(DeleteBranchAsync);
+                }
+
+                return deleteBranchCommand;
+            }
+        }
+
+        private async void DeleteBranchAsync()
+        {
+            if (await FeedbackService.Ask("Удалить филиал? " +
+                "Вместе с ним будут удалены связанные заказы"))
+            {
+                if (await BranchDataStore
+                    .DeleteItemAsync(CurrentBranch
+                    .Id
+                    .ToString()))
+                {
+                    await FeedbackService.Inform("Филиал удалён");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await FeedbackService.InformError("Не удалось удалить филиал");
+                }
+            }
+        }
     }
 }

@@ -172,7 +172,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BranchPhone_Branch">
-          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+          <End Role="Branch" Type="Self.Branch" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="BranchPhone" Type="Self.BranchPhone" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Branch">
@@ -184,7 +186,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Order_Branch">
-          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+          <End Role="Branch" Type="Self.Branch" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Branch">
@@ -234,7 +238,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ServiceOfBranch_Branch">
-          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+          <End Role="Branch" Type="Self.Branch" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ServiceOfBranch" Type="Self.ServiceOfBranch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Branch">
@@ -725,7 +731,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BranchPhone_Branch">
-          <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="1" />
+          <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="CarWashBaseModel.BranchPhone" Role="BranchPhone" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Branch">
@@ -737,7 +745,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Order_Branch">
-          <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="1" />
+          <End Type="CarWashBaseModel.Branch" Role="Branch" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="CarWashBaseModel.Order" Role="Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Branch">

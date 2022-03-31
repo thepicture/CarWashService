@@ -6,9 +6,15 @@
              xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              xmlns:behaviors="clr-namespace:CarWashService.MobileApp.Behaviors"
+             xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
              x:DataType="viewmodels:AddEditBranchViewModel"
              Title="{Binding Title}"
              x:Class="CarWashService.MobileApp.Views.AddEditBranchPage">
+    <ContentPage.ToolbarItems>
+        <controls:BindableToolbarItem Text="Удалить"
+                                      Command="{Binding DeleteBranchCommand}"
+                                      IsVisible="{Binding IsCanDeleteBranch}" />
+    </ContentPage.ToolbarItems>
     <ScrollView Margin="10,10,10,0">
         <StackLayout x:DataType="viewmodels:AddEditBranchViewModel">
             <Grid>
@@ -132,7 +138,7 @@
                                             HelperText="* Обязательно"
                                             Grid.Column="1">
                     <material:MaterialTextField.Behaviors>
-                        <behaviors:MaskedBehavior Mask="+X (XXX) XXX XX-XX"/>
+                        <behaviors:MaskedBehavior Mask="+X (XXX) XXX XX-XX" />
                     </material:MaterialTextField.Behaviors>
                 </material:MaterialTextField>
 

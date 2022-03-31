@@ -211,7 +211,7 @@ namespace CarWashService.Web.Controllers
 
         // DELETE: api/Branches/5
         [ResponseType(typeof(Branch))]
-        [Authorize(Roles = "Администратор")]
+        [Authorize(Roles = "Администратор, Сотрудник")]
         public async Task<IHttpActionResult> DeleteBranch(int id)
         {
             Branch branch = await db.Branch.FindAsync(id);
@@ -223,7 +223,7 @@ namespace CarWashService.Web.Controllers
             _ = db.Branch.Remove(branch);
             _ = await db.SaveChangesAsync();
 
-            return Ok(branch);
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)
