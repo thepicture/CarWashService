@@ -220,7 +220,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ServiceDiscount_Service">
-          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ServiceDiscount" Type="Self.ServiceDiscount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Service">
@@ -256,7 +258,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ServiceOfOrder_Order">
-          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ServiceOfOrder" Type="Self.ServiceOfOrder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Order">
@@ -268,7 +272,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ServiceOfOrder_Service">
-          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ServiceOfOrder" Type="Self.ServiceOfOrder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Service">
@@ -280,7 +286,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TypeOfService_Service">
-          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TypeOfService" Type="Self.TypeOfService" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Service">
@@ -765,7 +773,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ServiceDiscount_Service">
-          <End Type="CarWashBaseModel.Service" Role="Service" Multiplicity="1" />
+          <End Type="CarWashBaseModel.Service" Role="Service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="CarWashBaseModel.ServiceDiscount" Role="ServiceDiscount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Service">

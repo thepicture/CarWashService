@@ -21,6 +21,7 @@ namespace CarWashService.MobileApp.ViewModels
         public IDataStore<SerializedOrder> OrderDataStore =>
       DependencyService.Get<IDataStore<SerializedOrder>>();
         public string Role => AppIdentity.Role;
+        public bool IsCanDelete => "Администратор, Сотрудник".Contains(Role);
 
         bool isBusy = false;
         public bool IsBusy

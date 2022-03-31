@@ -156,6 +156,7 @@ namespace CarWashService.Web.Controllers
 
         // DELETE: api/Orders/5
         [ResponseType(typeof(Order))]
+        [Authorize(Roles = "Администратор, Сотрудник")]
         public async Task<IHttpActionResult> DeleteOrder(int id)
         {
             Order order = await db.Order.FindAsync(id);
@@ -167,7 +168,7 @@ namespace CarWashService.Web.Controllers
             _ = db.Order.Remove(order);
             _ = await db.SaveChangesAsync();
 
-            return Ok(order);
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)

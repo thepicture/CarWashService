@@ -8,6 +8,11 @@
              x:DataType="viewmodels:MakeOrderViewModel"
              x:Class="CarWashService.MobileApp.Views.MakeOrderPage"
              Title="Оформление заказа">
+    <ContentPage.ToolbarItems>
+        <controls:BindableToolbarItem Text="Удалить"
+                                      Command="{Binding DeleteOrderCommand}"
+                                      IsVisible="{Binding IsCanDelete}" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView Margin="10,10,10,0"
                     x:DataType="viewmodels:MakeOrderViewModel">
@@ -57,12 +62,12 @@
                                                FontAttributes="Bold"
                                                HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
-                                                 HeightRequest="1" 
-                                                 Grid.Row="1"/>
+                                                 HeightRequest="1"
+                                                 Grid.Row="1" />
                                         <Label Text="{Binding Price, 
                                                               StringFormat='{}{0:F0} руб.'}"
-                                               HorizontalTextAlignment="Center" 
-                                               Grid.Row="2"/>
+                                               HorizontalTextAlignment="Center"
+                                               Grid.Row="2" />
                                     </Grid>
                                 </material:MaterialCard>
                             </Grid>
@@ -72,8 +77,8 @@
                 <Label Text="{Binding TotalPrice, 
                                       StringFormat='ИТОГО: {0:F0} руб.'}"
                        FontSize="Title"
-                       HorizontalTextAlignment="Center" 
-                       Padding="0,0,0,20"/>
+                       HorizontalTextAlignment="Center"
+                       Padding="0,0,0,20" />
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
                                          Text="Оформить"
                                          Margin="0,0,0,50"

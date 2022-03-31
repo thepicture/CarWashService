@@ -196,5 +196,40 @@ namespace CarWashService.MobileApp.ViewModels
             get => isNew;
             set => SetProperty(ref isNew, value);
         }
+
+        private Command deleteOrderCommand;
+
+        public ICommand DeleteOrderCommand
+        {
+            get
+            {
+                if (deleteOrderCommand == null)
+                {
+                    deleteOrderCommand = new Command(DeleteOrderAsync);
+                }
+
+                return deleteOrderCommand;
+            }
+        }
+
+        private async void DeleteOrderAsync()
+        {
+            if (await FeedbackService.Ask("Удалить заказ?"))
+            {
+                if (await OrderDataStore
+                    .DeleteItemAsync((App.Current as App)
+                    .CurrentOrder
+                    .Id
+                    .ToString()))
+                {
+                    await FeedbackService.Inform("Заказ удалён");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await FeedbackService.InformError("Не удалось удалить заказ");
+                }
+            }
+        }
     }
 }
