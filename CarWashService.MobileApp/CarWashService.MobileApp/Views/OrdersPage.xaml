@@ -35,14 +35,19 @@
                                                        x:DataType="serialized:SerializedOrder"
                                                        IsClickable="True">
                                     <StackLayout>
-                                        <Label Text="{Binding ClientFullName}"
+                                        <Label Text="{Binding Path=ClientFullName,
+                                                              StringFormat='{}Клиент: {0}'}"
                                                FontAttributes="Bold"
                                                HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
-                                        <Label Text="{Binding SellerFullName, StringFormat='Продавец: {0}', 
-                                                              TargetNullValue='Не подтверждено'}"
-                                               HorizontalTextAlignment="Center" />
+                                        <Label Text="{Binding Path=SellerFullName, 
+                                                              StringFormat='Менеджер: {0}', 
+                                                              TargetNullValue='Не подтверждено менеджером'}"
+                                               HorizontalTextAlignment="Center" 
+                                               FontAttributes="Bold"/>
+                                        <BoxView Color="WhiteSmoke"
+                                                 HeightRequest="1" />
                                         <Label Text="{Binding TotalPrice, StringFormat='ИТОГО: {0:F0} руб.'}"
                                                HorizontalOptions="Center" />
                                         <BoxView Color="WhiteSmoke"
