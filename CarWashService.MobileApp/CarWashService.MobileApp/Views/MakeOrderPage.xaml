@@ -30,7 +30,16 @@
                         ItemDisplayBinding="{Binding Title}"
                         ItemsSource="{Binding Branches}"
                         SelectedItem="{Binding CurrentBranch}" />
-                <Label Text="* Укажите дату и время назначения" />
+                <Label Text="* Укажите дату и время назначения">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding IsNew}"
+                                     Value="False">
+                            <Setter Property="Text"
+                                    Value="Дата и время назначения" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
                 <controls:DateTimePicker DateTime="{Binding AppointmentDateTime}" />
                 <BoxView HeightRequest="1"
                          Color="WhiteSmoke"
