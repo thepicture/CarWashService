@@ -11,5 +11,11 @@ namespace CarWashService.MobileApp.Views
             InitializeComponent();
             BindingContext = new AccountViewModel();
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            (BindingContext as AccountViewModel).OnAppearing();
+        }
     }
 }

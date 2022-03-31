@@ -212,6 +212,7 @@
     <Compile Include="Models\Entities\Serialized\SerializedDiscount.cs" />
     <Compile Include="Models\Entities\Serialized\SerializedOrder.cs" />
     <Compile Include="Models\Entities\Serialized\SerializedService.cs" />
+    <Compile Include="Models\Entities\Serialized\SerializedUser.cs" />
     <Compile Include="Models\Entities\Service.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>

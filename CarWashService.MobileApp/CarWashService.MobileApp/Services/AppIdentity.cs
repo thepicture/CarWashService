@@ -1,35 +1,48 @@
-﻿using Xamarin.Essentials;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using Newtonsoft.Json;
+using Xamarin.Essentials;
 
 namespace CarWashService.MobileApp.Services
 {
     public static class AppIdentity
     {
-        public static string Role
+        public static void Invalidate()
+        {
+            SecureStorage.RemoveAll();
+            AppIdentity.AuthorizationValue = null;
+            AppIdentity.User = null;
+        }
+        public static SerializedUser User
         {
             get
             {
-                if ((App.Current as App).Role != null)
+                if ((App.Current as App).User != null)
                 {
-                    return (App.Current as App).Role;
+                    return (App.Current as App).User;
                 }
                 else
                 {
-                    return SecureStorage.GetAsync("Role").Result;
+                    return JsonConvert
+                        .DeserializeObject<SerializedUser>(
+                            SecureStorage.GetAsync("User").Result);
                 }
             }
             set
             {
-                (App.Current as App).Role = value;
+                (App.Current as App).User = value;
                 if (value == null)
                 {
-                    _ = SecureStorage.Remove("Role");
+                    _ = SecureStorage.Remove("User");
                 }
                 else
                 {
-                    _ = SecureStorage.SetAsync("Role", value);
+                    _ = SecureStorage
+                        .SetAsync("User",
+                                  JsonConvert.SerializeObject(value));
                 }
             }
         }
+        public static string Role => User.UserTypeName;
         public static string AuthorizationValue
         {
             get

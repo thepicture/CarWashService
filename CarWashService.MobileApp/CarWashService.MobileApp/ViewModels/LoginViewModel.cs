@@ -1,4 +1,5 @@
 ﻿using CarWashService.MobileApp.Services;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -92,16 +93,17 @@ namespace CarWashService.MobileApp.ViewModels
                         .SetAsync("Identity",
                                   encodedLoginAndPassword);
                     await SecureStorage
-                       .SetAsync("Role",
-                                 Authenticator.Role);
+                       .SetAsync("User",
+                                 JsonConvert.SerializeObject(Authenticator.User));
                 }
                 else
                 {
-                    (App.Current as App).Role = Authenticator.Role;
+                    (App.Current as App).User = Authenticator.User;
+                    (App.Current as App).Role = Authenticator.User.UserTypeName;
                     (App.Current as App).Identity = encodedLoginAndPassword;
                 }
                 await FeedbackService.Inform("Вы авторизованы " +
-                    $"как {Authenticator.Role.ToLower()}");
+                    $"как {AppIdentity.User.UserTypeName.ToLower()}");
                 (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
                 CountOfIncorrectAttempts = 0;
                 CaptchaService.Invalidate();

@@ -7,104 +7,115 @@
              xmlns:viewmodelhelpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              x:DataType="vm:RegisterViewModel"
              Title="Регистрация">
-    <ScrollView Margin="10">
-        <StackLayout>
-            <material:MaterialTextField Text="{Binding FirstName}"
-                                        Placeholder="Введите ваше имя"
-                                        LeadingIcon="profile"
-                                        InputType="Text"
-                                        MaxLength="50"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        HelperText="* Обязательно" />
-            <material:MaterialTextField Text="{Binding LastName}"
-                                        Placeholder="Введите вашу фамилию"
-                                        LeadingIcon="profile"
-                                        InputType="Text"
-                                        MaxLength="50"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        HelperText="* Обязательно" />
-            <material:MaterialTextField Text="{Binding Patronymic}"
-                                        Placeholder="Введите ваше отчество"
-                                        LeadingIcon="profile"
-                                        InputType="Text"
-                                        MaxLength="50"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}" />
-            <Picker Title="Тип пользователя"
-                    SelectedItem="{Binding UserType}">
-                <Picker.ItemDisplayBinding>
-                    <Binding Path="Name"
-                             x:DataType="viewmodelhelpers:UserTypeHelper" />
-                </Picker.ItemDisplayBinding>
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type viewmodelhelpers:UserTypeHelper}">
-                        <viewmodelhelpers:UserTypeHelper>
-                            <viewmodelhelpers:UserTypeHelper.Id>1</viewmodelhelpers:UserTypeHelper.Id>
-                            <viewmodelhelpers:UserTypeHelper.Name>Администратор</viewmodelhelpers:UserTypeHelper.Name>
-                        </viewmodelhelpers:UserTypeHelper>
-                        <viewmodelhelpers:UserTypeHelper>
-                            <viewmodelhelpers:UserTypeHelper.Id>2</viewmodelhelpers:UserTypeHelper.Id>
-                            <viewmodelhelpers:UserTypeHelper.Name>Клиент</viewmodelhelpers:UserTypeHelper.Name>
-                        </viewmodelhelpers:UserTypeHelper>
-                        <viewmodelhelpers:UserTypeHelper>
-                            <viewmodelhelpers:UserTypeHelper.Id>3</viewmodelhelpers:UserTypeHelper.Id>
-                            <viewmodelhelpers:UserTypeHelper.Name>Сотрудник</viewmodelhelpers:UserTypeHelper.Name>
-                        </viewmodelhelpers:UserTypeHelper>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
-            <material:MaterialTextField Text="{Binding Login}"
-                                        Placeholder="Введите логин"
-                                        LeadingIcon="authorization"
-                                        InputType="Text"
-                                        MaxLength="50"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        HelperText="* Обязательно" />
-            <material:MaterialTextField Text="{Binding Password}"
-                                        Placeholder="Введите пароль"
-                                        LeadingIcon="key"
-                                        InputType="Password"
-                                        MaxLength="50"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        HelperText="* Обязательно" />
-            <Grid ColumnDefinitions="*,*">
-                <material:MaterialTextField Text="{Binding PassportNumber}"
-                                            Placeholder="Номер"
-                                            LeadingIcon="registration"
-                                            InputType="Numeric"
-                                            MaxLength="6"
+    <ContentView>
+        <ScrollView Margin="10">
+            <StackLayout>
+                <material:MaterialTextField Text="{Binding FirstName}"
+                                            Placeholder="Введите ваше имя"
+                                            LeadingIcon="profile"
+                                            InputType="Text"
+                                            MaxLength="50"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
                                             HelperText="* Обязательно" />
-                <material:MaterialTextField Text="{Binding PassportSeries}"
-                                            Grid.Column="1"
-                                            Placeholder="Серия"
-                                            LeadingIcon="registration"
-                                            InputType="Numeric"
-                                            MaxLength="4"
+                <material:MaterialTextField Text="{Binding LastName}"
+                                            Placeholder="Введите вашу фамилию"
+                                            LeadingIcon="profile"
+                                            InputType="Text"
+                                            MaxLength="50"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
                                             HelperText="* Обязательно" />
-            </Grid>
-            <material:MaterialTextField Text="{Binding Email}"
-                                        Placeholder="Введите email"
-                                        LeadingIcon="profile"
-                                        InputType="Email"
-                                        MaxLength="100"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}"
-                                        HelperText="* Обязательно" />
-            <material:MaterialButton Command="{Binding RegisterCommand}"
-                                     Text="Зарегистрироваться"
-                                     VerticalOptions="EndAndExpand"
-                                     Style="{StaticResource BaseButton}"/>
-            <Label Text="* Нажимая 'Зарегистрироваться', вы соглашаетесь на обработку персональных данных"
-                   HorizontalTextAlignment="Center"
-                   Padding="10" />
-        </StackLayout>
-    </ScrollView>
+                <material:MaterialTextField Text="{Binding Patronymic}"
+                                            Placeholder="Введите ваше отчество"
+                                            LeadingIcon="profile"
+                                            InputType="Text"
+                                            MaxLength="50"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}" />
+                <Picker Title="Тип пользователя"
+                        SelectedItem="{Binding UserType}">
+                    <Picker.ItemDisplayBinding>
+                        <Binding Path="Name"
+                                 x:DataType="viewmodelhelpers:UserTypeHelper" />
+                    </Picker.ItemDisplayBinding>
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type viewmodelhelpers:UserTypeHelper}">
+                            <viewmodelhelpers:UserTypeHelper Id="1"
+                                                             Name="Администратор" />
+                            <viewmodelhelpers:UserTypeHelper Id="2"
+                                                             Name="Клиент" />
+                            <viewmodelhelpers:UserTypeHelper Id="3"
+                                                             Name="Сотрудник" />
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <material:MaterialTextField Text="{Binding Login}"
+                                            Placeholder="Введите логин"
+                                            LeadingIcon="authorization"
+                                            InputType="Text"
+                                            MaxLength="50"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            HelperText="* Обязательно" />
+                <material:MaterialTextField Text="{Binding Password}"
+                                            Placeholder="Введите пароль"
+                                            LeadingIcon="key"
+                                            InputType="Password"
+                                            MaxLength="50"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            HelperText="* Обязательно" />
+                <Grid ColumnDefinitions="*,*">
+                    <material:MaterialTextField Text="{Binding PassportNumber}"
+                                                Placeholder="Номер"
+                                                LeadingIcon="registration"
+                                                InputType="Numeric"
+                                                MaxLength="6"
+                                                AlwaysShowUnderline="True"
+                                                TintColor="{StaticResource Primary}"
+                                                HelperText="* Обязательно" />
+                    <material:MaterialTextField Text="{Binding PassportSeries}"
+                                                Grid.Column="1"
+                                                Placeholder="Серия"
+                                                LeadingIcon="registration"
+                                                InputType="Numeric"
+                                                MaxLength="4"
+                                                AlwaysShowUnderline="True"
+                                                TintColor="{StaticResource Primary}"
+                                                HelperText="* Обязательно" />
+                </Grid>
+                <material:MaterialTextField Text="{Binding Email}"
+                                            Placeholder="Введите email"
+                                            LeadingIcon="profile"
+                                            InputType="Email"
+                                            MaxLength="100"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}"
+                                            HelperText="* Обязательно" />
+                <Label Text="Фотография аккаунта (необязательно)" />
+                <Frame CornerRadius="200"
+                       Padding="0"
+                       WidthRequest="300"
+                       HeightRequest="300"
+                       HasShadow="False"
+                       HorizontalOptions="Center">
+                    <Image Source="{Binding Path=AccountImage, 
+                                    TargetNullValue='account'}"
+                           Aspect="AspectFill" />
+                </Frame>
+                <material:MaterialButton Command="{Binding SelectImageCommand}"
+                                         Text="Выбрать фото"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BackgroundButton}" />
+                <material:MaterialButton Command="{Binding RegisterCommand}"
+                                         Text="Зарегистрироваться"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
+                <Label Text="* Нажимая 'Зарегистрироваться', вы соглашаетесь на обработку персональных данных"
+                       HorizontalTextAlignment="Center"
+                       Padding="10" />
+            </StackLayout>
+        </ScrollView>
+    </ContentView>
 </ContentPage>

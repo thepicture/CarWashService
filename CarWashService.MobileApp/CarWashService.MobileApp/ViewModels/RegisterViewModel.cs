@@ -2,11 +2,12 @@
 using CarWashService.MobileApp.Models.ViewModelHelpers;
 using CarWashService.MobileApp.Services;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -125,7 +126,8 @@ namespace CarWashService.MobileApp.ViewModels
                 Patronymic = Patronymic,
                 PassportNumber = PassportNumber,
                 PassportSeries = PassportSeries,
-                UserTypeId = userType.Id
+                UserTypeId = userType.Id,
+                ImageBytes=ImageBytes
             };
 
             bool isRegistered;
@@ -166,6 +168,59 @@ namespace CarWashService.MobileApp.ViewModels
 
         private string email;
 
-        public string Email { get => email; set => SetProperty(ref email, value); }
+        public string Email
+        {
+            get => email;
+            set => SetProperty(ref email, value);
+        }
+
+        private ImageSource accountImage;
+
+        public ImageSource AccountImage
+        {
+            get => accountImage;
+            set => SetProperty(ref accountImage, value);
+        }
+
+        private Command selectImageCommand;
+        private byte[] imageBytes;
+
+        public ICommand SelectImageCommand
+        {
+            get
+            {
+                if (selectImageCommand == null)
+                {
+                    selectImageCommand = new Command(SelectImageAsync);
+                }
+
+                return selectImageCommand;
+            }
+        }
+
+        public byte[] ImageBytes
+        {
+            get => imageBytes;
+            set => SetProperty(ref imageBytes, value);
+        }
+
+        private async void SelectImageAsync()
+        {
+            FileResult result = await MediaPicker
+               .PickPhotoAsync(new MediaPickerOptions
+               {
+                   Title = "Выберите фото аккаунта"
+               });
+            Stream imageStream = await result.OpenReadAsync();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await imageStream.CopyToAsync(memoryStream);
+                ImageBytes = memoryStream.ToArray();
+            }
+            AccountImage = ImageSource.FromStream(() =>
+            {
+                return new MemoryStream(ImageBytes);
+            });
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using Newtonsoft.Json;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
@@ -9,7 +11,7 @@ namespace CarWashService.MobileApp.Services
 {
     public class ApiAuthenticator : IAuthenticator
     {
-        public string Role
+        public SerializedUser User
         {
             get;
             private set;
@@ -30,10 +32,10 @@ namespace CarWashService.MobileApp.Services
                 {
                     HttpResponseMessage response = await client
                         .GetAsync(new Uri(client.BaseAddress + "users/login"));
-                    if (response.StatusCode != HttpStatusCode.Unauthorized)
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
                         string content = await response.Content.ReadAsStringAsync();
-                        Role = content.Replace("\"", "");
+                        User = JsonConvert.DeserializeObject<SerializedUser>(content);
                         return true;
                     }
                     else

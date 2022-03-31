@@ -31,8 +31,15 @@ namespace CarWashService.MobileApp.ViewModels
             get { return isBusy; }
             set { _ = SetProperty(ref isBusy, value); }
         }
+        private bool isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set => SetProperty(ref isRefreshing, value);
+        }
 
         string title = string.Empty;
+
         public string Title
         {
             get { return title; }

@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using System.Threading.Tasks;
 
 namespace CarWashService.MobileApp.Services
 {
     public interface IAuthenticator
     {
-        string Role { get; }
+        SerializedUser User { get; }
         Task<bool> IsCorrectAsync(string login, string password);
     }
 }

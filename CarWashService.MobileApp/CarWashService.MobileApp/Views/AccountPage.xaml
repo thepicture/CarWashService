@@ -4,35 +4,58 @@
              xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
              xmlns:converters="clr-namespace:CarWashService.MobileApp.Converters"
+             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              Title="Мой аккаунт"
              x:DataType="mobileapp:AccountViewModel"
              x:Class="CarWashService.MobileApp.Views.AccountPage">
-    <ContentPage.Content>
-        <ui:MaterialCard HorizontalOptions="FillAndExpand"
-                         Margin="20"
-                         Elevation="5"
-                         IsClickable="True"
-                         x:DataType="mobileapp:AccountViewModel">
-            <StackLayout>
-                <Label HorizontalOptions="Center"
-                       FontAttributes="Bold"
-                       FontSize="Large">
-                    <Label.Text>
-                        <Binding Path="Role">
-                            <Binding.Converter>
-                                <converters:RoleToGreatingValueConverter/>
-                            </Binding.Converter>
-                        </Binding>
-                    </Label.Text>
-                </Label>
-                <ui:MaterialButton Command="{Binding ExitLoginCommand}"
-                                   CornerRadius="50"
-                                   BackgroundColor="{StaticResource Primary}"
-                                   Text="Выйти из аккаунта"
-                                   FontAttributes="None"
-                                   HeightRequest="60"
-                                   VerticalOptions="EndAndExpand" />
-            </StackLayout>
-        </ui:MaterialCard>
-    </ContentPage.Content>
+    <ContentView>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <ui:MaterialCard HorizontalOptions="FillAndExpand"
+                                 Margin="20"
+                                 Elevation="5"
+                                 IsClickable="True"
+                                 x:DataType="mobileapp:AccountViewModel">
+                    <StackLayout>
+                        <Frame CornerRadius="200"
+                               Padding="0"
+                               WidthRequest="150"
+                               HeightRequest="150"
+                               HasShadow="False"
+                               HorizontalOptions="Center">
+                            <Image Source="{Binding Path=User.ImageSource,
+                                                    TargetNullValue='account'}"
+                                   Aspect="AspectFill" />
+                        </Frame>
+                        <Label HorizontalOptions="Center"
+                               FontAttributes="Bold"
+                               FontSize="Large">
+                            <Label.Text>
+                                <Binding Path="Role">
+                                    <Binding.Converter>
+                                        <converters:RoleToGreatingValueConverter />
+                                    </Binding.Converter>
+                                </Binding>
+                            </Label.Text>
+                        </Label>
+                        <StackLayout VerticalOptions="EndAndExpand">
+                        <ui:MaterialButton Command="{Binding ChangePictureCommand}"
+                                           CornerRadius="50"
+                                           BackgroundColor="{StaticResource Primary}"
+                                           Text="Изменить фото"
+                                           FontAttributes="None"
+                                           HeightRequest="60" />
+                        <ui:MaterialButton Command="{Binding ExitLoginCommand}"
+                                           CornerRadius="50"
+                                           BackgroundColor="{StaticResource Primary}"
+                                           Text="Выйти из аккаунта"
+                                           FontAttributes="None"
+                                           HeightRequest="60"/>
+                        </StackLayout>
+                    </StackLayout>
+                </ui:MaterialCard>
+            </ScrollView>
+        </RefreshView>
+    </ContentView>
 </ContentPage>

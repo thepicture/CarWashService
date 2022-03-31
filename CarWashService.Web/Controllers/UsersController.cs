@@ -35,7 +35,7 @@ namespace CarWashService.Web.Controllers
 
                 if (string.IsNullOrWhiteSpace(user.Email))
                 {
-                    ModelState.AddModelError("Login", "email must be provided");
+                    ModelState.AddModelError("Email", "email must be provided");
                 }
             }
 
@@ -44,26 +44,32 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-
-            if (await db
-                .User
-                .AnyAsync(u =>
-                    u.Login.ToLower()
-                    == user.Login.ToLower()))
+            if (user.Id == 0)
             {
-                return Conflict();
+                if (await db
+                    .User
+                    .AnyAsync(u =>
+                        u.Login.ToLower()
+                        == user.Login.ToLower()))
+                {
+                    return Conflict();
+                }
+
+                if (await db
+                  .User
+                  .AnyAsync(u =>
+                      u.Email.ToLower()
+                      == user.Email.ToLower()))
+                {
+                    return Conflict();
+                }
+                _ = db.User.Add(user);
+            }
+            else
+            {
+                db.User.Find(user.Id).ImageBytes = user.ImageBytes;
             }
 
-            if (await db
-              .User
-              .AnyAsync(u =>
-                  u.Email.ToLower()
-                  == user.Email.ToLower()))
-            {
-                return Conflict();
-            }
-
-            _ = db.User.Add(user);
             _ = await db.SaveChangesAsync();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -75,10 +81,8 @@ namespace CarWashService.Web.Controllers
         {
             ClaimsIdentity identity = (ClaimsIdentity)
                 Thread.CurrentPrincipal.Identity;
-            string role = identity
-                .FindFirst(ClaimTypes.Role)
-                .Value;
-            return Ok(role);
+            User user = db.User.First(u => u.Login == identity.Name);
+            return Ok(new SerializedUser(user));
         }
 
         [HttpGet]

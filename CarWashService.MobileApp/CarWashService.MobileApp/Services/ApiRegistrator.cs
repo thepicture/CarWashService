@@ -28,6 +28,10 @@ namespace CarWashService.MobileApp.Services
                     {
                         return false;
                     }
+                    if (response.StatusCode == HttpStatusCode.Conflict)
+                    {
+                        return false;
+                    }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         return false;

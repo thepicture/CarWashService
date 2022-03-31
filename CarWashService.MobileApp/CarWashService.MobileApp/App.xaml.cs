@@ -1,6 +1,7 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
 using System.Collections.Generic;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -14,6 +15,7 @@ namespace CarWashService.MobileApp
         public SerializedOrder CurrentOrder { get; set; }
         public string Role { get; set; }
         public string Identity { get; set; }
+        public SerializedUser User { get; set; }
 
         public App()
         {
