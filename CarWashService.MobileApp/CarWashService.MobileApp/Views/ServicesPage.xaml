@@ -30,18 +30,26 @@
                                                        Margin="10"
                                                        IsClickable="True">
                                     <StackLayout>
-                                        <Label Text="{Binding Name}"
+                                        <Label Text="{Binding Path=Name,
+                                                              StringFormat='{}Название: {0}'}"
                                                FontAttributes="Bold"
+                                               FontSize="Medium"
                                                HorizontalTextAlignment="Center" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
-                                        <Label Text="{Binding Description, TargetNullValue='Описание не предоставлено'}"
+                                        <Label Text="{Binding Path=Description, 
+                                                              TargetNullValue='Описание не предоставлено',
+                                                              StringFormat='{}Описание: {0}'}"
                                                HorizontalTextAlignment="Center" />
                                         <Label Text="{Binding Price, StringFormat='Цена: {0:F0} руб.'}"
                                                HorizontalOptions="Center" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
-                                        <StackLayout BindableLayout.ItemsSource="{Binding ServiceTypes}">
+                                    <Label Text="Типы услуги:" 
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"
+                                           FontSize="Medium"/>
+                                    <StackLayout BindableLayout.ItemsSource="{Binding ServiceTypes}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate x:DataType="serialized:SerializedService">
                                                     <material:MaterialCard Elevation="5"

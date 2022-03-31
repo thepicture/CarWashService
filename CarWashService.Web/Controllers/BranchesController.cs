@@ -128,7 +128,7 @@ namespace CarWashService.Web.Controllers
 
         // POST: api/Branches
         [ResponseType(typeof(Branch))]
-        [Authorize(Roles = "Администратор")]
+        [Authorize(Roles = "Администратор, Сотрудник")]
         public async Task<IHttpActionResult> PostBranch(
             SerializedBranch serializedBranch)
         {
