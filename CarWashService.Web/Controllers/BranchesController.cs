@@ -137,42 +137,76 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            City city = await db.City
-                .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
-            if (city == null)
+            if (serializedBranch.Id == 0)
             {
-                city = new City
+                City city = await db.City
+                    .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
+                if (city == null)
                 {
-                    Name = serializedBranch.CityName
-                };
-                _ = db.City.Add(city);
-            }
+                    city = new City
+                    {
+                        Name = serializedBranch.CityName
+                    };
+                    _ = db.City.Add(city);
+                }
 
-            Address address = await db.Address
-                .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
-            if (address == null)
-            {
-                address = new Address
+                Address address = await db.Address
+                    .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
+                if (address == null)
                 {
-                    City = city,
-                    StreetName = serializedBranch.StreetName,
+                    address = new Address
+                    {
+                        City = city,
+                        StreetName = serializedBranch.StreetName,
+                    };
+                }
+
+                Branch branchToAdd = new Branch
+                {
+                    Title = serializedBranch.Title,
+                    Address = address,
+                    WorkFrom = TimeSpan.Parse(serializedBranch.WorkFrom),
+                    WorkTo = TimeSpan.Parse(serializedBranch.WorkTo)
                 };
+                foreach (string phone in serializedBranch.PhoneNumbers)
+                {
+                    branchToAdd.BranchPhone.Add(new BranchPhone
+                    {
+                        PhoneNumber = phone
+                    });
+                }
+                _ = db.Branch.Add(branchToAdd);
+                _ = await db.SaveChangesAsync();
+                return CreatedAtRoute("DefaultApi",
+                                      new { id = branchToAdd.Id },
+                                      branchToAdd.Id);
             }
-
-            Branch branchToAdd = new Branch
+            else
             {
-                Title = serializedBranch.Title,
-                Address = address,
-                WorkFrom = TimeSpan.Parse(serializedBranch.WorkFrom),
-                WorkTo = TimeSpan.Parse(serializedBranch.WorkTo)
-            };
+                Branch branch = await db.Branch.FindAsync(serializedBranch.Id);
+                if (branch == null)
+                {
+                    return NotFound();
+                }
 
-            _ = db.Branch.Add(branchToAdd);
-            _ = await db.SaveChangesAsync();
+                foreach (string phone in serializedBranch.PhoneNumbers)
+                {
+                    if (branch.BranchPhone.Any(p => p.PhoneNumber == phone))
+                    {
+                        continue;
+                    }
+                    BranchPhone newPhone = new BranchPhone
+                    {
+                        PhoneNumber = phone,
+                    };
+                    branch.BranchPhone.Add(newPhone);
+                }
 
-            return CreatedAtRoute("DefaultApi",
-                                  new { id = branchToAdd.Id },
-                                  branchToAdd.Id);
+                _ = await db.SaveChangesAsync();
+                return CreatedAtRoute("DefaultApi",
+                                      new { id = branch.Id },
+                                      serializedBranch.Id);
+            }
         }
 
         // DELETE: api/Branches/5

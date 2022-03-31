@@ -11,7 +11,7 @@ namespace CarWashService.MobileApp.Models.Serialized
         public string StreetName { get; set; }
         public string CityName { get; set; }
         public int[] ServiceIds { get; set; }
-        public IEnumerable<string> PhoneNumbers { get; set; }
+        public List<string> PhoneNumbers { get; set; } = new List<string>();
 
     }
 }

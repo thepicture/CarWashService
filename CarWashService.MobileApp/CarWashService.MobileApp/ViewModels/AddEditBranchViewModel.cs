@@ -1,16 +1,11 @@
 ﻿using CarWashService.MobileApp.Models;
 using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
-using CarWashService.MobileApp.Services;
-using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -43,21 +38,6 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            if (CurrentBranch.Id != 0)
-            {
-                if (await IsAddingContactsSuccessfulAsync(CurrentBranch.Id))
-                {
-                    await FeedbackService.Inform("Контакты сохранены");
-                    return;
-                }
-                else
-                {
-                    await FeedbackService.Inform("Не удалось " +
-                        "сохранить контакты. " +
-                        "Проверьте подключение к сети");
-                    return;
-                }
-            }
             StringBuilder validationErrors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(CurrentBranch.Title))
             {
@@ -90,6 +70,10 @@ namespace CarWashService.MobileApp.ViewModels
             CurrentBranch.StreetName = StreetName;
             CurrentBranch.WorkFrom = WorkFrom.ToString();
             CurrentBranch.WorkTo = WorkTo.ToString();
+            foreach (PhoneNumberHelper phoneNumber in PhoneNumbers)
+            {
+                CurrentBranch.PhoneNumbers.Add(phoneNumber.PhoneNumber);
+            }
             bool isSuccessfulAdding;
             bool isNewBranch;
             try
@@ -108,15 +92,10 @@ namespace CarWashService.MobileApp.ViewModels
             }
             if (isSuccessfulAdding)
             {
-                if (isNewBranch
-                    && await IsAddingContactsSuccessfulAsync(BranchDataStore
-                        .GetItemAsync(string.Empty)
-                        .Result.Id))
-                {
-                    await FeedbackService.Inform($"Филиал {CurrentBranch.Title} " +
-                        "добавлен");
-                    await Shell.Current.GoToAsync($"..");
-                }
+                string action = CurrentBranch.Id == 0 ? "добавлен" : "обновлен";
+                await FeedbackService.Inform($"Филиал {CurrentBranch.Title} " +
+                    $"{action}");
+                await Shell.Current.GoToAsync($"..");
             }
             else
             {
@@ -124,34 +103,6 @@ namespace CarWashService.MobileApp.ViewModels
                     "добавить филиал. " +
                     "Вероятно, политика компании изменилась. " +
                     "Обратитесь к системному администратору");
-            }
-        }
-
-        private async Task<bool> IsAddingContactsSuccessfulAsync(int id)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Basic",
-                                                  AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
-                try
-                {
-                    string serializedPhones = JsonConvert
-                        .SerializeObject(PhoneNumbers
-                            .Select(p => p.PhoneNumber));
-                    HttpResponseMessage response = await client
-                         .PostAsync(new Uri(client.BaseAddress + $"branches/{id}/add/phones"),
-                                   new StringContent(serializedPhones,
-                                                     Encoding.UTF8,
-                                                     "application/json"));
-                    return true;
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    return false;
-                }
             }
         }
 
