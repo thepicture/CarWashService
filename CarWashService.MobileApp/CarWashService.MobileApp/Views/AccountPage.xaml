@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
+             xmlns:converters="clr-namespace:CarWashService.MobileApp.Converters"
              Title="Мой аккаунт"
              x:DataType="mobileapp:AccountViewModel"
              x:Class="CarWashService.MobileApp.Views.AccountPage">
@@ -13,13 +14,17 @@
                          IsClickable="True"
                          x:DataType="mobileapp:AccountViewModel">
             <StackLayout>
-                <Label Text="{Binding Login, StringFormat='Привет, {0}.'}"
-                       HorizontalOptions="Center"
-                       FontSize="Title"/>
-                <BoxView Color="WhiteSmoke"
-                         HeightRequest="1"/>
-                <Label Text="{Binding Role, StringFormat='Вы {0}'}" 
-                       HorizontalOptions="Center"/>
+                <Label HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       FontSize="Large">
+                    <Label.Text>
+                        <Binding Path="Role">
+                            <Binding.Converter>
+                                <converters:RoleToGreatingValueConverter/>
+                            </Binding.Converter>
+                        </Binding>
+                    </Label.Text>
+                </Label>
                 <ui:MaterialButton Command="{Binding ExitLoginCommand}"
                                    CornerRadius="50"
                                    BackgroundColor="{StaticResource Primary}"

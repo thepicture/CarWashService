@@ -72,7 +72,7 @@ namespace CarWashService.MobileApp.ViewModels
                     (App.Current as App).Identity = encodedLoginAndPassword;
                 }
                 await FeedbackService.Inform("Вы авторизованы " +
-                    $"как {Authenticator.Role}");
+                    $"как {Authenticator.Role.ToLower()}");
                 (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
             }
             else
@@ -83,11 +83,19 @@ namespace CarWashService.MobileApp.ViewModels
 
         private string login;
 
-        public string Login { get => login; set => SetProperty(ref login, value); }
+        public string Login
+        {
+            get => login;
+            set => SetProperty(ref login, value);
+        }
 
         private string password;
 
-        public string Password { get => password; set => SetProperty(ref password, value); }
+        public string Password
+        {
+            get => password;
+            set => SetProperty(ref password, value);
+        }
 
         private Command exitCommand;
 
