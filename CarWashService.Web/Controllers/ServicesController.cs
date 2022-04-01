@@ -103,19 +103,36 @@ namespace CarWashService.Web.Controllers
 
             Service service = new Service
             {
+                Id = serializedService.Id,
                 Name = serializedService.Name,
                 Price = serializedService.Price,
                 Description = serializedService.Description,
             };
 
-            List<ServiceType> types = new List<ServiceType>();
-            foreach (string typeName in serializedService.ServiceTypes)
-            {
-                service.ServiceType.Add(
-                    db.ServiceType.First(t => t.TypeName == typeName));
-            }
 
-            _ = db.Service.Add(service);
+            if (serializedService.Id == 0)
+            {
+                List<ServiceType> types = new List<ServiceType>();
+                foreach (string typeName in serializedService.ServiceTypes)
+                {
+                    service.ServiceType.Add(
+                        db.ServiceType.First(t => t.TypeName == typeName));
+                }
+                _ = db.Service.Add(service);
+            }
+            else
+            {
+                db.Service.Find(serializedService.Id).ServiceType.Clear();
+                db.Service.Find(serializedService.Id).ServiceType
+                    .Add(
+                        db.ServiceType.ToList()
+                            .First(t =>
+                                t.TypeName == serializedService.ServiceTypes.First()));
+                Service serviceFromDb = db.Service.Find(serializedService.Id);
+                db.Entry(
+                    serviceFromDb)
+                    .CurrentValues.SetValues(service);
+            }
             _ = await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi",

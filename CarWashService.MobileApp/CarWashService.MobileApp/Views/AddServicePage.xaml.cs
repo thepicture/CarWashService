@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using CarWashService.MobileApp.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,6 +10,13 @@ namespace CarWashService.MobileApp.Views
         public AddServicePage()
         {
             InitializeComponent();
+            BindingContext = new AddServiceViewModel();
+        }
+
+        public AddServicePage(AddServiceViewModel viewModel)
+        {
+            InitializeComponent();
+            BindingContext = viewModel;
         }
     }
 }

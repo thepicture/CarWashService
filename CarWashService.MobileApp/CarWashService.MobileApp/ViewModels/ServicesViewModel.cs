@@ -85,7 +85,9 @@ namespace CarWashService.MobileApp
 
         private async void PerformGoToAddServicePageAsync()
         {
-            await Shell.Current.GoToAsync($"{nameof(AddServicePage)}");
+            await Shell.Current.Navigation.PushAsync(
+                new AddServicePage(
+                    new AddServiceViewModel()));
         }
 
 
@@ -180,6 +182,28 @@ namespace CarWashService.MobileApp
                 SelectedServices.Add(parameter as SerializedService);
             }
             IsAbleToMakeOrder = SelectedServices.Count > 0 && IsClientCheckingForOrder;
+        }
+
+        private Command<SerializedService> goToEditDiscountPage;
+
+        public Command<SerializedService> GoToEditDiscountPage
+        {
+            get
+            {
+                if (goToEditDiscountPage == null)
+                {
+                    goToEditDiscountPage = new Command<SerializedService>(PerformGoToEditDiscountPageAsync);
+                }
+
+                return goToEditDiscountPage;
+            }
+        }
+
+        private async void PerformGoToEditDiscountPageAsync(SerializedService service)
+        {
+            await Shell.Current.Navigation.PushAsync(
+                new AddServicePage(
+                    new AddServiceViewModel(service)));
         }
     }
 }

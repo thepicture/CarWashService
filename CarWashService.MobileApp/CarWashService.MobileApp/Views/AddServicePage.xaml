@@ -3,13 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
-             xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              x:DataType="viewmodels:AddServiceViewModel"
-             Title="Добавление услуги"
+             Title="Редактирование услуги"
              x:Class="CarWashService.MobileApp.Views.AddServicePage">
-    <ContentPage.BindingContext>
-        <viewmodels:AddServiceViewModel />
-    </ContentPage.BindingContext>
+    <ContentPage.Triggers>
+        <DataTrigger TargetType="ContentPage"
+                     Binding="{Binding CurrentService.Id}"
+                     Value="0">
+            <Setter Property="Title"
+                    Value="Добавление услуги" />
+        </DataTrigger>
+    </ContentPage.Triggers>
     <ContentPage.Content>
         <ScrollView Margin="10,10,10,0"
                     x:DataType="viewmodels:AddServiceViewModel">
@@ -23,25 +27,16 @@
                                             TintColor="{StaticResource Primary}"
                                             HelperText="* Обязательно" />
                 <Picker Title="Тип услуги"
-                        SelectedItem="{Binding CurrentType}">
-                    <Picker.ItemDisplayBinding>
-                        <Binding Path="Name"
-                                 x:DataType="helpers:ServiceTypeHelper" />
-                    </Picker.ItemDisplayBinding>
+                        SelectedItem="{Binding CurrentType}"
+                        x:Name="ServiceTypes">
                     <Picker.ItemsSource>
-                        <x:Array Type="{x:Type helpers:ServiceTypeHelper}">
-                            <helpers:ServiceTypeHelper Id="1"
-                                                       Name="Мойка двигателя" />
-                            <helpers:ServiceTypeHelper Id="2"
-                                                       Name="Уборка салона" />
-                            <helpers:ServiceTypeHelper Id="3"
-                                                       Name="Ополаскивание" />
-                            <helpers:ServiceTypeHelper Id="4"
-                                                       Name="Полировка кузова" />
-                            <helpers:ServiceTypeHelper Id="5"
-                                                       Name="Химчистка салона" />
-                            <helpers:ServiceTypeHelper Id="6"
-                                                       Name="Чистка колесных дисков" />
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Мойка двигателя</x:String>
+                            <x:String>Уборка салона</x:String>
+                            <x:String>Ополаскивание</x:String>
+                            <x:String>Полировка кузова</x:String>
+                            <x:String>Химчистка салона</x:String>
+                            <x:String>Чистка колесных дисков</x:String>
                         </x:Array>
                     </Picker.ItemsSource>
                 </Picker>

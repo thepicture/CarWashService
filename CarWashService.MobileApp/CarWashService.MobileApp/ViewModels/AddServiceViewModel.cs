@@ -1,6 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
-using CarWashService.MobileApp.Models.ViewModelHelpers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -10,7 +10,6 @@ namespace CarWashService.MobileApp.ViewModels
     public class AddServiceViewModel : BaseViewModel
     {
         public SerializedService CurrentService { get; set; }
-            = new SerializedService();
 
         private Command saveChangesCommand;
 
@@ -56,17 +55,20 @@ namespace CarWashService.MobileApp.ViewModels
             CurrentService.Price = int.Parse(PriceString);
             CurrentService.ServiceTypes = new List<string>
             {
-                CurrentType.Name
+                CurrentType
             };
             if (await ServiceDataStore.AddItemAsync(CurrentService))
             {
-                await FeedbackService.Inform("Услуга добавлена.");
+                string action = CurrentService.Id == 0
+                    ? "добавлена"
+                    : "изменена";
+                await FeedbackService.Inform($"Услуга {action}.");
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
                 await FeedbackService.Inform("Не удалось " +
-                    "добавить услугу. Проверьте подключение к интернету.");
+                    "сохранить услугу. Проверьте подключение к интернету.");
             }
         }
 
@@ -78,9 +80,23 @@ namespace CarWashService.MobileApp.ViewModels
             set => SetProperty(ref priceString, value);
         }
 
-        private ServiceTypeHelper currentType;
+        private string currentType;
 
-        public ServiceTypeHelper CurrentType
+        public AddServiceViewModel(SerializedService inputService = null)
+        {
+            if (inputService != null)
+            {
+                CurrentService = inputService;
+                PriceString = CurrentService.Price.ToString("F0");
+                CurrentType = CurrentService.ServiceTypes.First();
+            }
+            else
+            {
+                CurrentService = new SerializedService();
+            }
+        }
+
+        public string CurrentType
         {
             get => currentType;
             set => SetProperty(ref currentType, value);
