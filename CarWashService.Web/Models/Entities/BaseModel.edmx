@@ -253,7 +253,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ServiceOfBranch_Service">
-          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ServiceOfBranch" Type="Self.ServiceOfBranch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Service">

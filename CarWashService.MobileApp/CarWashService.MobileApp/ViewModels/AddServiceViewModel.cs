@@ -101,5 +101,42 @@ namespace CarWashService.MobileApp.ViewModels
             get => currentType;
             set => SetProperty(ref currentType, value);
         }
+
+        private Command deleteServiceCommand;
+
+        public ICommand DeleteServiceCommand
+        {
+            get
+            {
+                if (deleteServiceCommand == null)
+                {
+                    deleteServiceCommand = new Command(DeleteServiceAsync);
+                }
+
+                return deleteServiceCommand;
+            }
+        }
+
+        private async void DeleteServiceAsync()
+        {
+            if (await FeedbackService.Ask("Удалить услугу?"))
+            {
+                if (await ServiceDataStore
+                    .DeleteItemAsync(CurrentService
+                    .Id
+                    .ToString()))
+                {
+                    await FeedbackService.Inform("Услуга удалена.");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await FeedbackService.InformError("Не удалось удалить услугу. " +
+                        "Попробуйте ещё раз.");
+                }
+            }
+        }
+
+        public bool IsCanDeleteService => CurrentService.Id > 0;
     }
 }

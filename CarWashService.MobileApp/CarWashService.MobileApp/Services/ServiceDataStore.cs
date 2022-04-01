@@ -40,9 +40,26 @@ namespace CarWashService.MobileApp.Services
             }
         }
 
-        public Task<bool> DeleteItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic",
+                                                  AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                try
+                {
+                    HttpResponseMessage response = await client
+                        .DeleteAsync($"services?id={id}");
+                    return response.StatusCode == System.Net.HttpStatusCode.NoContent;
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    return false;
+                }
+            }
         }
 
         public async Task<SerializedService> GetItemAsync(string id)
