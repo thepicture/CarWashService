@@ -156,7 +156,7 @@ namespace CarWashService.Web.Controllers
 
         // DELETE: api/Orders/5
         [ResponseType(typeof(Order))]
-        [Authorize(Roles = "Администратор, Сотрудник")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public async Task<IHttpActionResult> DeleteOrder(int id)
         {
             Order order = await db.Order.FindAsync(id);

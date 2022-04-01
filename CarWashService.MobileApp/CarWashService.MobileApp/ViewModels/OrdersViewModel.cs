@@ -68,7 +68,7 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 Debug.WriteLine(ex.StackTrace);
                 await FeedbackService.Inform("У вас нет интернет " +
-                    "подключения. Включён оффлайн-режим");
+                    "подключения. Включён оффлайн-режим.");
             }
         }
 
@@ -159,6 +159,39 @@ namespace CarWashService.MobileApp.ViewModels
             (App.Current as App).CurrentOrder = parameter as SerializedOrder;
             await Shell.Current.GoToAsync(
                 $"{nameof(MakeOrderPage)}");
+        }
+
+        private Command<SerializedOrder> deleteOrderCommand;
+
+        public Command<SerializedOrder> DeleteOrderCommand
+        {
+            get
+            {
+                if (deleteOrderCommand == null)
+                {
+                    deleteOrderCommand = new Command<SerializedOrder>(DeleteOrderAsync);
+                }
+
+                return deleteOrderCommand;
+            }
+        }
+
+        private async void DeleteOrderAsync(SerializedOrder order)
+        {
+            if (await FeedbackService.Ask("Удалить заказ?"))
+            {
+                if (await OrderDataStore
+                    .DeleteItemAsync(order.Id
+                    .ToString()))
+                {
+                    await FeedbackService.Inform("Заказ удалён.");
+                    LoadOrdersAsync();
+                }
+                else
+                {
+                    await FeedbackService.InformError("Не удалось удалить заказ.");
+                }
+            }
         }
     }
 }
