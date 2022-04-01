@@ -4,7 +4,9 @@
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
+             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              x:DataType="viewmodels:ServiceDiscountsViewModel"
+             x:Name="Page"
              Title="{Binding Source={x:Static Application.Current}, 
                              Path=CurrentService.Name, 
                              StringFormat='Скидки услуги {0}'}"
@@ -55,6 +57,23 @@
                                         <Label Text="{Binding WorkToAsDate, 
                                                               StringFormat='Заканчивается: {0:yyyy/MM/dd hh:mm}'}"
                                                HorizontalTextAlignment="Center" />
+                                        <material:MaterialButton CommandParameter="{Binding .}"
+                                                                 Command="{Binding Source={Reference Page},
+                                                                                   Path=BindingContext.DeleteDiscountCommand}"
+                                                                 Text="Удалить"
+                                                                 FontSize="10"
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 BackgroundColor="Red"
+                                                                 IsVisible="False">
+                                            <material:MaterialButton.Triggers>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                             Value="Сотрудник">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                            </material:MaterialButton.Triggers>
+                                        </material:MaterialButton>
                                     </StackLayout>
                                 </material:MaterialCard>
                             </Grid>

@@ -1,5 +1,6 @@
 ﻿using CarWashService.Web.Models.Entities;
 using CarWashService.Web.Models.Entities.Serialized;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -99,8 +100,8 @@ namespace CarWashService.Web.Controllers
         }
 
         // DELETE: api/ServiceDiscounts/5
-        [ResponseType(typeof(ServiceDiscount))]
-        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [ResponseType(typeof(Nullable))]
+        [Authorize(Roles = "Сотрудник")]
         public async Task<IHttpActionResult> DeleteServiceDiscount(int id)
         {
             ServiceDiscount serviceDiscount = await db.ServiceDiscount.FindAsync(id);
@@ -112,7 +113,7 @@ namespace CarWashService.Web.Controllers
             _ = db.ServiceDiscount.Remove(serviceDiscount);
             _ = await db.SaveChangesAsync();
 
-            return Ok(new SerializedDiscount(serviceDiscount));
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)

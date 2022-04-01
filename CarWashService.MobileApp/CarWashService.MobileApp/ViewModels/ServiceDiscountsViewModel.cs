@@ -147,5 +147,39 @@ namespace CarWashService.MobileApp.ViewModels
             await Shell.Current.GoToAsync(
                 $"{nameof(AddDiscountPage)}");
         }
+
+        private Command<SerializedDiscount> deleteDiscountCommand;
+
+        public Command<SerializedDiscount> DeleteDiscountCommand
+        {
+            get
+            {
+                if (deleteDiscountCommand == null)
+                {
+                    deleteDiscountCommand = new Command<SerializedDiscount>
+                        (DeleteDiscountAsync);
+                }
+
+                return deleteDiscountCommand;
+            }
+        }
+
+        private async void DeleteDiscountAsync(SerializedDiscount discount)
+        {
+            if (await FeedbackService.Ask("Удалить скидку?"))
+            {
+                if (await DiscountDataStore
+                    .DeleteItemAsync(discount.Id
+                    .ToString()))
+                {
+                    await FeedbackService.Inform("Скидка удалена.");
+                    LoadDiscounts();
+                }
+                else
+                {
+                    await FeedbackService.InformError("Не удалось удалить скидку.");
+                }
+            }
+        }
     }
 }
