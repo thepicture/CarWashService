@@ -27,14 +27,14 @@
                 </StackLayout.Triggers>
                 <Label Text="{Binding Source={Static Application.Current}, 
                                       Path=CurrentBranch.Title,
-                                      StringFormat='{}Филиал: {0}'}"/>
-                <Label Text="* Укажите дату и время назначения">
+                                      StringFormat='{}Наименование филиала: {0}'}"/>
+                <Label Text="* Укажите дату и время оказания услуг">
                     <Label.Triggers>
                         <DataTrigger TargetType="Label"
                                      Binding="{Binding IsNew}"
                                      Value="False">
                             <Setter Property="Text"
-                                    Value="Дата и время назначения" />
+                                    Value="Дата и время оказания услуг" />
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
