@@ -12,6 +12,7 @@ namespace CarWashService.MobileApp.Models.Serialized
         public string AppointmentDate { get; set; }
         public bool IsConfirmed { get; set; }
         public IEnumerable<int> Services { get; set; }
+        public IEnumerable<string> ServiceNames { get; set; }
         public string SellerFullName { get; set; }
         public string ClientFullName { get; set; }
         public decimal TotalPrice { get; set; }

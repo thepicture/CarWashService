@@ -34,6 +34,7 @@ namespace CarWashService.Web.Models.Entities.Serialized
                 ClientFullName += " " + order.User1.Patronymic;
             }
             TotalPrice = order.Service.Sum(s => s.Price);
+            ServiceNames = order.Service.Select(s => s.Name);
         }
 
         public int Id { get; set; }
@@ -47,5 +48,6 @@ namespace CarWashService.Web.Models.Entities.Serialized
         public string SellerFullName { get; set; }
         public string ClientFullName { get; set; }
         public decimal TotalPrice { get; set; }
+        public IEnumerable<string> ServiceNames { get; set; }
     }
 }

@@ -49,14 +49,11 @@ namespace CarWashService.MobileApp.ViewModels
                     items = items
                         .Where(s =>
                         {
-                            bool isClientApproves = s.ClientFullName.ToLower()
-                            .Contains(
-                                SearchText.ToLower());
-                            bool isSellerApproves = s.SellerFullName != null
-                                && s.SellerFullName.ToLower()
-                           .Contains(
-                               SearchText.ToLower());
-                            return isClientApproves || isSellerApproves;
+                            return s.ServiceNames.Any(sn =>
+                            {
+                                return sn.StartsWith(SearchText,
+                                                     StringComparison.OrdinalIgnoreCase);
+                            });
                         });
                 }
                 Device.BeginInvokeOnMainThread(() =>

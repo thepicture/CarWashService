@@ -24,7 +24,7 @@
     <ContentPage.Content>
         <StackLayout>
             <SearchBar Text="{Binding SearchText}"
-                       Placeholder="Поиск по ФИО" />
+                       Placeholder="Поиск по наименованию услуги" />
             <ScrollView>
                 <StackLayout BindableLayout.ItemsSource="{Binding Orders}">
                     <BindableLayout.ItemTemplate>
