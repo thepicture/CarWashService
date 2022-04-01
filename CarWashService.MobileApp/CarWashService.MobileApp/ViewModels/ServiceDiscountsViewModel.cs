@@ -181,5 +181,27 @@ namespace CarWashService.MobileApp.ViewModels
                 }
             }
         }
+
+        private Command<SerializedDiscount> goToDiscountPageCommand;
+
+        public Command<SerializedDiscount> GoToDiscountPageCommand
+        {
+            get
+            {
+                if (goToDiscountPageCommand == null)
+                {
+                    goToDiscountPageCommand = new Command<SerializedDiscount>(GoToDiscountPageAsync);
+                }
+
+                return goToDiscountPageCommand;
+            }
+        }
+
+        private async void GoToDiscountPageAsync(SerializedDiscount discount)
+        {
+            await Shell.Current.Navigation.PushAsync(
+                new AddDiscountPage(
+                    new AddDiscountViewModel(discount)));
+        }
     }
 }

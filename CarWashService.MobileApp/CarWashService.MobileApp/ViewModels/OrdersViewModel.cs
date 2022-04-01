@@ -138,8 +138,8 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
-        private Command goToOrderPageCommand;
         private ObservableCollection<SerializedOrder> orders;
+        private Command goToOrderPageCommand;
 
         public ICommand GoToOrderPageCommand
         {

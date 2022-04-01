@@ -58,6 +58,12 @@
                                                               StringFormat='Заканчивается: {0:yyyy/MM/dd hh:mm}'}"
                                                HorizontalTextAlignment="Center" />
                                         <material:MaterialButton CommandParameter="{Binding .}"
+                                                                 Command="{Binding Source={Reference Page}, 
+                                                                                   Path=BindingContext.GoToDiscountPageCommand}"
+                                                                 Text="Редактировать"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BackgroundButton}" />
+                                        <material:MaterialButton CommandParameter="{Binding .}"
                                                                  Command="{Binding Source={Reference Page},
                                                                                    Path=BindingContext.DeleteDiscountCommand}"
                                                                  Text="Удалить"

@@ -93,7 +93,17 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            _ = db.ServiceDiscount.Add(serviceDiscount);
+            if (serviceDiscount.Id == 0)
+            {
+                _ = db.ServiceDiscount.Add(serviceDiscount);
+            }
+            else
+            {
+                db.Entry(
+                    db.ServiceDiscount.Find(serviceDiscount.Id)).CurrentValues
+                    .SetValues(serviceDiscount);
+            }
+
             _ = await db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = serviceDiscount.Id }, serviceDiscount.Id);

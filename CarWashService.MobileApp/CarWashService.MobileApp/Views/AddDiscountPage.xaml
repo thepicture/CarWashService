@@ -3,9 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
+             xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
              x:DataType="viewmodels:AddDiscountViewModel"
              x:Class="CarWashService.MobileApp.Views.AddDiscountPage"
-             Title="Добавление скидки">
+             Title="Редактирование скидки">
+    <ContentPage.Triggers>
+        <DataTrigger TargetType="ContentPage"
+                     Binding="{Binding CurrentDiscount.Id}"
+                     Value="0">
+            <Setter Property="Title"
+                    Value="Добавление скидки" />
+        </DataTrigger>
+    </ContentPage.Triggers>
+    <ContentPage.ToolbarItems>
+        <controls:BindableToolbarItem Text="Удалить"
+                                      Command="{Binding DeleteDiscountCommand}"
+                                      IsVisible="{Binding IsCanDeleteDiscount}" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView Margin="10,10,10,0"
                     x:DataType="viewmodels:AddDiscountViewModel">

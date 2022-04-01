@@ -1,4 +1,5 @@
-﻿using CarWashService.MobileApp.ViewModels;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,6 +12,12 @@ namespace CarWashService.MobileApp.Views
         {
             InitializeComponent();
             BindingContext = new AddDiscountViewModel();
+        }
+
+        public AddDiscountPage(AddDiscountViewModel viewModel)
+        {
+            InitializeComponent();
+            BindingContext = viewModel;
         }
     }
 }

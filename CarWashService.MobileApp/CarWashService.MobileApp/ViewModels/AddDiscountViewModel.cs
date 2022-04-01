@@ -11,9 +11,19 @@ namespace CarWashService.MobileApp.ViewModels
 
         private SerializedDiscount currentService;
 
-        public AddDiscountViewModel()
+        public AddDiscountViewModel(SerializedDiscount inputDiscount = null)
         {
-            CurrentDiscount = new SerializedDiscount();
+            if (inputDiscount == null)
+            {
+                CurrentDiscount = new SerializedDiscount();
+            }
+            else
+            {
+                CurrentDiscount = inputDiscount;
+                DiscountPercent = CurrentDiscount.DiscountPercent.ToString();
+                WorkFrom = CurrentDiscount.WorkFromAsDate;
+                WorkTo = CurrentDiscount.WorkToAsDate;
+            }
         }
 
         public SerializedDiscount CurrentDiscount
@@ -75,7 +85,10 @@ namespace CarWashService.MobileApp.ViewModels
             CurrentDiscount.ServiceId = (App.Current as App).CurrentService.Id;
             if (await DiscountDataStore.AddItemAsync(CurrentDiscount))
             {
-                await FeedbackService.Inform("Скидка добавлена.");
+                string action = CurrentDiscount.Id == 0 ? 
+                    "добавлена" : 
+                    "изменена";
+                await FeedbackService.Inform($"Скидка {action}.");
                 await Shell.Current.GoToAsync("..");
             }
             else
@@ -99,6 +112,41 @@ namespace CarWashService.MobileApp.ViewModels
         {
             get => workTo;
             set => SetProperty(ref workTo, value);
+        }
+
+
+        public bool IsCanDeleteDiscount => CurrentDiscount.Id != 0;
+        private Command deleteDiscountCommand;
+
+        public ICommand DeleteDiscountCommand
+        {
+            get
+            {
+                if (deleteDiscountCommand == null)
+                {
+                    deleteDiscountCommand = new Command(DeleteDiscountAsync);
+                }
+
+                return deleteDiscountCommand;
+            }
+        }
+
+        private async void DeleteDiscountAsync()
+        {
+            if (await FeedbackService.Ask("Удалить скидку?"))
+            {
+                if (await DiscountDataStore
+                    .DeleteItemAsync(CurrentDiscount.Id
+                    .ToString()))
+                {
+                    await FeedbackService.Inform("Скидка удалена.");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await FeedbackService.InformError("Не удалось удалить скидку.");
+                }
+            }
         }
     }
 }
