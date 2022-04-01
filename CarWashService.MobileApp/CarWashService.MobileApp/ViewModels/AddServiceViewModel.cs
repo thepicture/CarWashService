@@ -33,18 +33,18 @@ namespace CarWashService.MobileApp.ViewModels
             if (string.IsNullOrWhiteSpace(CurrentService.Name))
             {
                 _ = validationErrors.AppendLine("Введите наименование " +
-                    "услуги");
+                    "услуги.");
             }
             if (string.IsNullOrWhiteSpace(PriceString)
                 || !int.TryParse(PriceString, out _)
                 || int.Parse(PriceString) <= 0)
             {
                 _ = validationErrors.AppendLine("Стоимость - " +
-                    "это положительное целое число в рублях");
+                    "это положительное целое число в рублях.");
             }
             if (CurrentType == null)
             {
-                _ = validationErrors.AppendLine("Выберите тип услуги");
+                _ = validationErrors.AppendLine("Выберите тип услуги.");
             }
 
             if (validationErrors.Length > 0)
@@ -60,13 +60,13 @@ namespace CarWashService.MobileApp.ViewModels
             };
             if (await ServiceDataStore.AddItemAsync(CurrentService))
             {
-                await FeedbackService.Inform("Услуга добавлена");
+                await FeedbackService.Inform("Услуга добавлена.");
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
                 await FeedbackService.Inform("Не удалось " +
-                    "добавить услугу. Проверьте подключение к интернету");
+                    "добавить услугу. Проверьте подключение к интернету.");
             }
         }
 

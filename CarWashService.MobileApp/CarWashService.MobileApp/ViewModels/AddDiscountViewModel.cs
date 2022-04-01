@@ -55,12 +55,12 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 _ = validationErrors.AppendLine("Процент - " +
                     "это положительное целое число " +
-                    "в диапазоне от 0 до 100");
+                    "в диапазоне от 0 до 100.");
             }
             if (WorkFrom >= WorkTo)
             {
                 _ = validationErrors.AppendLine("Дата окончания " +
-                    "должна быть позднее даты начала");
+                    "должна быть позднее даты начала.");
             }
 
             if (validationErrors.Length > 0)
@@ -75,13 +75,13 @@ namespace CarWashService.MobileApp.ViewModels
             CurrentDiscount.ServiceId = (App.Current as App).CurrentService.Id;
             if (await DiscountDataStore.AddItemAsync(CurrentDiscount))
             {
-                await FeedbackService.Inform("Скидка добавлена");
+                await FeedbackService.Inform("Скидка добавлена.");
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
                 await FeedbackService.Inform("Не удалось " +
-                    "добавить скидку. Проверьте подключение к интернету");
+                    "добавить скидку. Проверьте подключение к интернету.");
             }
         }
 

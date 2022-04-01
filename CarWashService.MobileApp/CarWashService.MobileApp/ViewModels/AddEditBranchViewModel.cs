@@ -43,25 +43,25 @@ namespace CarWashService.MobileApp.ViewModels
             if (string.IsNullOrWhiteSpace(CurrentBranch.Title))
             {
                 _ = validationErrors.AppendLine("Введите наименование " +
-                    "филиала");
+                    "филиала.");
             }
             if (string.IsNullOrWhiteSpace(CityName))
             {
-                _ = validationErrors.AppendLine("Укажите город");
+                _ = validationErrors.AppendLine("Укажите город.");
             }
             if (string.IsNullOrWhiteSpace(StreetName))
             {
-                _ = validationErrors.AppendLine("Введите название улицы");
+                _ = validationErrors.AppendLine("Введите название улицы.");
             }
             if (WorkFrom >= WorkTo)
             {
                 _ = validationErrors.AppendLine("Время " +
                     "начала работы должно быть " +
-                    "раньше времени окончания работы");
+                    "раньше времени окончания работы.");
             }
             if (PhoneNumbers.Count == 0)
             {
-                _ = validationErrors.AppendLine("Укажите хотя бы один контакт");
+                _ = validationErrors.AppendLine("Укажите хотя бы один контакт.");
             }
 
             if (validationErrors.Length > 0)
@@ -92,14 +92,14 @@ namespace CarWashService.MobileApp.ViewModels
                 Debug.WriteLine(ex.StackTrace);
                 await FeedbackService.Inform("Подключение к интернету " +
                      "отсутствует, проверьте подключение " +
-                     "и попробуйте ещё раз");
+                     "и попробуйте ещё раз.");
                 return;
             }
             if (isSuccessfulAdding)
             {
                 string action = CurrentBranch.Id == 0 ? "добавлен" : "обновлен";
                 await FeedbackService.Inform($"Филиал {CurrentBranch.Title} " +
-                    $"{action}");
+                    $"{action}.");
                 await Shell.Current.GoToAsync($"..");
             }
             else
@@ -107,7 +107,7 @@ namespace CarWashService.MobileApp.ViewModels
                 await FeedbackService.InformError("Не удалось " +
                     "добавить филиал. " +
                     "Вероятно, политика компании изменилась. " +
-                    "Обратитесь к системному администратору");
+                    "Обратитесь к системному администратору.");
             }
         }
 
@@ -202,14 +202,14 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 await FeedbackService.InformError("Чтобы добавить "
                     + "контакт, введите номер телефона "
-                    + "и попробуйте ещё раз");
+                    + "и попробуйте ещё раз.");
                 return;
             }
             if (PhoneNumbers.Any(
                 p => p.PhoneNumber == MaskDeleter.DeleteMask(CurrentPhone)))
             {
                 await FeedbackService.InformError("Такой " +
-                    "контакт уже есть");
+                    "контакт уже есть.");
                 return;
             }
             if (CurrentPhone.Length != 18)
@@ -227,7 +227,7 @@ namespace CarWashService.MobileApp.ViewModels
             await FeedbackService.Inform("Контакт добавлен " +
                 "локально. " +
                 "После нажатия кнопки сохранения " +
-                "информация будет обновлена");
+                "информация будет обновлена.");
         }
 
         private string currentPhone;
@@ -258,19 +258,19 @@ namespace CarWashService.MobileApp.ViewModels
         private async void DeleteBranchAsync()
         {
             if (await FeedbackService.Ask("Удалить филиал? " +
-                "Вместе с ним будут удалены связанные заказы"))
+                "Вместе с ним будут удалены связанные заказы."))
             {
                 if (await BranchDataStore
                     .DeleteItemAsync(CurrentBranch
                     .Id
                     .ToString()))
                 {
-                    await FeedbackService.Inform("Филиал удалён");
+                    await FeedbackService.Inform("Филиал удалён.");
                     await Shell.Current.GoToAsync("..");
                 }
                 else
                 {
-                    await FeedbackService.InformError("Не удалось удалить филиал");
+                    await FeedbackService.InformError("Не удалось удалить филиал.");
                 }
             }
         }

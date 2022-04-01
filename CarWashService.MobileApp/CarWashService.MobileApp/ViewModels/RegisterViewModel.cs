@@ -69,44 +69,44 @@ namespace CarWashService.MobileApp.ViewModels
             StringBuilder validationErrors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(FirstName))
             {
-                _ = validationErrors.AppendLine("Введите ваше имя");
+                _ = validationErrors.AppendLine("Введите ваше имя.");
             }
             if (string.IsNullOrWhiteSpace(LastName))
             {
-                _ = validationErrors.AppendLine("Введите вашу фамилию");
+                _ = validationErrors.AppendLine("Введите вашу фамилию.");
             }
             if (string.IsNullOrWhiteSpace(Login))
             {
-                _ = validationErrors.AppendLine("Введите логин");
+                _ = validationErrors.AppendLine("Введите логин.");
             }
             if (string.IsNullOrWhiteSpace(Password))
             {
-                _ = validationErrors.AppendLine("Введите пароль");
+                _ = validationErrors.AppendLine("Введите пароль.");
             }
             if (string.IsNullOrWhiteSpace(Email)
                 || !Regex.IsMatch(Email, @"\w+@\w+\.\w{2,}"))
             {
                 _ = validationErrors.AppendLine("Укажите почту в " +
-                    "формате <aaa>@<bbb>.<cc>");
+                    "формате <aaa>@<bbb>.<cc>.");
             }
             if (string
                 .IsNullOrWhiteSpace(PassportNumber)
                 || !int.TryParse(PassportNumber, out _))
             {
                 _ = validationErrors.AppendLine("Укажите корректный номер " +
-                    "паспорта до 6 цифр");
+                    "паспорта до 6 цифр.");
             }
             if (string
                 .IsNullOrWhiteSpace(PassportSeries)
                 || !int.TryParse(PassportSeries, out _))
             {
                 _ = validationErrors.AppendLine("Укажите корректную серию " +
-                    "паспорта до 4 цифр");
+                    "паспорта до 4 цифр.");
             }
 
             if (UserType == null)
             {
-                _ = validationErrors.AppendLine("Укажите тип пользователя");
+                _ = validationErrors.AppendLine("Укажите тип пользователя.");
             }
 
             if (validationErrors.Length > 0)
@@ -141,12 +141,12 @@ namespace CarWashService.MobileApp.ViewModels
                 Debug.WriteLine(ex.StackTrace);
                 await FeedbackService.Inform("Подключение к интернету " +
                      "отсутствует, проверьте подключение " +
-                     "и попробуйте ещё раз");
+                     "и попробуйте ещё раз.");
                 return;
             }
             if (isRegistered)
             {
-                await FeedbackService.Inform("Вы зарегистрированы");
+                await FeedbackService.Inform("Вы зарегистрированы.");
                 (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
             }
             else
@@ -154,7 +154,7 @@ namespace CarWashService.MobileApp.ViewModels
                 await FeedbackService.InformError("Не удалось " +
                     "зарегистрировать. " +
                     "Вероятно, политика компании изменилась. " +
-                    "Обратитесь к системному администратору");
+                    "Обратитесь к системному администратору.");
             }
         }
 

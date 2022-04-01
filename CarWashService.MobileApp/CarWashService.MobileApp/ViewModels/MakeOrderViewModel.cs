@@ -108,12 +108,12 @@ namespace CarWashService.MobileApp.ViewModels
                 _ = validationErrors.AppendLine("В указанное вами время " +
                     "филиал не работает. Он работает с " +
                     $"{DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay:hh\\:mm} до " +
-                    $"{DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay:hh\\:mm}");
+                    $"{DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay:hh\\:mm}.");
             }
             if (AppointmentDateTime < DateTime.Now)
             {
                 _ = validationErrors.AppendLine("Дата назначения " +
-                    "должна быть позднее текущей даты");
+                    "должна быть позднее текущей даты.");
             }
             if (validationErrors.Length > 0)
             {
@@ -130,7 +130,7 @@ namespace CarWashService.MobileApp.ViewModels
             };
             if (await OrderDataStore.AddItemAsync(order))
             {
-                await FeedbackService.Inform("Заказ оформлен");
+                await FeedbackService.Inform("Заказ оформлен.");
                 await Shell.Current.GoToAsync("..");
             }
         }
@@ -191,12 +191,12 @@ namespace CarWashService.MobileApp.ViewModels
                     .Id
                     .ToString()))
                 {
-                    await FeedbackService.Inform("Заказ удалён");
+                    await FeedbackService.Inform("Заказ удалён.");
                     await Shell.Current.GoToAsync("..");
                 }
                 else
                 {
-                    await FeedbackService.InformError("Не удалось удалить заказ");
+                    await FeedbackService.InformError("Не удалось удалить заказ.");
                 }
             }
         }

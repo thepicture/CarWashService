@@ -31,16 +31,16 @@ namespace CarWashService.MobileApp.ViewModels
             StringBuilder validationErrors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(Login))
             {
-                _ = validationErrors.AppendLine("Введите логин");
+                _ = validationErrors.AppendLine("Введите логин.");
             }
             if (string.IsNullOrWhiteSpace(Password))
             {
-                _ = validationErrors.AppendLine("Введите пароль");
+                _ = validationErrors.AppendLine("Введите пароль.");
 
             }
             if (string.IsNullOrWhiteSpace(CaptchaText) && CountOfIncorrectAttempts > 2)
             {
-                _ = validationErrors.AppendLine("Введите captcha");
+                _ = validationErrors.AppendLine("Введите captcha.");
             }
 
             if (validationErrors.Length > 0)
@@ -54,13 +54,13 @@ namespace CarWashService.MobileApp.ViewModels
                                    StringComparison.OrdinalIgnoreCase))
             {
                 _ = FeedbackService.InformError("Неверная captcha. " +
-                    "Интерфейс заблокирован на 10 секунд");
+                    "Интерфейс заблокирован на 10 секунд.");
                 IsNotBlocked = false;
                 Device.StartTimer(TimeSpan.FromSeconds(10), () =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        FeedbackService.Inform("Интерфейс разблокирован");
+                        FeedbackService.Inform("Интерфейс разблокирован.");
                         IsNotBlocked = true;
                     });
                     return false;
@@ -79,7 +79,7 @@ namespace CarWashService.MobileApp.ViewModels
                 Debug.WriteLine(ex.StackTrace);
                 await FeedbackService.Inform("Подключение к интернету " +
                      "отсутствует, проверьте подключение " +
-                     "и попробуйте ещё раз");
+                     "и попробуйте ещё раз.");
                 return;
             }
             if (isAuthenticated)
@@ -103,14 +103,14 @@ namespace CarWashService.MobileApp.ViewModels
                     (App.Current as App).Identity = encodedLoginAndPassword;
                 }
                 await FeedbackService.Inform("Вы авторизованы " +
-                    $"как {AppIdentity.User.UserTypeName.ToLower()}");
+                    $"как {AppIdentity.User.UserTypeName.ToLower()}.");
                 (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
                 CountOfIncorrectAttempts = 0;
                 CaptchaService.Invalidate();
             }
             else
             {
-                await FeedbackService.InformError("Неверный логин или пароль");
+                await FeedbackService.InformError("Неверный логин или пароль.");
                 CountOfIncorrectAttempts++;
                 if (CountOfIncorrectAttempts == 3)
                 {

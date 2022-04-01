@@ -113,13 +113,13 @@ namespace CarWashService.MobileApp
                 var registrator = new ApiRegistrator();
                 if (await registrator.IsRegisteredAsync(AppIdentity.User))
                 {
-                    await FeedbackService.Inform("Фото изменено");
+                    await FeedbackService.Inform("Фото изменено.");
                     IsRefreshing = true;
                 }
                 else
                 {
                     await FeedbackService.Inform("Фото не изменено. " +
-                        "Проверьте подключение к интернету");
+                        "Проверьте подключение к интернету.");
                 }
             }
         }

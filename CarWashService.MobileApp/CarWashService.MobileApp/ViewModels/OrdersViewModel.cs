@@ -118,14 +118,14 @@ namespace CarWashService.MobileApp.ViewModels
                     if (response.StatusCode != HttpStatusCode.Unauthorized)
                     {
                         await FeedbackService
-                            .Inform("Заказ успешно подтверждён");
+                            .Inform("Заказ успешно подтверждён.");
                         LoadOrdersAsync();
                     }
                     else
                     {
                         await FeedbackService
                             .InformError("Не удалось подтвердить заказ. " +
-                            "Обратитесь в службу поддержки");
+                            "Обратитесь в службу поддержки.");
                     }
                 }
                 catch (HttpRequestException ex)
@@ -133,7 +133,7 @@ namespace CarWashService.MobileApp.ViewModels
                     Debug.WriteLine(ex.StackTrace);
                     await FeedbackService
                           .Inform("Проверьте подключение к сети " +
-                          "и попробуйте ещё раз");
+                          "и попробуйте ещё раз.");
                 }
             }
         }

@@ -44,7 +44,7 @@ namespace CarWashService.MobileApp.ViewModels
                             {
                                 FeedbackService.InformError("Сервер "
                                     + "ответил ошибкой "
-                                    + response.StatusCode);
+                                    + response.StatusCode + ".");
                             });
                             return new List<SerializedDiscount>();
                         }
