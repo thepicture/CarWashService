@@ -298,5 +298,27 @@ namespace CarWashService.MobileApp.ViewModels
                 new ServicesPage(
                     new ServicesViewModel(isForOrder: true)));
         }
+
+        private Command activateEditBranchCommand;
+
+        public ICommand ActivateEditBranchCommand
+        {
+            get
+            {
+                if (activateEditBranchCommand == null)
+                {
+                    activateEditBranchCommand = new Command(ActivateEditBranch);
+                }
+
+                return activateEditBranchCommand;
+            }
+        }
+
+        private void ActivateEditBranch()
+        {
+            IsNotInReadMode = true;
+        }
+
+        public bool IsCanEditBranch => IsCanDelete && CurrentBranch.Id > 0;
     }
 }

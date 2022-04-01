@@ -4,7 +4,6 @@
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:helpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
-             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              xmlns:behaviors="clr-namespace:CarWashService.MobileApp.Behaviors"
              xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
              x:DataType="viewmodels:AddEditBranchViewModel"
@@ -15,183 +14,205 @@
                                       Command="{Binding DeleteBranchCommand}"
                                       IsVisible="{Binding IsCanDeleteBranch}" />
     </ContentPage.ToolbarItems>
-    <ScrollView Margin="10,10,10,0">
-        <StackLayout x:DataType="viewmodels:AddEditBranchViewModel">
-            <Grid>
-                <StackLayout>
-                    <StackLayout.Style>
-                        <Style TargetType="StackLayout">
-                            <Setter Property="IsVisible"
-                                    Value="False" />
-                            <Style.Triggers>
-                                <DataTrigger TargetType="StackLayout"
-                                             Binding="{Binding IsNotInReadMode}"
-                                             Value="True">
-                                    <Setter Property="IsVisible"
-                                            Value="True" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackLayout.Style>
-                    <material:MaterialTextField Text="{Binding CurrentBranch.Title}"
-                                                Placeholder="Введите название филиала"
-                                                LeadingIcon="icon_about"
-                                                InputType="Text"
-                                                MaxLength="50"
-                                                AlwaysShowUnderline="True"
-                                                TintColor="{StaticResource Primary}"
-                                                HelperText="* Обязательно" />
-                    <material:MaterialTextField Text="{Binding CityName}"
-                                                Placeholder="Введите город филиала"
-                                                LeadingIcon="branch"
-                                                InputType="Text"
-                                                MaxLength="50"
-                                                AlwaysShowUnderline="True"
-                                                TintColor="{StaticResource Primary}"
-                                                BackgroundColor="White"
-                                                HelperText="* Обязательно" />
-                    <material:MaterialTextField Text="{Binding StreetName}"
-                                                Placeholder="Введите улицу филиала"
-                                                LeadingIcon="branch"
-                                                InputType="Text"
-                                                MaxLength="50"
-                                                AlwaysShowUnderline="True"
-                                                TintColor="{StaticResource Primary}"
-                                                BackgroundColor="White"
-                                                HelperText="* Обязательно"
-                                                Grid.Column="1" />
-                    <Label Text="Укажите время начала работы" />
-                    <material:MaterialTimePicker Time="{Binding WorkFrom}" />
-                    <Label Text="Укажите время окончания работы" />
-                    <material:MaterialTimePicker Time="{Binding WorkTo}" />
-                </StackLayout>
-                <StackLayout>
-                    <StackLayout.Style>
-                        <Style TargetType="StackLayout">
-                            <Setter Property="IsVisible"
-                                    Value="False" />
-                            <Style.Triggers>
-                                <DataTrigger TargetType="StackLayout"
-                                             Binding="{Binding IsNotInReadMode}"
-                                             Value="False">
-                                    <Setter Property="IsVisible"
-                                            Value="True" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackLayout.Style>
-                    <Label Text="Название филиала"
-                           FontSize="Body"
-                           FontAttributes="Bold" />
-                    <Label Text="{Binding CurrentBranch.Title}" />
-                    <BoxView Color="WhiteSmoke"
-                             HeightRequest="1" />
-                    <Label Text="Город филиала"
-                           FontSize="Body"
-                           FontAttributes="Bold" />
-                    <Label Text="{Binding CurrentBranch.CityName}" />
-                    <BoxView Color="WhiteSmoke"
-                             HeightRequest="1" />
-                    <Label Text="Улица филиала"
-                           FontSize="Body"
-                           FontAttributes="Bold" />
-                    <Label Text="{Binding CurrentBranch.StreetName}" />
-                    <BoxView Color="WhiteSmoke"
-                             HeightRequest="1" />
-                    <Label Text="Время начала работы"
-                           FontSize="Body"
-                           FontAttributes="Bold" />
-                    <Label Text="{Binding CurrentBranch.WorkFrom}" />
-                    <BoxView Color="WhiteSmoke"
-                             HeightRequest="1" />
-                    <Label Text="Время окончания работы"
-                           FontSize="Body"
-                           FontAttributes="Bold" />
-                    <Label Text="{Binding CurrentBranch.WorkTo}" />
-                    <BoxView Color="WhiteSmoke"
-                             HeightRequest="1" />
-                </StackLayout>
-            </Grid>
-            <StackLayout>
-                <StackLayout.Style>
-                    <Style TargetType="StackLayout">
-                        <Style.Triggers>
-                            <DataTrigger TargetType="StackLayout"
-                                         Binding="{Binding Role}"
-                                         Value="Клиент">
+    <ContentView Margin="10,10,10,0">
+        <ScrollView>
+            <StackLayout x:DataType="viewmodels:AddEditBranchViewModel">
+                <Grid>
+                    <StackLayout>
+                        <StackLayout.Style>
+                            <Style TargetType="StackLayout">
                                 <Setter Property="IsVisible"
                                         Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackLayout.Style>
-                <Label Text="Управление контактами"
-                       Margin="0,20,0,0"
-                       FontSize="Small" />
-                <material:MaterialTextField Text="{Binding CurrentPhone}"
-                                            Placeholder="Введите номер телефона"
-                                            LeadingIcon="add"
-                                            InputType="Telephone"
-                                            MaxLength="18"
-                                            AlwaysShowUnderline="True"
-                                            TintColor="{StaticResource Primary}"
-                                            HelperText="* Обязательно"
-                                            Grid.Column="1">
-                    <material:MaterialTextField.Behaviors>
-                        <behaviors:MaskedBehavior Mask="+X (XXX) XXX XX-XX" />
-                    </material:MaterialTextField.Behaviors>
-                </material:MaterialTextField>
+                                <Style.Triggers>
+                                    <DataTrigger TargetType="StackLayout"
+                                                 Binding="{Binding IsNotInReadMode}"
+                                                 Value="True">
+                                        <Setter Property="IsVisible"
+                                                Value="True" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackLayout.Style>
+                        <material:MaterialTextField Text="{Binding CurrentBranch.Title}"
+                                                    Placeholder="Введите название филиала"
+                                                    LeadingIcon="icon_about"
+                                                    InputType="Text"
+                                                    MaxLength="50"
+                                                    AlwaysShowUnderline="True"
+                                                    TintColor="{StaticResource Primary}"
+                                                    HelperText="* Обязательно" />
+                        <material:MaterialTextField Text="{Binding CityName}"
+                                                    Placeholder="Введите город филиала"
+                                                    LeadingIcon="branch"
+                                                    InputType="Text"
+                                                    MaxLength="50"
+                                                    AlwaysShowUnderline="True"
+                                                    TintColor="{StaticResource Primary}"
+                                                    BackgroundColor="White"
+                                                    HelperText="* Обязательно" />
+                        <material:MaterialTextField Text="{Binding StreetName}"
+                                                    Placeholder="Введите улицу филиала"
+                                                    LeadingIcon="branch"
+                                                    InputType="Text"
+                                                    MaxLength="50"
+                                                    AlwaysShowUnderline="True"
+                                                    TintColor="{StaticResource Primary}"
+                                                    BackgroundColor="White"
+                                                    HelperText="* Обязательно"
+                                                    Grid.Column="1" />
+                        <Label Text="Укажите время начала работы" />
+                        <material:MaterialTimePicker Time="{Binding WorkFrom}" />
+                        <Label Text="Укажите время окончания работы" />
+                        <material:MaterialTimePicker Time="{Binding WorkTo}" />
+                    </StackLayout>
+                    <StackLayout>
+                        <StackLayout.Style>
+                            <Style TargetType="StackLayout">
+                                <Setter Property="IsVisible"
+                                        Value="False" />
+                                <Style.Triggers>
+                                    <DataTrigger TargetType="StackLayout"
+                                                 Binding="{Binding IsNotInReadMode}"
+                                                 Value="False">
+                                        <Setter Property="IsVisible"
+                                                Value="True" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackLayout.Style>
+                        <Label Text="Название филиала"
+                               FontSize="Body"
+                               FontAttributes="Bold" />
+                        <Label Text="{Binding CurrentBranch.Title}" />
+                        <BoxView Color="WhiteSmoke"
+                                 HeightRequest="1" />
+                        <Label Text="Город филиала"
+                               FontSize="Body"
+                               FontAttributes="Bold" />
+                        <Label Text="{Binding CurrentBranch.CityName}" />
+                        <BoxView Color="WhiteSmoke"
+                                 HeightRequest="1" />
+                        <Label Text="Улица филиала"
+                               FontSize="Body"
+                               FontAttributes="Bold" />
+                        <Label Text="{Binding CurrentBranch.StreetName}" />
+                        <BoxView Color="WhiteSmoke"
+                                 HeightRequest="1" />
+                        <Label Text="Время начала работы"
+                               FontSize="Body"
+                               FontAttributes="Bold" />
+                        <Label Text="{Binding CurrentBranch.WorkFrom}" />
+                        <BoxView Color="WhiteSmoke"
+                                 HeightRequest="1" />
+                        <Label Text="Время окончания работы"
+                               FontSize="Body"
+                               FontAttributes="Bold" />
+                        <Label Text="{Binding CurrentBranch.WorkTo}" />
+                        <BoxView Color="WhiteSmoke"
+                                 HeightRequest="1" />
+                    </StackLayout>
+                </Grid>
+                <StackLayout>
+                    <StackLayout.Style>
+                        <Style TargetType="StackLayout">
+                            <Style.Triggers>
+                                <DataTrigger TargetType="StackLayout"
+                                             Binding="{Binding Role}"
+                                             Value="Клиент">
+                                    <Setter Property="IsVisible"
+                                            Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackLayout.Style>
+                    <Label Text="Управление контактами"
+                           Margin="0,20,0,0"
+                           FontSize="Small" />
+                    <material:MaterialTextField Text="{Binding CurrentPhone}"
+                                                Placeholder="Введите номер телефона"
+                                                LeadingIcon="add"
+                                                InputType="Telephone"
+                                                MaxLength="18"
+                                                AlwaysShowUnderline="True"
+                                                TintColor="{StaticResource Primary}"
+                                                HelperText="* Обязательно"
+                                                Grid.Column="1">
+                        <material:MaterialTextField.Behaviors>
+                            <behaviors:MaskedBehavior Mask="+X (XXX) XXX XX-XX" />
+                        </material:MaterialTextField.Behaviors>
+                    </material:MaterialTextField>
 
-                <material:MaterialButton Command="{Binding AddContactCommand}"
-                                         Text="Добавить контакт"
+                    <material:MaterialButton Command="{Binding AddContactCommand}"
+                                             Text="Добавить контакт"
+                                             VerticalOptions="EndAndExpand"
+                                             Style="{StaticResource BaseButton}" />
+                    <BoxView HeightRequest="1"
+                             Color="WhiteSmoke"
+                             Margin="0,10,0,10" />
+                </StackLayout>
+                <Label Text="Имеющиеся контакты"
+                       FontSize="Small" />
+                <StackLayout BindableLayout.ItemsSource="{Binding PhoneNumbers}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Grid x:DataType="helpers:PhoneNumberHelper">
+                                <material:MaterialCard Elevation="5"
+                                                       Margin="10">
+                                    <Label Text="{Binding PhoneNumber, StringFormat='+{0}'}"
+                                           HorizontalOptions="Center" />
+                                </material:MaterialCard>
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+                <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                         Text="Сохранить"
                                          VerticalOptions="EndAndExpand"
-                                         Style="{StaticResource BaseButton}" />
-                <BoxView HeightRequest="1"
-                         Color="WhiteSmoke"
-                         Margin="0,10,0,10" />
+                                         Style="{StaticResource BaseButton}">
+                    <material:MaterialButton.Triggers>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding Role}"
+                                     Value="Клиент">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </material:MaterialButton.Triggers>
+                </material:MaterialButton>
+                <material:MaterialButton Command="{Binding ActivateEditBranchCommand}"
+                                         Text="Редактировать"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}"
+                                         IsVisible="False">
+                    <material:MaterialButton.Triggers>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding IsCanEditBranch}"
+                                     Value="True">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding IsNotInReadMode}"
+                                     Value="True">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </material:MaterialButton.Triggers>
+                </material:MaterialButton>
+                <material:MaterialButton Command="{Binding GoToServicesForOrderPageCommand}"
+                                         Text="Услуги"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}"
+                                         IsVisible="False">
+                    <material:MaterialButton.Triggers>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding Role}"
+                                     Value="Клиент">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                    </material:MaterialButton.Triggers>
+                </material:MaterialButton>
             </StackLayout>
-            <Label Text="Имеющиеся контакты"
-                   FontSize="Small" />
-            <StackLayout BindableLayout.ItemsSource="{Binding PhoneNumbers}">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate>
-                        <Grid x:DataType="helpers:PhoneNumberHelper">
-                            <material:MaterialCard Elevation="5"
-                                                   Margin="10">
-                                <Label Text="{Binding PhoneNumber, StringFormat='+{0}'}"
-                                       HorizontalOptions="Center" />
-                            </material:MaterialCard>
-                        </Grid>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </StackLayout>
-            <material:MaterialButton Command="{Binding SaveChangesCommand}"
-                                     Text="Сохранить"
-                                     VerticalOptions="EndAndExpand"
-                                     Style="{StaticResource BaseButton}">
-                <material:MaterialButton.Triggers>
-                    <DataTrigger TargetType="material:MaterialButton"
-                                 Binding="{Binding Role}"
-                                 Value="Клиент">
-                        <Setter Property="IsVisible"
-                                Value="False" />
-                    </DataTrigger>
-                </material:MaterialButton.Triggers>
-            </material:MaterialButton>
-            <material:MaterialButton Command="{Binding GoToServicesForOrderPageCommand}"
-                                     Text="Услуги"
-                                     VerticalOptions="EndAndExpand"
-                                     Style="{StaticResource BaseButton}"
-                                     IsVisible="False">
-                <material:MaterialButton.Triggers>
-                    <DataTrigger TargetType="material:MaterialButton"
-                                 Binding="{Binding Role}"
-                                 Value="Клиент">
-                        <Setter Property="IsVisible"
-                                Value="True" />
-                    </DataTrigger>
-                </material:MaterialButton.Triggers>
-            </material:MaterialButton>
-        </StackLayout>
-    </ScrollView>
+        </ScrollView>
+    </ContentView>
 </ContentPage>

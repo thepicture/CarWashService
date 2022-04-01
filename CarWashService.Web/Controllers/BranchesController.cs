@@ -137,29 +137,29 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
+            City city = await db.City
+                .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
+            if (city == null)
+            {
+                city = new City
+                {
+                    Name = serializedBranch.CityName
+                };
+                _ = db.City.Add(city);
+            }
+
+            Address address = await db.Address
+                .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
+            if (address == null)
+            {
+                address = new Address
+                {
+                    City = city,
+                    StreetName = serializedBranch.StreetName,
+                };
+            }
             if (serializedBranch.Id == 0)
             {
-                City city = await db.City
-                    .FirstOrDefaultAsync(c => c.Name == serializedBranch.CityName);
-                if (city == null)
-                {
-                    city = new City
-                    {
-                        Name = serializedBranch.CityName
-                    };
-                    _ = db.City.Add(city);
-                }
-
-                Address address = await db.Address
-                    .FirstOrDefaultAsync(b => b.StreetName == serializedBranch.StreetName);
-                if (address == null)
-                {
-                    address = new Address
-                    {
-                        City = city,
-                        StreetName = serializedBranch.StreetName,
-                    };
-                }
 
                 Branch branchToAdd = new Branch
                 {
@@ -188,7 +188,10 @@ namespace CarWashService.Web.Controllers
                 {
                     return NotFound();
                 }
-
+                db.Branch.Find(serializedBranch.Id).Title = serializedBranch.Title;
+                db.Branch.Find(serializedBranch.Id).Address = address;
+                db.Branch.Find(serializedBranch.Id).WorkFrom = TimeSpan.Parse(serializedBranch.WorkFrom);
+                db.Branch.Find(serializedBranch.Id).WorkTo = TimeSpan.Parse(serializedBranch.WorkTo);
                 foreach (string phone in serializedBranch.PhoneNumbers)
                 {
                     if (branch.BranchPhone.Any(p => p.PhoneNumber == phone))
