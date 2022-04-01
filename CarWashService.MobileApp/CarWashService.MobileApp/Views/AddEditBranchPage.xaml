@@ -179,7 +179,7 @@
                 </material:MaterialButton.Triggers>
             </material:MaterialButton>
             <material:MaterialButton Command="{Binding GoToServicesForOrderPageCommand}"
-                                     Text="Заказать услуги"
+                                     Text="Услуги"
                                      VerticalOptions="EndAndExpand"
                                      Style="{StaticResource BaseButton}"
                                      IsVisible="False">
