@@ -54,9 +54,9 @@ namespace CarWashService.MobileApp.ViewModels
                                    StringComparison.OrdinalIgnoreCase))
             {
                 _ = FeedbackService.InformError("Неверная captcha. " +
-                    "Интерфейс заблокирован на 10 секунд.");
+                    "Интерфейс заблокирован на 5 секунд.");
                 IsNotBlocked = false;
-                Device.StartTimer(TimeSpan.FromSeconds(10), () =>
+                Device.StartTimer(TimeSpan.FromSeconds(5), () =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {

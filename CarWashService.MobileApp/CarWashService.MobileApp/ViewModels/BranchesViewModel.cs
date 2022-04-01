@@ -1,15 +1,10 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
-using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -33,55 +28,38 @@ namespace CarWashService.MobileApp.ViewModels
         private async Task InsertBranchesIntoPositions()
         {
             Locations.Clear();
-            using (HttpClient client = new HttpClient())
+            IEnumerable<SerializedBranch> branches =
+                await BranchDataStore.GetItemsAsync();
+            if (branches == null)
             {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
-                try
+                return;
+            }
+            Geocoder geoCoder = new Geocoder();
+            foreach (SerializedBranch branch in branches)
+            {
+                IEnumerable<Position> approximateLocations =
+                    await geoCoder
+                    .GetPositionsForAddressAsync(
+                    string.Format("{0}, {1}, {2}",
+                                  branch.StreetName,
+                                  branch.CityName,
+                                  "Россия")
+                    );
+                Position position = approximateLocations
+                    .FirstOrDefault();
+                Locations.Add(new LocationHelper
                 {
-                    string response = await client
-                        .GetAsync("branches")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    IEnumerable<SerializedBranch> branches = JsonConvert
-                        .DeserializeObject
-                        <IEnumerable<SerializedBranch>>
-                        (response);
-                    Geocoder geoCoder = new Geocoder();
-                    foreach (SerializedBranch branch in branches)
-                    {
-                        IEnumerable<Position> approximateLocations =
-                            await geoCoder
-                            .GetPositionsForAddressAsync(
-                            string.Format("{0}, {1}, {2}",
-                                          branch.StreetName,
-                                          branch.CityName,
-                                          "Россия")
-                            );
-                        Position position = approximateLocations
-                            .FirstOrDefault();
-                        Locations.Add(new LocationHelper
-                        {
-                            Address = $"{branch.StreetName}, " +
-                            $"{branch.CityName}",
-                            Description = "С "
-                            + TimeSpan.Parse(branch.WorkFrom)
-                            .ToString(@"hh\:mm")
-                            + " по "
-                            + TimeSpan.Parse(branch.WorkTo)
-                            .ToString(@"hh\:mm"),
-                            Position = position,
-                            Branch = branch
-                        });
-                    }
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                }
+                    Address = $"{branch.StreetName}, " +
+                    $"{branch.CityName}",
+                    Description = "С "
+                    + TimeSpan.Parse(branch.WorkFrom)
+                    .ToString(@"hh\:mm")
+                    + " по "
+                    + TimeSpan.Parse(branch.WorkTo)
+                    .ToString(@"hh\:mm"),
+                    Position = position,
+                    Branch = branch
+                });
             }
         }
 
