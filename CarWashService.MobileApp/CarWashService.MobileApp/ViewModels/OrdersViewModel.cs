@@ -110,7 +110,7 @@ namespace CarWashService.MobileApp.ViewModels
                 client.DefaultRequestHeaders.Authorization =
                      new AuthenticationHeaderValue("Basic",
                                                    AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
                     HttpResponseMessage response = await client
@@ -156,7 +156,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void GoToOrderPageAsync(object parameter)
         {
-            (App.Current as App).CurrentOrder = parameter as SerializedOrder;
+            App.CurrentOrder = parameter as SerializedOrder;
             await Shell.Current.GoToAsync(
                 $"{nameof(MakeOrderPage)}");
         }

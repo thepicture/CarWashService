@@ -37,7 +37,7 @@ namespace CarWashService.MobileApp.Views
 
         private void OnPinClicked(object sender, PinClickedEventArgs e)
         {
-            (BindingContext as BranchesViewModel)
+            _viewModel
               .SelectedLocation = (sender as Pin)
               .BindingContext as LocationHelper;
         }

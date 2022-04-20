@@ -147,7 +147,7 @@ namespace CarWashService.MobileApp.ViewModels
             if (isRegistered)
             {
                 await FeedbackService.Inform("Вы зарегистрированы.");
-                (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
+                AppShell.LoadLoginAndRegisterShell();
             }
             else
             {

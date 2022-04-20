@@ -83,7 +83,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void GoToSelectedBranchPageAsync()
         {
-            (App.Current as App).CurrentBranch = SelectedLocation.Branch;
+            App.CurrentBranch = SelectedLocation.Branch;
             await Shell.Current.GoToAsync($"{nameof(AddEditBranchPage)}");
         }
 
@@ -104,7 +104,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void GoToAddBranchPageAsync()
         {
-            (App.Current as App).CurrentBranch = new SerializedBranch();
+            App.CurrentBranch = new SerializedBranch();
             await Shell.Current.GoToAsync($"{nameof(AddEditBranchPage)}");
         }
 

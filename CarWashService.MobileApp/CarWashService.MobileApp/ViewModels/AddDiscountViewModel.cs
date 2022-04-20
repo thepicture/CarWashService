@@ -82,7 +82,7 @@ namespace CarWashService.MobileApp.ViewModels
             CurrentDiscount.DiscountPercent = int.Parse(DiscountPercent);
             CurrentDiscount.WorkFrom = WorkFrom.ToString();
             CurrentDiscount.WorkTo = WorkTo.ToString();
-            CurrentDiscount.ServiceId = (App.Current as App).CurrentService.Id;
+            CurrentDiscount.ServiceId = App.CurrentService.Id;
             if (await DiscountDataStore.AddItemAsync(CurrentDiscount))
             {
                 string action = CurrentDiscount.Id == 0 ? 

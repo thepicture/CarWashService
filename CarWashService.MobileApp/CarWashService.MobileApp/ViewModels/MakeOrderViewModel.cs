@@ -22,8 +22,8 @@ namespace CarWashService.MobileApp.ViewModels
 
         internal void OnAppearing()
         {
-            IsNew = (App.Current as App).CurrentOrder == null;
-            if ((App.Current as App).CurrentOrder != null)
+            IsNew = App.CurrentOrder == null;
+            if (App.CurrentOrder != null)
             {
                 _ = Task.Run(() =>
                 {
@@ -33,12 +33,12 @@ namespace CarWashService.MobileApp.ViewModels
                 {
                     TotalPrice = ServicesOfOrder.Sum(s => s.Price);
                     AppointmentDateTime = DateTime.Parse(
-                        (App.Current as App).CurrentOrder.AppointmentDate);
+                        App.CurrentOrder.AppointmentDate);
                 });
             }
             else
             {
-                ServicesOfOrder = (App.Current as App).CurrentServices;
+                ServicesOfOrder = App.CurrentServices;
                 TotalPrice = ServicesOfOrder.Sum(s => s.Price);
             }
         }
@@ -50,10 +50,10 @@ namespace CarWashService.MobileApp.ViewModels
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",
                                                 AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
-                    int orderId = (App.Current as App).CurrentOrder.Id;
+                    int orderId = App.CurrentOrder.Id;
                     string response = await client
                         .GetAsync($"orders/{orderId}")
                         .Result
@@ -143,7 +143,7 @@ namespace CarWashService.MobileApp.ViewModels
             set => SetProperty(ref branches, value);
         }
 
-        public SerializedBranch CurrentBranch => (App.Current as App).CurrentBranch;
+        public SerializedBranch CurrentBranch => App.CurrentBranch;
 
         private DateTime appointmentDateTime = DateTime.Now.AddHours(1);
 
@@ -186,7 +186,7 @@ namespace CarWashService.MobileApp.ViewModels
             if (await FeedbackService.Ask("Удалить заказ?"))
             {
                 if (await OrderDataStore
-                    .DeleteItemAsync((App.Current as App)
+                    .DeleteItemAsync(App
                     .CurrentOrder
                     .Id
                     .ToString()))

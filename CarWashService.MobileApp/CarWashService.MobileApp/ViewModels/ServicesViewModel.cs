@@ -108,7 +108,7 @@ namespace CarWashService.MobileApp
 
         private async void GoToDiscountsAsync(object parameter)
         {
-            (App.Current as App).CurrentService =
+            App.CurrentService =
                 parameter as SerializedService;
             await Shell.Current.GoToAsync(
                 $"{nameof(ServiceDiscountsPage)}");
@@ -131,8 +131,8 @@ namespace CarWashService.MobileApp
 
         private async void GoToMakeOrderAsync()
         {
-            (App.Current as App).CurrentOrder = null;
-            (App.Current as App).CurrentServices = SelectedServices;
+            App.CurrentOrder = null;
+            App.CurrentServices = SelectedServices;
             await Shell.Current.GoToAsync($"{nameof(MakeOrderPage)}");
         }
         public bool IsAbleToMakeOrder

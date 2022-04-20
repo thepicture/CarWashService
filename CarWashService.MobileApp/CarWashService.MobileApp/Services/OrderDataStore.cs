@@ -20,7 +20,7 @@ namespace CarWashService.MobileApp.Services
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
                     string discountJson = JsonConvert.SerializeObject(item);
@@ -91,7 +91,7 @@ namespace CarWashService.MobileApp.Services
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
                     HttpResponseMessage response = await client
@@ -118,7 +118,7 @@ namespace CarWashService.MobileApp.Services
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
                     string response = await client

@@ -7,10 +7,10 @@ namespace CarWashService.MobileApp.Controls
 {
     public class DateTimePicker : ContentView, INotifyPropertyChanged
     {
-        public Entry _entry { get; private set; } = new Entry();
-        public MaterialDatePicker _datePicker { get; private set; } = new MaterialDatePicker() { MinimumDate = DateTime.Today, IsVisible = false };
-        public MaterialTimePicker _timePicker { get; private set; } = new MaterialTimePicker() { IsVisible = false };
-        string _stringFormat { get; set; }
+        public Entry Entry { get; private set; } = new Entry();
+        public MaterialDatePicker DatePicker { get; private set; } = new MaterialDatePicker() { MinimumDate = DateTime.Today, IsVisible = false };
+        public MaterialTimePicker TimePicker { get; private set; } = new MaterialTimePicker() { IsVisible = false };
+        string _stringFormat;
         public string StringFormat { get { return _stringFormat ?? "dd/MM/yyyy HH:mm"; } set { _stringFormat = value; } }
         public DateTime DateTime
         {
@@ -18,7 +18,7 @@ namespace CarWashService.MobileApp.Controls
             set { SetValue(DateTimeProperty, value); OnPropertyChanged("DateTime"); }
         }
 
-        private TimeSpan _time
+        private TimeSpan Time
         {
             get
             {
@@ -30,7 +30,7 @@ namespace CarWashService.MobileApp.Controls
             }
         }
 
-        private DateTime _date
+        private DateTime Date
         {
             get
             {
@@ -55,44 +55,46 @@ namespace CarWashService.MobileApp.Controls
             {
                 Children =
             {
-                _datePicker,
-                _timePicker,
-                _entry
+                DatePicker,
+                TimePicker,
+                Entry
             }
             };
-            _datePicker.SetBinding<DateTimePicker>(MaterialDatePicker.DateProperty, p => p._date);
-            _timePicker.SetBinding<DateTimePicker>(MaterialTimePicker.TimeProperty, p => p._time);
-            _timePicker.Unfocused += (sender, args) => _time = _timePicker.Time;
-            _datePicker.Focused += (s, a) => UpdateEntryText();
+            DatePicker.SetBinding(MaterialDatePicker.DateProperty,
+                                  new Binding(nameof(Date)));
+            DatePicker.SetBinding(MaterialTimePicker.TimeProperty,
+                                  new Binding(nameof(Time)));
+            TimePicker.Unfocused += (sender, args) => Time = TimePicker.Time;
+            DatePicker.Focused += (s, a) => UpdateEntryText();
 
             GestureRecognizers.Add(new TapGestureRecognizer()
             {
-                Command = new Command(() => _datePicker.Focus())
+                Command = new Command(() => DatePicker.Focus())
             });
-            _entry.Focused += (sender, args) =>
+            Entry.Focused += (sender, args) =>
             {
-                Device.BeginInvokeOnMainThread(() => _datePicker.Focus());
+                Device.BeginInvokeOnMainThread(() => DatePicker.Focus());
             };
-            _datePicker.Unfocused += (sender, args) =>
+            DatePicker.Unfocused += (sender, args) =>
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    _timePicker.Focus();
-                    _date = _datePicker.Date;
+                    TimePicker.Focus();
+                    Date = DatePicker.Date;
                     UpdateEntryText();
-                    _datePicker.Unfocus();
+                    DatePicker.Unfocus();
                 });
             };
         }
 
         private void UpdateEntryText()
         {
-            _entry.Text = DateTime.ToString(StringFormat);
+            Entry.Text = DateTime.ToString(StringFormat);
         }
 
         static void DTPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var timePicker = (bindable as DateTimePicker);
+            var timePicker = bindable as DateTimePicker;
             timePicker.UpdateEntryText();
         }
     }

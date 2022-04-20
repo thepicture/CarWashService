@@ -8,10 +8,12 @@ namespace CarWashService.MobileApp
 {
     public partial class AppShell : Shell
     {
-        public TabBar ShellTabBar => CommonTabBar;
+        public static TabBar TabBar = new TabBar();
+
         public AppShell()
         {
             InitializeComponent();
+            Items.Add(TabBar);
 
             Routing.RegisterRoute(
                 nameof(AddEditBranchPage),
@@ -38,10 +40,10 @@ namespace CarWashService.MobileApp
             }
         }
 
-        public void LoadLoginAndRegisterShell()
+        public static void LoadLoginAndRegisterShell()
         {
-            CommonTabBar.Items.Clear();
-            CommonTabBar
+            TabBar.Items.Clear();
+            TabBar
                 .Items.Add(new ShellContent
                 {
                     Route = nameof(LoginPage),
@@ -49,7 +51,7 @@ namespace CarWashService.MobileApp
                     Title = "Авторизация",
                     ContentTemplate = new DataTemplate(typeof(LoginPage))
                 });
-            CommonTabBar
+            TabBar
               .Items.Add(new ShellContent
               {
                   Route = nameof(LoginPage),
@@ -64,13 +66,13 @@ namespace CarWashService.MobileApp
             return SecureStorage.GetAsync("Identity").Result != null;
         }
 
-        public void SetShellStacksDependingOnRole()
+        public static void SetShellStacksDependingOnRole()
         {
-            CommonTabBar.Items.Clear();
+            TabBar.Items.Clear();
             switch (AppIdentity.Role)
             {
                 case "Администратор":
-                    CommonTabBar
+                    TabBar
                         .Items.Add(new ShellContent
                         {
                             Route = nameof(BranchesPage),
@@ -78,7 +80,7 @@ namespace CarWashService.MobileApp
                             Title = "Филиалы",
                             ContentTemplate = new DataTemplate(typeof(BranchesPage))
                         });
-                    CommonTabBar
+                    TabBar
                        .Items.Add(new ShellContent
                        {
                            Route = nameof(ServicesPage),
@@ -88,7 +90,7 @@ namespace CarWashService.MobileApp
                        });
                     break;
                 case "Сотрудник":
-                    CommonTabBar
+                    TabBar
                       .Items.Add(new ShellContent
                       {
                           Route = nameof(BranchesPage),
@@ -96,7 +98,7 @@ namespace CarWashService.MobileApp
                           Title = "Филиалы",
                           ContentTemplate = new DataTemplate(typeof(BranchesPage))
                       });
-                    CommonTabBar
+                    TabBar
                       .Items.Add(new ShellContent
                       {
                           Route = nameof(ServicesPage),
@@ -106,7 +108,7 @@ namespace CarWashService.MobileApp
                       });
                     break;
                 case "Клиент":
-                    CommonTabBar
+                    TabBar
                       .Items.Add(new ShellContent
                       {
                           Route = nameof(BranchesPage),
@@ -114,7 +116,7 @@ namespace CarWashService.MobileApp
                           Title = "Филиалы",
                           ContentTemplate = new DataTemplate(typeof(BranchesPage))
                       });
-                    CommonTabBar
+                    TabBar
                    .Items.Add(new ShellContent
                    {
                        Route = nameof(ServicesPage),
@@ -126,7 +128,7 @@ namespace CarWashService.MobileApp
                 default:
                     break;
             }
-            CommonTabBar
+            TabBar
                .Items.Add(new ShellContent
                {
                    Route = nameof(OrdersPage),
@@ -134,7 +136,7 @@ namespace CarWashService.MobileApp
                    Title = "Заказы",
                    ContentTemplate = new DataTemplate(typeof(OrdersPage))
                });
-            CommonTabBar
+            TabBar
                  .Items.Add(new ShellContent
                  {
                      Route = nameof(AccountPage),

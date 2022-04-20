@@ -6,16 +6,18 @@ namespace CarWashService.MobileApp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AccountPage : ContentPage
     {
+        private readonly AccountViewModel _viewModel;
+
         public AccountPage()
         {
             InitializeComponent();
-            BindingContext = new AccountViewModel();
+            BindingContext = _viewModel = new AccountViewModel();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            (BindingContext as AccountViewModel).OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }

@@ -32,10 +32,10 @@ namespace CarWashService.MobileApp.ViewModels
                     client.DefaultRequestHeaders.Authorization =
                         new AuthenticationHeaderValue("Basic",
                                                       AppIdentity.AuthorizationValue);
-                    client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                    client.BaseAddress = new Uri(App.BaseUrl);
                     try
                     {
-                        int serviceId = (App.Current as App).CurrentService.Id;
+                        int serviceId = App.CurrentService.Id;
                         HttpResponseMessage response = await client
                             .GetAsync(new Uri(client.BaseAddress + $"servicediscounts/{serviceId}"));
                         if (response.StatusCode != System.Net.HttpStatusCode.OK)

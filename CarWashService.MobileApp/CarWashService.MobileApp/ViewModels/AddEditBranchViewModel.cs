@@ -122,7 +122,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         public AddEditBranchViewModel()
         {
-            CurrentBranch = (App.Current as App)
+            CurrentBranch = App
                 .CurrentBranch;
             if (CurrentBranch.Id != 0)
             {
@@ -293,7 +293,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void PerformGoToServicesForOrderPageAsync()
         {
-            (App.Current as App).CurrentBranch = CurrentBranch;
+            App.CurrentBranch = CurrentBranch;
             await Shell.Current.Navigation.PushAsync(
                 new ServicesPage(
                     new ServicesViewModel(isForOrder: true)));

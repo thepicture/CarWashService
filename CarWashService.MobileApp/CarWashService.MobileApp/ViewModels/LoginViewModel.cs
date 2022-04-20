@@ -1,11 +1,9 @@
 ﻿using CarWashService.MobileApp.Services;
-using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -95,13 +93,12 @@ namespace CarWashService.MobileApp.ViewModels
                 }
                 else
                 {
-                    (App.Current as App).User = Authenticator.User;
-                    (App.Current as App).Role = Authenticator.User.UserTypeName;
-                    (App.Current as App).Identity = encodedLoginAndPassword;
+                    App.User = Authenticator.User;
+                    App.AuthorizationValue = encodedLoginAndPassword;
                 }
                 await FeedbackService.Inform("Вы авторизованы " +
                     $"как {AppIdentity.User.UserTypeName.ToLower()}.");
-                (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
+                AppShell.SetShellStacksDependingOnRole();
                 CountOfIncorrectAttempts = 0;
                 CaptchaService.Invalidate();
             }

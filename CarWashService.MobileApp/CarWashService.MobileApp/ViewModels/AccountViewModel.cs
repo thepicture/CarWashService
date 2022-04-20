@@ -49,7 +49,7 @@ namespace CarWashService.MobileApp
             if (await FeedbackService.Ask("Выйти из аккаунта?"))
             {
                 AppIdentity.Invalidate();
-                (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
+                AppShell.LoadLoginAndRegisterShell();
             }
         }
 

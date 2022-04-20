@@ -9,16 +9,14 @@ namespace CarWashService.MobileApp.Services
         public static void Invalidate()
         {
             SecureStorage.RemoveAll();
-            AppIdentity.AuthorizationValue = null;
-            AppIdentity.User = null;
         }
         public static SerializedUser User
         {
             get
             {
-                if ((App.Current as App).User != null)
+                if (App.User != null)
                 {
-                    return (App.Current as App).User;
+                    return App.User;
                 }
                 else
                 {
@@ -29,14 +27,15 @@ namespace CarWashService.MobileApp.Services
             }
             set
             {
-                value.ImageBytes = null;
-                (App.Current as App).User = value;
                 if (value == null)
                 {
+                    App.User = null;
                     _ = SecureStorage.Remove("User");
                 }
                 else
                 {
+                    value.ImageBytes = null;
+                    App.User = value;
                     _ = SecureStorage
                         .SetAsync("User",
                                   JsonConvert.SerializeObject(value));
@@ -48,9 +47,9 @@ namespace CarWashService.MobileApp.Services
         {
             get
             {
-                if ((App.Current as App).Identity != null)
+                if (App.AuthorizationValue != null)
                 {
-                    return (App.Current as App).Identity;
+                    return App.AuthorizationValue;
                 }
                 else
                 {
@@ -59,15 +58,8 @@ namespace CarWashService.MobileApp.Services
             }
             set
             {
-                (App.Current as App).Identity = value;
-                if (value == null)
-                {
-                    _ = SecureStorage.Remove("Identity");
-                }
-                else
-                {
-                    _ = SecureStorage.SetAsync("Identity", value);
-                }
+                App.AuthorizationValue = value;
+                _ = SecureStorage.SetAsync("Identity", value);
             }
         }
     }
