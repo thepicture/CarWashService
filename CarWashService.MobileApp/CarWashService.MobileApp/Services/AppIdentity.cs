@@ -29,6 +29,7 @@ namespace CarWashService.MobileApp.Services
             }
             set
             {
+                value.ImageBytes = null;
                 (App.Current as App).User = value;
                 if (value == null)
                 {

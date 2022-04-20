@@ -26,6 +26,7 @@ namespace CarWashService.MobileApp.ViewModels
             LoginCommand = new Command(OnLoginClickedAsync);
         }
 
+
         private async void OnLoginClickedAsync(object obj)
         {
             StringBuilder validationErrors = new StringBuilder();
@@ -89,12 +90,8 @@ namespace CarWashService.MobileApp.ViewModels
                     .Encode(Login, Password);
                 if (IsRememberMe)
                 {
-                    await SecureStorage
-                        .SetAsync("Identity",
-                                  encodedLoginAndPassword);
-                    await SecureStorage
-                       .SetAsync("User",
-                                 JsonConvert.SerializeObject(Authenticator.User));
+                    AppIdentity.User = Authenticator.User;
+                    AppIdentity.AuthorizationValue = encodedLoginAndPassword;
                 }
                 else
                 {

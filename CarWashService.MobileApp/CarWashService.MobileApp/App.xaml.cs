@@ -1,6 +1,7 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
 using System.Collections.Generic;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
