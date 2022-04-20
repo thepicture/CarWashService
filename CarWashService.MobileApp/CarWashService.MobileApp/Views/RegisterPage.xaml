@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodelhelpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
+             xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
              x:DataType="vm:RegisterViewModel"
              Title="Регистрация">
     <ContentView>
@@ -58,14 +59,9 @@
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
                                             HelperText="* Обязательно" />
-                <material:MaterialTextField Text="{Binding Password}"
-                                            Placeholder="Введите пароль"
-                                            LeadingIcon="key"
-                                            InputType="Password"
-                                            MaxLength="50"
-                                            AlwaysShowUnderline="True"
-                                            TintColor="{StaticResource Primary}"
-                                            HelperText="* Обязательно" />
+                <controls:PasswordMaterialTextField Password="{Binding Password}"
+                                                    Placeholder="Введите пароль"
+                                                    HelperText="* Обязательно" />
                 <Grid ColumnDefinitions="*,*">
                     <material:MaterialTextField Text="{Binding PassportNumber}"
                                                 Placeholder="Номер"

@@ -13,74 +13,69 @@
              Title="Авторизация"
              IsEnabled="{Binding IsNotBlocked}">
     <ContentView>
-    <ScrollView Margin="0,40,0,0">
-        <StackLayout Padding="10,0,10,0"
-                     VerticalOptions="Fill">
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="Center">
-                <Image Source="logo"
-                       WidthRequest="110" />
-                <StackLayout VerticalOptions="Center">
-                    <Label Text="АВТОМОЙКА"
-                           Grid.Column="1"
-                           FontSize="25"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-                    <Label Text="Всемирная сеть"
-                           Margin="0,-5,0,0"
-                           VerticalTextAlignment="Start"
-                           Grid.Row="1"
-                           Grid.Column="1" />
+        <ScrollView Margin="0,40,0,0">
+            <StackLayout Padding="10,0,10,0"
+                         VerticalOptions="Fill">
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center">
+                    <Image Source="logo"
+                           WidthRequest="110" />
+                    <StackLayout VerticalOptions="Center">
+                        <Label Text="АВТОМОЙКА"
+                               Grid.Column="1"
+                               FontSize="25"
+                               FontAttributes="Bold"
+                               TextColor="Black" />
+                        <Label Text="Всемирная сеть"
+                               Margin="0,-5,0,0"
+                               VerticalTextAlignment="Start"
+                               Grid.Row="1"
+                               Grid.Column="1" />
+                    </StackLayout>
                 </StackLayout>
-            </StackLayout>
-            <material:MaterialTextField Text="{Binding Login}"
-                                        Placeholder="Введите логин"
-                                        InputType="Text"
-                                        MaxLength="50"
-                                        LeadingIcon="profile"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}" />
-            <material:MaterialTextField Text="{Binding Password}"
-                                        Placeholder="Введите пароль"
-                                        InputType="Password"
-                                        MaxLength="50"
-                                        LeadingIcon="key"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}" />
-            <StackLayout IsVisible="False">
-                <StackLayout.Triggers>
-                    <DataTrigger TargetType="StackLayout"
-                                 Binding="{Binding CountOfIncorrectAttempts}"
-                                 Value="3">
-                        <Setter Property="IsVisible"
-                                Value="True" />
-                    </DataTrigger>
-                </StackLayout.Triggers>
-                <controls:CaptchaView x:Name="Captcha"
-                                      HorizontalOptions="Fill"/>
-                <material:MaterialButton Command="{Binding RegenerateCaptchaCommand}"
-                                         Text="Сгенерировать капчу"
-                                         VerticalOptions="EndAndExpand"
-                                         Style="{StaticResource BaseButton}" />
-                <material:MaterialTextField Text="{Binding CaptchaText}"
-                                            Placeholder="Введите капчу"
+                <material:MaterialTextField Text="{Binding Login}"
+                                            Placeholder="Введите логин"
                                             InputType="Text"
-                                            MaxLength="6"
-                                            LeadingIcon="key"
+                                            MaxLength="50"
+                                            LeadingIcon="profile"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}" />
+                <controls:PasswordMaterialTextField Password="{Binding Password}"
+                                                    Placeholder="Введите пароль" />
+                <StackLayout IsVisible="False">
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout"
+                                     Binding="{Binding CountOfIncorrectAttempts}"
+                                     Value="3">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                    <controls:CaptchaView x:Name="Captcha"
+                                          HorizontalOptions="Fill" />
+                    <material:MaterialButton Command="{Binding RegenerateCaptchaCommand}"
+                                             Text="Сгенерировать капчу"
+                                             VerticalOptions="EndAndExpand"
+                                             Style="{StaticResource BaseButton}" />
+                    <material:MaterialTextField Text="{Binding CaptchaText}"
+                                                Placeholder="Введите капчу"
+                                                InputType="Text"
+                                                MaxLength="6"
+                                                LeadingIcon="key"
+                                                AlwaysShowUnderline="True"
+                                                TintColor="{StaticResource Primary}" />
+                </StackLayout>
+                <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
+                                           Text="Запомнить меня" />
+                <material:MaterialButton Command="{Binding LoginCommand}"
+                                         Text="Авторизоваться"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
+                <material:MaterialButton Command="{Binding ExitCommand}"
+                                         Text="Выход"
+                                         VerticalOptions="End"
+                                         Style="{StaticResource BackgroundButton}" />
             </StackLayout>
-            <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
-                                       Text="Запомнить меня" />
-            <material:MaterialButton Command="{Binding LoginCommand}"
-                                     Text="Авторизоваться"
-                                     VerticalOptions="EndAndExpand"
-                                     Style="{StaticResource BaseButton}" />
-            <material:MaterialButton Command="{Binding ExitCommand}"
-                                     Text="Выход"
-                                     VerticalOptions="End"
-                                     Style="{StaticResource BackgroundButton}" />
-        </StackLayout>
-    </ScrollView>
+        </ScrollView>
     </ContentView>
 </ContentPage>
