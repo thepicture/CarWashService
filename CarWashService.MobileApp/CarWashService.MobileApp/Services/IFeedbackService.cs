@@ -4,9 +4,9 @@ namespace CarWashService.MobileApp.Services
 {
     public interface IFeedbackService
     {
-        Task Inform(string message);
-        Task<bool> Ask(string question);
-        Task Warn(string warning);
-        Task InformError(string description);
+        Task Inform(object message);
+        Task<bool> Ask(object question);
+        Task Warn(object warning);
+        Task InformError(object description);
     }
 }

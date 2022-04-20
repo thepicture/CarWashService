@@ -22,10 +22,10 @@ namespace CarWashService.MobileApp
             InitializeComponent();
             XF.Material.Forms.Material.Init(this);
 
-            DependencyService.Register<ToastFeedbackService>();
+            DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<BranchDataStore>();
+            DependencyService.Register<RegistrationDataStore>();
             DependencyService.Register<ApiAuthenticator>();
-            DependencyService.Register<ApiRegistrator>();
             DependencyService.Register<ServiceDataStore>();
             DependencyService.Register<DiscountDataStore>();
             DependencyService.Register<OrderDataStore>();

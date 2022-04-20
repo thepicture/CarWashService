@@ -70,9 +70,13 @@ namespace CarWashService.MobileApp
 
         private async void RefreshAsync()
         {
-            var credentials = new LoginAndPasswordFromBasicDecoder().Decode();
+            var credentials = new LoginAndPasswordFromBasicDecoder()
+                .Decode();
             var authenticator = new ApiAuthenticator();
-            if (await authenticator.IsCorrectAsync(credentials[0], credentials[1]))
+            string login = credentials[0];
+            string password = credentials[1];
+            if (await authenticator.IsCorrectAsync(login,
+                                                   password))
             {
                 User = authenticator.User;
                 IsRefreshing = false;
@@ -98,10 +102,14 @@ namespace CarWashService.MobileApp
         private async void ChangePictureAsync()
         {
             FileResult result = await MediaPicker
-             .PickPhotoAsync(new MediaPickerOptions
-             {
-                 Title = "Выберите фото аккаунта"
-             });
+                .PickPhotoAsync(new MediaPickerOptions
+                {
+                    Title = "Выберите фото аккаунта"
+                });
+            if (result == null)
+            {
+                return;
+            }
             Stream imageStream = await result.OpenReadAsync();
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -109,17 +117,9 @@ namespace CarWashService.MobileApp
                 var imageBytes = memoryStream.ToArray();
                 var newUser = AppIdentity.User;
                 newUser.ImageBytes = imageBytes;
-                AppIdentity.User = newUser;
-                var registrator = new ApiRegistrator();
-                if (await registrator.IsRegisteredAsync(AppIdentity.User))
+                if (await RegistrationDataStore.AddItemAsync(newUser))
                 {
-                    await FeedbackService.Inform("Фото изменено.");
                     IsRefreshing = true;
-                }
-                else
-                {
-                    await FeedbackService.Inform("Фото не изменено. " +
-                        "Проверьте подключение к интернету.");
                 }
             }
         }

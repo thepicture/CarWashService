@@ -20,6 +20,8 @@ namespace CarWashService.MobileApp.ViewModels
             DependencyService.Get<IDataStore<SerializedDiscount>>();
         public IDataStore<SerializedOrder> OrderDataStore =>
             DependencyService.Get<IDataStore<SerializedOrder>>();
+        public IDataStore<SerializedUser> RegistrationDataStore =>
+           DependencyService.Get<IDataStore<SerializedUser>>();
         public ICaptchaService CaptchaService =>
             DependencyService.Get<ICaptchaService>();
         public string Role => AppIdentity.Role;
