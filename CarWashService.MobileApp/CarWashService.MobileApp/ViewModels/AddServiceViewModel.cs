@@ -1,7 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -28,47 +27,15 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(CurrentService.Name))
-            {
-                _ = validationErrors.AppendLine("Введите наименование " +
-                    "услуги.");
-            }
-            if (string.IsNullOrWhiteSpace(PriceString)
-                || !int.TryParse(PriceString, out _)
-                || int.Parse(PriceString) <= 0)
-            {
-                _ = validationErrors.AppendLine("Стоимость - " +
-                    "это положительное целое число в рублях.");
-            }
-            if (CurrentType == null)
-            {
-                _ = validationErrors.AppendLine("Выберите тип услуги.");
-            }
 
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(
-                    validationErrors.ToString());
-                return;
-            }
-            CurrentService.Price = int.Parse(PriceString);
             CurrentService.ServiceTypes = new List<string>
             {
                 CurrentType
             };
+            CurrentService.PriceString = PriceString;
             if (await ServiceDataStore.AddItemAsync(CurrentService))
             {
-                string action = CurrentService.Id == 0
-                    ? "добавлена"
-                    : "изменена";
-                await FeedbackService.Inform($"Услуга {action}.");
                 await Shell.Current.GoToAsync("..");
-            }
-            else
-            {
-                await FeedbackService.Inform("Не удалось " +
-                    "сохранить услугу. Проверьте подключение к интернету.");
             }
         }
 
@@ -119,21 +86,12 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void DeleteServiceAsync()
         {
-            if (await FeedbackService.Ask("Удалить услугу?"))
+            if (await ServiceDataStore
+                .DeleteItemAsync(CurrentService
+                .Id
+                .ToString()))
             {
-                if (await ServiceDataStore
-                    .DeleteItemAsync(CurrentService
-                    .Id
-                    .ToString()))
-                {
-                    await FeedbackService.Inform("Услуга удалена.");
-                    await Shell.Current.GoToAsync("..");
-                }
-                else
-                {
-                    await FeedbackService.InformError("Не удалось удалить услугу. " +
-                        "Попробуйте ещё раз.");
-                }
+                await Shell.Current.GoToAsync("..");
             }
         }
 

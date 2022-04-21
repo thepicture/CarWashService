@@ -3,19 +3,49 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.Services
 {
-    class ServiceDataStore : IDataStore<SerializedService>
+    public class ServiceDataStore : IDataStore<SerializedService>
     {
         public async Task<bool> AddItemAsync(SerializedService item)
         {
+            StringBuilder validationErrors = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(item.Name))
+            {
+                _ = validationErrors.AppendLine("Введите наименование " +
+                    "услуги.");
+            }
+            if (string.IsNullOrWhiteSpace(item.PriceString)
+                || !int.TryParse(item.PriceString, out _)
+                || int.Parse(item.PriceString) <= 0)
+            {
+                _ = validationErrors.AppendLine("Стоимость - " +
+                    "это положительное целое число в рублях.");
+            }
+            if (item.ServiceTypes.FirstOrDefault() == null)
+            {
+                _ = validationErrors.AppendLine("Выберите тип услуги.");
+            }
+
+            if (validationErrors.Length > 0)
+            {
+                await DependencyService
+                    .Get<IFeedbackService>()
+                    .InformError(validationErrors);
+                return false;
+            }
+            item.Price = int.Parse(item.PriceString);
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -24,26 +54,49 @@ namespace CarWashService.MobileApp.Services
                 {
                     string serviceJson = JsonConvert.SerializeObject(item);
                     HttpResponseMessage response = await client
-                        .PostAsync(new Uri(client.BaseAddress + "services"),
+                        .PostAsync("services",
                                    new StringContent(serviceJson,
                                                      Encoding.UTF8,
                                                      "application/json"));
-                    string content = await response.Content.ReadAsStringAsync();
-                    return response.StatusCode ==
-                        System.Net.HttpStatusCode.Created;
+                    if (response.StatusCode == HttpStatusCode.Created)
+                    {
+                        string action = item.Id == 0
+                            ? "добавлена"
+                            : "изменена";
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform($"Услуга { action}.");
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.Created;
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
-                    return await Task.FromResult(false);
+                    await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(ex);
+                    Debug.WriteLine(ex);
+                    return false;
                 }
             }
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
+            if (!await DependencyService
+                .Get<IFeedbackService>()
+                .Ask("Удалить услугу?"))
+            {
+                return false;
+            }
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -52,11 +105,26 @@ namespace CarWashService.MobileApp.Services
                 {
                     HttpResponseMessage response = await client
                         .DeleteAsync($"services?id={id}");
-                    return response.StatusCode == System.Net.HttpStatusCode.NoContent;
+                    if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Услуга удалена.");
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.NoContent;
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
+                    await DependencyService
+                           .Get<IFeedbackService>()
+                           .InformError(ex);
+                    Debug.WriteLine(ex);
                     return false;
                 }
             }
@@ -68,25 +136,35 @@ namespace CarWashService.MobileApp.Services
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    client.Timeout = App.HttpClientTimeout;
                     client.DefaultRequestHeaders.Authorization =
                       new AuthenticationHeaderValue("Basic",
                                                     AppIdentity.AuthorizationValue);
                     client.BaseAddress = new Uri(App.BaseUrl);
-                    string response = await client
-                      .GetAsync($"services/{id}")
-                      .Result
-                      .Content
-                      .ReadAsStringAsync();
-                    SerializedService service = JsonConvert
-                        .DeserializeObject<SerializedService>(response);
-                    return service;
+                    HttpResponseMessage response = await client
+                      .GetAsync($"services/{id}");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return JsonConvert
+                            .DeserializeObject<SerializedService>(
+                                await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine(ex.StackTrace);
-                return null;
-            };
+                await DependencyService
+                       .Get<IFeedbackService>()
+                       .InformError(ex);
+                Debug.WriteLine(ex);
+            }
+            return null;
         }
 
         public async Task<IEnumerable<SerializedService>> GetItemsAsync
@@ -94,25 +172,37 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                         AppIdentity.AuthorizationValue);
                 client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
-                    string response = await client
-                        .GetAsync(new Uri(client.BaseAddress + "services"))
-                        .Result
-                        .Content.ReadAsStringAsync();
-                    return JsonConvert
-                        .DeserializeObject<IEnumerable<SerializedService>>(response);
+                    HttpResponseMessage response = await client
+                        .GetAsync("services");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return JsonConvert
+                            .DeserializeObject<IEnumerable<SerializedService>>(
+                                await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
-                    return null;
+                    await DependencyService
+                           .Get<IFeedbackService>()
+                           .InformError(ex);
+                    Debug.WriteLine(ex);
                 }
             }
+            return new List<SerializedService>();
         }
 
         public Task<bool> UpdateItemAsync(SerializedService item)

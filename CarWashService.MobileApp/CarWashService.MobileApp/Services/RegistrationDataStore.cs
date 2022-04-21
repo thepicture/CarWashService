@@ -61,7 +61,7 @@ namespace CarWashService.MobileApp.Services
 
             if (validationErrors.Length > 0)
             {
-                _ = DependencyService
+                await DependencyService
                     .Get<IFeedbackService>()
                     .InformError(validationErrors);
                 return false;
@@ -70,31 +70,31 @@ namespace CarWashService.MobileApp.Services
             string jsonIdentity = JsonConvert.SerializeObject(item);
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
                     HttpResponseMessage response = await client
-                       .PostAsync(
-                        new Uri(client.BaseAddress + "users/register"),
+                       .PostAsync("users/register",
                         new StringContent(jsonIdentity,
                                           Encoding.UTF8,
                                           "application/json"));
                     if (response.StatusCode == HttpStatusCode.NoContent)
                     {
-                        _ = DependencyService
+                        await DependencyService
                             .Get<IFeedbackService>()
                             .Inform("Вы зарегистрированы.");
                     }
                     else if (response.StatusCode == HttpStatusCode.Conflict)
                     {
-                        _ = DependencyService
+                        await DependencyService
                                .Get<IFeedbackService>()
                                .Inform("Пользователь с таким логином "
                                        + "уже есть.");
                     }
                     else
                     {
-                        _ = DependencyService
+                        await DependencyService
                           .Get<IFeedbackService>()
                           .InformError(response);
                         Debug.WriteLine(response);
@@ -103,7 +103,7 @@ namespace CarWashService.MobileApp.Services
                 }
                 catch (Exception ex)
                 {
-                    _ = DependencyService
+                    await DependencyService
                          .Get<IFeedbackService>()
                          .InformError(ex);
                     Debug.WriteLine(ex);

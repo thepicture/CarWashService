@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace CarWashService.MobileApp.Models.Serialized
 {
@@ -9,5 +10,7 @@ namespace CarWashService.MobileApp.Models.Serialized
         public string Description { get; set; }
         public decimal Price { get; set; }
         public virtual IEnumerable<string> ServiceTypes { get; set; }
+        [JsonIgnore]
+        public string PriceString { get; set; }
     }
 }

@@ -57,7 +57,7 @@ namespace CarWashService.MobileApp.ViewModels
         public ObservableCollection<SerializedOrder> Orders
         {
             get => orders;
-            set => _ = SetProperty(ref orders, value);
+            set => SetProperty(ref orders, value);
         }
 
         private Command<SerializedOrder> acceptOrderCommand;

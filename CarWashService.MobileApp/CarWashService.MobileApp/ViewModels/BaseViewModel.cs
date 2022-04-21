@@ -50,8 +50,8 @@ namespace CarWashService.MobileApp.ViewModels
 
         public string Title
         {
-            get { return title; }
-            set { _ = SetProperty(ref title, value); }
+            get => title;
+            set => SetProperty(ref title, value);
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,

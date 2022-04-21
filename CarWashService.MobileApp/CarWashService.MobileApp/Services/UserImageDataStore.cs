@@ -27,6 +27,7 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
                         "Basic",
@@ -48,7 +49,7 @@ namespace CarWashService.MobileApp.Services
                         }
                         catch (Exception ex)
                         {
-                            _ = DependencyService
+                            await DependencyService
                                 .Get<IFeedbackService>()
                                 .InformError("Не удалось "
                                 + "десереализовать фото: "
@@ -58,7 +59,7 @@ namespace CarWashService.MobileApp.Services
                     }
                     else
                     {
-                        _ = DependencyService
+                        await DependencyService
                           .Get<IFeedbackService>()
                           .InformError(response);
                         Debug.WriteLine(response);
@@ -67,7 +68,7 @@ namespace CarWashService.MobileApp.Services
                 }
                 catch (Exception ex)
                 {
-                    _ = DependencyService
+                    await DependencyService
                          .Get<IFeedbackService>()
                          .InformError(ex);
                     Debug.WriteLine(ex);
@@ -85,6 +86,7 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
                         "Basic",

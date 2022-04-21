@@ -42,6 +42,7 @@ namespace CarWashService.MobileApp.Services
             item.DiscountPercent = int.Parse(item.DiscountPercentAsString);
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -92,6 +93,7 @@ namespace CarWashService.MobileApp.Services
             }
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -135,6 +137,7 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -151,7 +154,7 @@ namespace CarWashService.MobileApp.Services
                     }
                     else
                     {
-                        _ = DependencyService
+                        await DependencyService
                             .Get<IFeedbackService>()
                             .InformError(response);
                     }
@@ -159,7 +162,7 @@ namespace CarWashService.MobileApp.Services
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
-                    _ = DependencyService
+                    await DependencyService
                         .Get<IFeedbackService>()
                         .InformError(ex);
                 }

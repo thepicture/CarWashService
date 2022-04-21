@@ -47,11 +47,17 @@ namespace CarWashService.MobileApp.Controls
 
                 if ((bool)newvalue && !items.Contains(item))
                 {
-                    Device.BeginInvokeOnMainThread(() => { items.Add(item); });
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        items.Add(item);
+                    });
                 }
                 else if (!(bool)newvalue && items.Contains(item))
                 {
-                    Device.BeginInvokeOnMainThread(() => { _ = items.Remove(item); });
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        _ = items.Remove(item);
+                    });
                 }
             }
         }

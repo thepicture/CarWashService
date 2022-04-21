@@ -20,16 +20,13 @@ namespace CarWashService.MobileApp.ViewModels
             IsNew = App.CurrentOrder == null;
             if (App.CurrentOrder != null)
             {
-                _ = Task.Run(() =>
-                {
-                    _ = LoadServicesOfOrderAsync();
-                })
+                _ = LoadServicesOfOrderAsync()
                     .ContinueWith((task) =>
-                {
-                    TotalPrice = ServicesOfOrder.Sum(s => s.Price);
-                    AppointmentDateTime = DateTime.Parse(
-                        App.CurrentOrder.AppointmentDate);
-                });
+                    {
+                        TotalPrice = ServicesOfOrder.Sum(s => s.Price);
+                        AppointmentDateTime = DateTime.Parse(
+                            App.CurrentOrder.AppointmentDate);
+                    });
             }
             else
             {

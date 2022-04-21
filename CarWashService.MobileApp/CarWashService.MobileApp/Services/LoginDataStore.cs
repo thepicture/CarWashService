@@ -35,6 +35,7 @@ namespace CarWashService.MobileApp.Services
             }
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                      new AuthenticationHeaderValue("Basic",
                                                    AppIdentity.AuthorizationValue);
@@ -42,7 +43,7 @@ namespace CarWashService.MobileApp.Services
                 try
                 {
                     HttpResponseMessage response = await client
-                        .GetAsync(new Uri(client.BaseAddress + "users/login"));
+                        .GetAsync("users/login");
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         SerializedLoginUser serializedLoginUser =
@@ -75,6 +76,9 @@ namespace CarWashService.MobileApp.Services
                 }
                 catch (Exception ex)
                 {
+                    await DependencyService
+                          .Get<IFeedbackService>()
+                          .InformError(ex);
                     Debug.WriteLine(ex.StackTrace);
                     return false;
                 }

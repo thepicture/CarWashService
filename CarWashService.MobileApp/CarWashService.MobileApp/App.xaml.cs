@@ -1,7 +1,7 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
+using System;
 using System.Collections.Generic;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -17,7 +17,7 @@ namespace CarWashService.MobileApp
         public static SerializedOrder CurrentOrder { get; set; }
         public static SerializedUser User { get; set; }
         public static string AuthorizationValue { get; set; }
-
+        public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(10);
         public App()
         {
             InitializeComponent();
@@ -27,7 +27,6 @@ namespace CarWashService.MobileApp
             DependencyService.Register<BranchDataStore>();
             DependencyService.Register<RegistrationDataStore>();
             DependencyService.Register<UserImageDataStore>();
-            DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ServiceDataStore>();
             DependencyService.Register<DiscountDataStore>();
             DependencyService.Register<LoginDataStore>();

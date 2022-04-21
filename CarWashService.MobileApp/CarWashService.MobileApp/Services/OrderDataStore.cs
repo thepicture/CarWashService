@@ -42,6 +42,7 @@ namespace CarWashService.MobileApp.Services
             item.AppointmentDate = item.AppointmentDateTimeAsDateTime.ToString();
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -90,6 +91,7 @@ namespace CarWashService.MobileApp.Services
             }
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -134,6 +136,7 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
@@ -171,6 +174,7 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
                      new AuthenticationHeaderValue("Basic",
                                                    AppIdentity.AuthorizationValue);
