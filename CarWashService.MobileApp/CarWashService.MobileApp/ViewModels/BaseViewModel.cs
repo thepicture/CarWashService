@@ -22,12 +22,14 @@ namespace CarWashService.MobileApp.ViewModels
             DependencyService.Get<IDataStore<SerializedOrder>>();
         public IDataStore<SerializedRegistrationUser> RegistrationDataStore =>
             DependencyService.Get<IDataStore<SerializedRegistrationUser>>();
+        public IDataStore<SerializedLoginUser> LoginDataStore =>
+           DependencyService.Get<IDataStore<SerializedLoginUser>>();
         public IDataStore<byte[]> UserImageDataStore =>
             DependencyService.Get<IDataStore<byte[]>>();
         public ICaptchaService CaptchaService =>
             DependencyService.Get<ICaptchaService>();
-        public string Role => AppIdentity.Role;
-        public bool IsCanDelete => "Администратор, Сотрудник".Contains(Role);
+        public bool IsCanDelete => "Администратор, Сотрудник"
+            .Contains(AppIdentity.User.UserTypeName);
 
         bool isBusy = false;
         public bool IsBusy

@@ -32,7 +32,8 @@
                                FontAttributes="Bold"
                                FontSize="Large">
                             <Label.Text>
-                                <Binding Path="Role">
+                                <Binding Path="UserTypeName"
+                                         Source="{Static services:AppIdentity.User}">
                                     <Binding.Converter>
                                         <converters:RoleToGreatingValueConverter />
                                     </Binding.Converter>
@@ -40,18 +41,18 @@
                             </Label.Text>
                         </Label>
                         <StackLayout VerticalOptions="EndAndExpand">
-                        <ui:MaterialButton Command="{Binding ChangePictureCommand}"
-                                           CornerRadius="50"
-                                           BackgroundColor="{StaticResource Primary}"
-                                           Text="Изменить фото"
-                                           FontAttributes="None"
-                                           HeightRequest="60" />
-                        <ui:MaterialButton Command="{Binding ExitLoginCommand}"
-                                           CornerRadius="50"
-                                           BackgroundColor="{StaticResource Primary}"
-                                           Text="Выйти из аккаунта"
-                                           FontAttributes="None"
-                                           HeightRequest="60"/>
+                            <ui:MaterialButton Command="{Binding ChangePictureCommand}"
+                                               CornerRadius="50"
+                                               BackgroundColor="{StaticResource Primary}"
+                                               Text="Изменить фото"
+                                               FontAttributes="None"
+                                               HeightRequest="60" />
+                            <ui:MaterialButton Command="{Binding ExitLoginCommand}"
+                                               CornerRadius="50"
+                                               BackgroundColor="{StaticResource Primary}"
+                                               Text="Выйти из аккаунта"
+                                               FontAttributes="None"
+                                               HeightRequest="60" />
                         </StackLayout>
                     </StackLayout>
                 </ui:MaterialCard>

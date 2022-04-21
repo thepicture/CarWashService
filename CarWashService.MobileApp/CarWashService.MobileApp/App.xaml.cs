@@ -1,6 +1,7 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
 using System.Collections.Generic;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -29,6 +30,7 @@ namespace CarWashService.MobileApp
             DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ServiceDataStore>();
             DependencyService.Register<DiscountDataStore>();
+            DependencyService.Register<LoginDataStore>();
             DependencyService.Register<OrderDataStore>();
             DependencyService.Register<CaptchaService>();
 

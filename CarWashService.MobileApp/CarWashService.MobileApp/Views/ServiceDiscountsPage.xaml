@@ -23,7 +23,8 @@
                                      Style="{StaticResource BaseButton}">
                 <material:MaterialButton.Triggers>
                     <DataTrigger TargetType="material:MaterialButton"
-                                 Binding="{Binding Role}"
+                                 Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                   Path=UserTypeName}"
                                  Value="Клиент">
                         <Setter Property="IsVisible"
                                 Value="False" />
@@ -73,7 +74,8 @@
                                                                  IsVisible="False">
                                             <material:MaterialButton.Triggers>
                                                 <DataTrigger TargetType="material:MaterialButton"
-                                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                               Path=UserTypeName}"
                                                              Value="Сотрудник">
                                                     <Setter Property="IsVisible"
                                                             Value="True" />

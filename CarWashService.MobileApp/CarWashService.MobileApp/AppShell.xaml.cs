@@ -1,7 +1,6 @@
 ﻿using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
 using System;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -63,13 +62,13 @@ namespace CarWashService.MobileApp
 
         private bool IsLoggedIn()
         {
-            return SecureStorage.GetAsync("Identity").Result != null;
+            return AppIdentity.User != null;
         }
 
         public static void SetShellStacksDependingOnRole()
         {
             TabBar.Items.Clear();
-            switch (AppIdentity.Role)
+            switch (AppIdentity.User.UserTypeName)
             {
                 case "Администратор":
                     TabBar

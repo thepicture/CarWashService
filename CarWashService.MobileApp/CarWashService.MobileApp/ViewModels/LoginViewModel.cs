@@ -1,8 +1,7 @@
-﻿using CarWashService.MobileApp.Services;
+﻿using CarWashService.MobileApp.Models.Serialized;
+using CarWashService.MobileApp.Services;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -27,25 +26,10 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void OnLoginClickedAsync(object obj)
         {
-            StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(Login))
+            if (string.IsNullOrWhiteSpace(CaptchaText)
+                && CountOfIncorrectAttempts > 2)
             {
-                _ = validationErrors.AppendLine("Введите логин.");
-            }
-            if (string.IsNullOrWhiteSpace(Password))
-            {
-                _ = validationErrors.AppendLine("Введите пароль.");
-
-            }
-            if (string.IsNullOrWhiteSpace(CaptchaText) && CountOfIncorrectAttempts > 2)
-            {
-                _ = validationErrors.AppendLine("Введите captcha.");
-            }
-
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(
-                    validationErrors.ToString());
+                await FeedbackService.InformError("Введите captcha.");
                 return;
             }
 
@@ -55,56 +39,38 @@ namespace CarWashService.MobileApp.ViewModels
                 _ = FeedbackService.InformError("Неверная captcha. " +
                     "Интерфейс заблокирован на 5 секунд.");
                 IsNotBlocked = false;
-                Device.StartTimer(TimeSpan.FromSeconds(5), () =>
-                {
-                    Device.BeginInvokeOnMainThread(() =>
+                Device.StartTimer(
+                    TimeSpan.FromSeconds(5), () =>
                     {
-                        FeedbackService.Inform("Интерфейс разблокирован.");
-                        IsNotBlocked = true;
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            _ = FeedbackService.Inform("Интерфейс разблокирован.");
+                            IsNotBlocked = true;
+                        });
+                        return false;
                     });
-                    return false;
-                });
                 return;
             }
 
-            bool isAuthenticated;
-            try
-            {
-                isAuthenticated = await Authenticator
-                .IsCorrectAsync(Login, Password);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.StackTrace);
-                await FeedbackService.Inform("Подключение к интернету " +
-                     "отсутствует, проверьте подключение " +
-                     "и попробуйте ещё раз.");
-                return;
-            }
-            if (isAuthenticated)
-            {
-                string encodedLoginAndPassword =
-                    new LoginAndPasswordToBasicEncoder()
-                    .Encode(Login, Password);
-                if (IsRememberMe)
+            string encodedLoginAndPassword =
+                new LoginAndPasswordToBasicEncoder()
+                .Encode(Login, Password);
+            AppIdentity.AuthorizationValue = encodedLoginAndPassword;
+            SerializedLoginUser serializedLoginUser =
+                new SerializedLoginUser
                 {
-                    AppIdentity.User = Authenticator.User;
-                    AppIdentity.AuthorizationValue = encodedLoginAndPassword;
-                }
-                else
-                {
-                    App.User = Authenticator.User;
-                    App.AuthorizationValue = encodedLoginAndPassword;
-                }
-                await FeedbackService.Inform("Вы авторизованы " +
-                    $"как {AppIdentity.User.UserTypeName.ToLower()}.");
+                    Login = Login,
+                    Password = Password,
+                    IsRememberMe = IsRememberMe
+                };
+            if (await LoginDataStore.AddItemAsync(serializedLoginUser))
+            {
                 AppShell.SetShellStacksDependingOnRole();
                 CountOfIncorrectAttempts = 0;
                 CaptchaService.Invalidate();
             }
             else
             {
-                await FeedbackService.InformError("Неверный логин или пароль.");
                 CountOfIncorrectAttempts++;
                 if (CountOfIncorrectAttempts == 3)
                 {

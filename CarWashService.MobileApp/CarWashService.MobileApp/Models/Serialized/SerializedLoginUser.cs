@@ -2,5 +2,6 @@
 {
     public class SerializedLoginUser : SerializedUser
     {
+        public bool IsRememberMe { get; set; }
     }
 }

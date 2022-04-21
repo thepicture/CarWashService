@@ -20,9 +20,12 @@ namespace CarWashService.MobileApp.Services
                 }
                 else
                 {
-                    return JsonConvert
-                        .DeserializeObject<SerializedUser>(
-                            SecureStorage.GetAsync("User").Result);
+                    string jsonUser = SecureStorage.GetAsync("User").Result;
+                    if (jsonUser == null)
+                    {
+                        return null;
+                    }
+                    return JsonConvert.DeserializeObject<SerializedUser>(jsonUser);
                 }
             }
             set
@@ -42,7 +45,6 @@ namespace CarWashService.MobileApp.Services
                 }
             }
         }
-        public static string Role => User.UserTypeName;
         public static string AuthorizationValue
         {
             get

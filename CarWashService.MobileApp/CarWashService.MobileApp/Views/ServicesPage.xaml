@@ -6,6 +6,7 @@
              xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
              xmlns:views="clr-namespace:CarWashService.MobileApp.Views"
              xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
+             xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              x:DataType="mobileapp:ServicesViewModel"
              x:Name="Page"
              Title="Услуги"
@@ -78,8 +79,8 @@
                                                              IsVisible="False">
                                         <material:MaterialButton.Triggers>
                                             <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Reference Page},
-                                                                               Path=BindingContext.Role}"
+                                                         Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                           Path=UserTypeName}"
                                                          Value="Сотрудник">
                                                 <Setter Property="IsVisible"
                                                         Value="True" />
@@ -98,9 +99,8 @@
                                                              Style="{StaticResource BaseButton}">
                                         <material:MaterialButton.Triggers>
                                             <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={RelativeSource Mode=FindAncestor,
-                                                                                                      AncestorType={x:Type views:ServicesPage}},
-                                                                               Path=BindingContext.Role}"
+                                                         Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                           Path=UserTypeName}"
                                                          Value="Клиент">
                                                 <Setter Property="IsVisible"
                                                         Value="True" />

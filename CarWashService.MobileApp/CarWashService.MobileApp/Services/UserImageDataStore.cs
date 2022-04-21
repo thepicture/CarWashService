@@ -76,7 +76,7 @@ namespace CarWashService.MobileApp.Services
             }
         }
 
-        public async Task<IEnumerable<byte[]>> GetItemsAsync(bool forceRefresh = false)
+        public Task<IEnumerable<byte[]>> GetItemsAsync(bool forceRefresh = false)
         {
             throw new NotImplementedException();
         }
