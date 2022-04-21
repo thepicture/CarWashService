@@ -2,6 +2,7 @@
 using CarWashService.MobileApp.Services;
 using System;
 using System.Collections.Generic;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -17,7 +18,14 @@ namespace CarWashService.MobileApp
         public static SerializedOrder CurrentOrder { get; set; }
         public static SerializedUser User { get; set; }
         public static string AuthorizationValue { get; set; }
-        public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(10);
+        public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(20);
+        private readonly string andAccelerometerIsOff = "Вы не сможете "
+            + "встряхнуть устройство "
+            + "для изменения таймаута API в сек.";
+        private readonly string accelerometerNotSupported = "На вашем устройстве "
+            + "не поддерживается акселерометр.";
+        private readonly string cannotHandleAccelerometer = "Не удалось " +
+            "настроить акселерометр.";
         public App()
         {
             InitializeComponent();
@@ -33,6 +41,38 @@ namespace CarWashService.MobileApp
             DependencyService.Register<OrderDataStore>();
             DependencyService.Register<OrderServicesDataStore>();
             DependencyService.Register<CaptchaService>();
+
+            try
+            {
+                Accelerometer.Start(SensorSpeed.UI);
+                Accelerometer.ShakeDetected += async (_, __) =>
+                {
+                    Vibration.Vibrate(TimeSpan.FromMilliseconds(100));
+                    string secondsString = await MainPage.DisplayPromptAsync(
+                        "Установить таймаут API",
+                        $"Текущий таймаут API: " +
+                        $"{HttpClientTimeout.TotalSeconds:F0} сек. " +
+                        $"Введите новый таймаут",
+                        keyboard: Keyboard.Numeric,
+                        initialValue: HttpClientTimeout.TotalSeconds.ToString("F0"));
+                    if (int.TryParse(secondsString, out int seconds))
+                    {
+                        HttpClientTimeout = TimeSpan.FromSeconds(seconds);
+                    }
+                };
+            }
+            catch (FeatureNotSupportedException)
+            {
+                DependencyService
+                    .Get<IFeedbackService>()
+                    .Warn($"{accelerometerNotSupported} {andAccelerometerIsOff}");
+            }
+            catch (ArgumentNullException)
+            {
+                DependencyService
+                    .Get<IFeedbackService>()
+                    .Warn($"{cannotHandleAccelerometer} {andAccelerometerIsOff}");
+            }
 
             MainPage = new AppShell();
         }
