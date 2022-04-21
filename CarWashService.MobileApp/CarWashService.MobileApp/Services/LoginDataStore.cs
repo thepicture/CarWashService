@@ -79,7 +79,7 @@ namespace CarWashService.MobileApp.Services
                     await DependencyService
                           .Get<IFeedbackService>()
                           .InformError(ex);
-                    Debug.WriteLine(ex.StackTrace);
+                    Debug.WriteLine(ex);
                     return false;
                 }
             }

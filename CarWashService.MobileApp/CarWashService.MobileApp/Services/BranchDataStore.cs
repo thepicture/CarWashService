@@ -135,7 +135,10 @@ namespace CarWashService.MobileApp.Services
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
+                    await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(ex);
+                    Debug.WriteLine(ex);
                     return false;
                 }
             }

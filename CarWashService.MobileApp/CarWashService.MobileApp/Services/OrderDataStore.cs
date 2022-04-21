@@ -118,8 +118,8 @@ namespace CarWashService.MobileApp.Services
                 catch (Exception ex)
                 {
                     await DependencyService
-                            .Get<IFeedbackService>()
-                            .InformError(ex);
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
                     Debug.WriteLine(ex);
                     return false;
                 }

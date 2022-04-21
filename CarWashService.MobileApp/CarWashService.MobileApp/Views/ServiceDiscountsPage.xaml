@@ -61,22 +61,40 @@
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
                                         <Label Text="{Binding WorkFromAsDate, 
-                                                              StringFormat='Действует с: {0:yyyy/MM/dd hh:mm}'}"
+                                                              StringFormat='Действует с: {0:yyyy/MM/dd}'}"
                                                HorizontalTextAlignment="Center" />
                                         <Label Text="{Binding WorkToAsDate, 
-                                                              StringFormat='Заканчивается: {0:yyyy/MM/dd hh:mm}'}"
+                                                              StringFormat='Заканчивается: {0:yyyy/MM/dd}'}"
                                                HorizontalTextAlignment="Center" />
                                         <material:MaterialButton CommandParameter="{Binding .}"
                                                                  Command="{Binding Source={Reference Page}, 
                                                                                    Path=BindingContext.GoToDiscountPageCommand}"
                                                                  Text="Редактировать"
                                                                  VerticalOptions="EndAndExpand"
-                                                                 Style="{StaticResource BackgroundButton}" />
+                                                                 Style="{StaticResource BackgroundButton}"
+                                                                 IsVisible="False">
+                                            <material:MaterialButton.Triggers>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                               Path=UserTypeName}"
+                                                             Value="Сотрудник">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                               Path=UserTypeName}"
+                                                             Value="Администратор">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                            </material:MaterialButton.Triggers>
+                                        </material:MaterialButton>
                                         <material:MaterialButton CommandParameter="{Binding .}"
                                                                  Command="{Binding Source={Reference Page},
                                                                                    Path=BindingContext.DeleteDiscountCommand}"
                                                                  Text="Удалить"
-                                                                 FontSize="10"
+                                                                 FontSize="15"
                                                                  Style="{StaticResource BaseButton}"
                                                                  BackgroundColor="Red"
                                                                  IsVisible="False">

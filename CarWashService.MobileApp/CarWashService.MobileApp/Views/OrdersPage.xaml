@@ -46,8 +46,8 @@
                                         <Label Text="{Binding Path=SellerFullName, 
                                                               StringFormat='Менеджер: {0}', 
                                                               TargetNullValue='Не подтверждено менеджером'}"
-                                               HorizontalTextAlignment="Center" 
-                                               FontAttributes="Bold"/>
+                                               HorizontalTextAlignment="Center"
+                                               FontAttributes="Bold" />
                                         <BoxView Color="WhiteSmoke"
                                                  HeightRequest="1" />
                                         <Label Text="{Binding TotalPrice, StringFormat='ИТОГО: {0:F0} руб.'}"
@@ -93,7 +93,9 @@
                                                                                    Path=BindingContext.DeleteOrderCommand}"
                                                                  Text="Удалить"
                                                                  VerticalOptions="EndAndExpand"
-                                                                 Style="{StaticResource BaseButton}" />
+                                                                 FontSize="15"
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 BackgroundColor="Red" />
                                     </StackLayout>
                                 </material:MaterialCard>
                             </Grid>

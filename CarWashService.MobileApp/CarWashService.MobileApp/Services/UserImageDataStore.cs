@@ -39,23 +39,10 @@ namespace CarWashService.MobileApp.Services
                        .GetAsync("users/image");
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        try
-                        {
-                            byte[] imageBytes =
-                                JsonConvert.DeserializeObject<byte[]>(
-                                    await response.Content.ReadAsStringAsync()
-                                    );
-                            return imageBytes;
-                        }
-                        catch (Exception ex)
-                        {
-                            await DependencyService
-                                .Get<IFeedbackService>()
-                                .InformError("Не удалось "
-                                + "десереализовать фото: "
-                                + response);
-                            Debug.WriteLine(ex);
-                        }
+                        byte[] imageBytes =
+                            JsonConvert.DeserializeObject<byte[]>(
+                                await response.Content.ReadAsStringAsync());
+                        return imageBytes;
                     }
                     else
                     {

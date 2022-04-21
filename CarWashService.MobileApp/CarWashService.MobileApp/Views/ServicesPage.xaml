@@ -75,7 +75,7 @@
                                                                                    Path=BindingContext.GoToEditDiscountPage}"
                                                              Text="Редактировать"
                                                              VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BackgroundButton}"
+                                                             Style="{StaticResource BaseButton}"
                                                              IsVisible="False">
                                         <material:MaterialButton.Triggers>
                                             <DataTrigger TargetType="material:MaterialButton"

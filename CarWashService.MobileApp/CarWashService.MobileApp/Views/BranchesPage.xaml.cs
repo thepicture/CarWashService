@@ -56,7 +56,7 @@ namespace CarWashService.MobileApp.Views
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.StackTrace);
+                Debug.WriteLine(ex);
             }
             base.OnAppearing();
             CheckConnectionAsync();
