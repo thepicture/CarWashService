@@ -5,6 +5,7 @@
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:serialized="clr-namespace:CarWashService.MobileApp.Models.Serialized"
              xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
+             xmlns:converters="clr-namespace:CarWashService.MobileApp.Converters"
              x:DataType="viewmodels:ServiceDiscountsViewModel"
              x:Name="Page"
              Title="{Binding Source={x:Static Application.Current}, 
@@ -33,6 +34,13 @@
             </material:MaterialButton>
             <ScrollView Grid.Row="1">
                 <StackLayout BindableLayout.ItemsSource="{Binding Discounts}">
+                    <BindableLayout.EmptyViewTemplate>
+                        <DataTemplate>
+                            <Label HorizontalTextAlignment="Center"
+                                   VerticalOptions="CenterAndExpand"
+                                   Text="Скидок нет" />
+                        </DataTemplate>
+                    </BindableLayout.EmptyViewTemplate>
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="serialized:SerializedDiscount">
                             <Grid>

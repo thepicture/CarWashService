@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,6 +16,30 @@ namespace CarWashService.MobileApp.Services
     {
         public async Task<bool> AddItemAsync(SerializedDiscount item)
         {
+            StringBuilder validationErrors = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(item.DiscountPercentAsString)
+                || !int.TryParse(item.DiscountPercentAsString, out int value)
+                || value < 0
+                || value > 100)
+            {
+                _ = validationErrors.AppendLine("Процент - " +
+                    "это положительное целое число " +
+                    "в диапазоне от 0 до 100.");
+            }
+            if (item.WorkFromAsDate >= item.WorkToAsDate)
+            {
+                _ = validationErrors.AppendLine("Дата окончания " +
+                    "должна быть позднее даты начала.");
+            }
+
+            if (validationErrors.Length > 0)
+            {
+                await DependencyService
+                    .Get<IFeedbackService>()
+                    .InformError(validationErrors);
+                return false;
+            }
+            item.DiscountPercent = int.Parse(item.DiscountPercentAsString);
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization =
@@ -25,57 +50,46 @@ namespace CarWashService.MobileApp.Services
                 {
                     string discountJson = JsonConvert.SerializeObject(item);
                     HttpResponseMessage response = await client
-                        .PostAsync(new Uri(client.BaseAddress + "servicediscounts"),
+                        .PostAsync("servicediscounts",
                                    new StringContent(discountJson,
                                                      Encoding.UTF8,
                                                      "application/json"));
-                    return response.StatusCode == System.Net.HttpStatusCode.Created;
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (response.StatusCode == HttpStatusCode.Created)
                     {
-                        DependencyService.Get<IFeedbackService>()
-                            .InformError("Ошибка запроса: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
-                }
-                catch (TaskCanceledException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
+                        string action = item.Id == 0
+                            ? "добавлена"
+                            : "изменена";
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform($"Скидка {action}.");
+                    }
+                    else
                     {
-                        DependencyService.Get<IFeedbackService>()
-                        .InformError("Создание акции отменено: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
+                        await DependencyService
+                           .Get<IFeedbackService>()
+                           .InformError(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.Created;
                 }
-                catch (ArgumentNullException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        DependencyService.Get<IFeedbackService>()
-                        .InformError("Запрос был пустой: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        DependencyService.Get<IFeedbackService>()
-                        .InformError("Акция уже добавлена: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
+                    Debug.WriteLine(ex);
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
+                    return false;
                 }
             }
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
+            if (!await DependencyService
+                            .Get<IFeedbackService>()
+                            .Ask("Удалить скидку?"))
+            {
+                return false;
+            }
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization =
@@ -86,11 +100,26 @@ namespace CarWashService.MobileApp.Services
                 {
                     HttpResponseMessage response = await client
                         .DeleteAsync($"servicediscounts?id={id}");
-                    return response.StatusCode == System.Net.HttpStatusCode.OK;
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Скидка удалена.");
+                    }
+                    else
+                    {
+                        await DependencyService
+                           .Get<IFeedbackService>()
+                           .InformError(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.OK;
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
+                    Debug.WriteLine(ex);
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
                     return false;
                 }
             }
@@ -101,9 +130,41 @@ namespace CarWashService.MobileApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<SerializedDiscount>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<SerializedDiscount>> GetItemsAsync(
+            bool forceRefresh = false)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic",
+                                                  AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri(App.BaseUrl);
+                try
+                {
+                    HttpResponseMessage response = await client
+                        .GetAsync("serviceDiscounts");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return JsonConvert.DeserializeObject
+                            <IEnumerable<SerializedDiscount>>(
+                            await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
+                }
+                return new List<SerializedDiscount>();
+            }
         }
 
         public Task<bool> UpdateItemAsync(SerializedDiscount item)

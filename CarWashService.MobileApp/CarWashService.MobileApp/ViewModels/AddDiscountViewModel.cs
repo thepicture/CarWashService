@@ -1,6 +1,5 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using System;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -57,44 +56,14 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(DiscountPercent)
-                || !int.TryParse(DiscountPercent, out int value)
-                || value < 0
-                || value > 100)
-            {
-                _ = validationErrors.AppendLine("Процент - " +
-                    "это положительное целое число " +
-                    "в диапазоне от 0 до 100.");
-            }
-            if (WorkFrom >= WorkTo)
-            {
-                _ = validationErrors.AppendLine("Дата окончания " +
-                    "должна быть позднее даты начала.");
-            }
 
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(
-                    validationErrors.ToString());
-                return;
-            }
-            CurrentDiscount.DiscountPercent = int.Parse(DiscountPercent);
+            CurrentDiscount.DiscountPercentAsString = DiscountPercent;
             CurrentDiscount.WorkFrom = WorkFrom.ToString();
             CurrentDiscount.WorkTo = WorkTo.ToString();
             CurrentDiscount.ServiceId = App.CurrentService.Id;
             if (await DiscountDataStore.AddItemAsync(CurrentDiscount))
             {
-                string action = CurrentDiscount.Id == 0 ? 
-                    "добавлена" : 
-                    "изменена";
-                await FeedbackService.Inform($"Скидка {action}.");
                 await Shell.Current.GoToAsync("..");
-            }
-            else
-            {
-                await FeedbackService.Inform("Не удалось " +
-                    "добавить скидку. Проверьте подключение к интернету.");
             }
         }
 
@@ -133,19 +102,11 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void DeleteDiscountAsync()
         {
-            if (await FeedbackService.Ask("Удалить скидку?"))
+            if (await DiscountDataStore
+                .DeleteItemAsync(CurrentDiscount.Id
+                .ToString()))
             {
-                if (await DiscountDataStore
-                    .DeleteItemAsync(CurrentDiscount.Id
-                    .ToString()))
-                {
-                    await FeedbackService.Inform("Скидка удалена.");
-                    await Shell.Current.GoToAsync("..");
-                }
-                else
-                {
-                    await FeedbackService.InformError("Не удалось удалить скидку.");
-                }
+                await Shell.Current.GoToAsync("..");
             }
         }
     }

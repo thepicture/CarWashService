@@ -91,27 +91,28 @@ namespace CarWashService.MobileApp
         }
 
 
-        private Command goToDiscountsCommand;
+        private Command<SerializedService> goToDiscountsCommand;
 
-        public ICommand GoToDiscountsCommand
+        public Command<SerializedService> GoToDiscountsCommand
         {
             get
             {
                 if (goToDiscountsCommand == null)
                 {
-                    goToDiscountsCommand = new Command(GoToDiscountsAsync);
+                    goToDiscountsCommand =
+                        new Command<SerializedService>(GoToDiscountsAsync);
                 }
 
                 return goToDiscountsCommand;
             }
         }
 
-        private async void GoToDiscountsAsync(object parameter)
+        private async void GoToDiscountsAsync(SerializedService parameter)
         {
-            App.CurrentService =
-                parameter as SerializedService;
-            await Shell.Current.GoToAsync(
-                $"{nameof(ServiceDiscountsPage)}");
+            App.CurrentService = parameter;
+            await AppShell.Current.Navigation.PushAsync(
+                new ServiceDiscountsPage(
+                    new ServiceDiscountsViewModel(parameter.Id)));
         }
 
         private Command goToMakeOrderCommand;

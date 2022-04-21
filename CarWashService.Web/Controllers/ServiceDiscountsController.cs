@@ -17,6 +17,7 @@ namespace CarWashService.Web.Controllers
         private readonly CarWashBaseEntities db = new CarWashBaseEntities();
 
         // GET: api/ServiceDiscounts
+        [ResponseType(typeof(List<ServiceDiscount>))]
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public IHttpActionResult GetServiceDiscount()
         {
@@ -27,7 +28,7 @@ namespace CarWashService.Web.Controllers
         }
 
         // GET: api/ServiceDiscounts?serviceId=5
-        [ResponseType(typeof(ServiceDiscount))]
+        [ResponseType(typeof(List<ServiceDiscount>))]
         [Route("api/servicediscounts/{serviceId}")]
         [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         [HttpGet]

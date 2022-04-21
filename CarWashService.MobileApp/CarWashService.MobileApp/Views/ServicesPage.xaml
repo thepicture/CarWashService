@@ -46,7 +46,7 @@
                                            HorizontalOptions="Center" />
                                     <BoxView Color="WhiteSmoke"
                                              HeightRequest="1" />
-                                    <Label Text="Типы услуги:"
+                                    <Label Text="Тип услуги:"
                                            FontAttributes="Bold"
                                            HorizontalTextAlignment="Center"
                                            FontSize="Medium" />

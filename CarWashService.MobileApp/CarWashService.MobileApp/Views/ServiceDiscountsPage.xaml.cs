@@ -1,9 +1,4 @@
 ﻿using CarWashService.MobileApp.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,10 +9,10 @@ namespace CarWashService.MobileApp.Views
     public partial class ServiceDiscountsPage : ContentPage
     {
         private readonly ServiceDiscountsViewModel _viewModel;
-        public ServiceDiscountsPage()
+        public ServiceDiscountsPage(ServiceDiscountsViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = _viewModel = new ServiceDiscountsViewModel();
+            BindingContext = _viewModel = viewModel;
         }
 
         protected override void OnAppearing()

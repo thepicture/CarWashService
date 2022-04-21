@@ -21,9 +21,6 @@ namespace CarWashService.MobileApp
                 nameof(LoginPage),
                 typeof(LoginPage));
             Routing.RegisterRoute(
-                nameof(ServiceDiscountsPage),
-                typeof(ServiceDiscountsPage));
-            Routing.RegisterRoute(
                 nameof(AddDiscountPage),
                 typeof(AddDiscountPage));
             Routing.RegisterRoute(
