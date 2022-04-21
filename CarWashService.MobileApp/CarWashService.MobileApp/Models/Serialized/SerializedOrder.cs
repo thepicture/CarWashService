@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace CarWashService.MobileApp.Models.Serialized
 {
@@ -16,5 +18,7 @@ namespace CarWashService.MobileApp.Models.Serialized
         public string SellerFullName { get; set; }
         public string ClientFullName { get; set; }
         public decimal TotalPrice { get; set; }
+        [JsonIgnore]
+        public DateTime AppointmentDateTimeAsDateTime { get; set; }
     }
 }

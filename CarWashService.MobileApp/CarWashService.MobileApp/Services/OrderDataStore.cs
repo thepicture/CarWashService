@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,6 +16,30 @@ namespace CarWashService.MobileApp.Services
     {
         public async Task<bool> AddItemAsync(SerializedOrder item)
         {
+            StringBuilder validationErrors = new StringBuilder();
+            if (item.AppointmentDateTimeAsDateTime.TimeOfDay
+                < DateTime.Parse(App.CurrentBranch.WorkFrom).TimeOfDay
+              || item.AppointmentDateTimeAsDateTime.TimeOfDay
+              > DateTime.Parse(App.CurrentBranch.WorkTo).TimeOfDay)
+            {
+                _ = validationErrors.AppendLine("В указанное вами время " +
+                    "филиал не работает. Он работает с " +
+                    $"{DateTime.Parse(App.CurrentBranch.WorkFrom).TimeOfDay:hh\\:mm} до " +
+                    $"{DateTime.Parse(App.CurrentBranch.WorkTo).TimeOfDay:hh\\:mm}.");
+            }
+            if (item.AppointmentDateTimeAsDateTime < DateTime.Now)
+            {
+                _ = validationErrors.AppendLine("Дата назначения " +
+                    "должна быть позднее текущей даты.");
+            }
+            if (validationErrors.Length > 0)
+            {
+                await DependencyService
+                    .Get<IFeedbackService>()
+                    .InformError(validationErrors);
+                return false;
+            }
+            item.AppointmentDate = item.AppointmentDateTimeAsDateTime.ToString();
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization =
@@ -23,69 +48,46 @@ namespace CarWashService.MobileApp.Services
                 client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
-                    string discountJson = JsonConvert.SerializeObject(item);
+                    string orderJson = JsonConvert.SerializeObject(item);
                     HttpResponseMessage response = await client
-                        .PostAsync(new Uri(client.BaseAddress + "orders"),
-                                   new StringContent(discountJson,
+                        .PostAsync("orders",
+                                   new StringContent(orderJson,
                                                      Encoding.UTF8,
                                                      "application/json"));
-                    return response.StatusCode == System.Net.HttpStatusCode.Created;
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (response.StatusCode == HttpStatusCode.Created)
                     {
-                        _ = DependencyService.Get<IFeedbackService>()
-                            .InformError("Ошибка запроса: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
-                }
-                catch (TaskCanceledException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Заказ оформлен.");
+                    }
+                    else
                     {
-                        _ = DependencyService.Get<IFeedbackService>()
-                        .InformError("Транзакция отменена: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
-                }
-                catch (ArgumentNullException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        _ = DependencyService.Get<IFeedbackService>()
-                        .InformError("Запрос был пустой: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        _ = DependencyService.Get<IFeedbackService>()
-                        .InformError("Транзакция уже началась: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                        Debug.WriteLine(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.Created;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        _ = DependencyService.Get<IFeedbackService>()
-                        .InformError("Неизвестная ошибка: " + ex.StackTrace);
-                    });
-                    return await Task.FromResult(false);
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
+                    Debug.WriteLine(ex);
+                    return false;
                 }
             }
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
+            if (!await DependencyService
+                    .Get<IFeedbackService>()
+                    .Ask("Удалить заказ?"))
+            {
+                return false;
+            }
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization =
@@ -96,11 +98,27 @@ namespace CarWashService.MobileApp.Services
                 {
                     HttpResponseMessage response = await client
                         .DeleteAsync($"orders/{id}");
-                    return response.StatusCode == System.Net.HttpStatusCode.OK;
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Заказ удалён.");
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                        Debug.WriteLine(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.OK;
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
+                    await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(ex);
+                    Debug.WriteLine(ex);
                     return false;
                 }
             }
@@ -111,7 +129,8 @@ namespace CarWashService.MobileApp.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<SerializedOrder>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<SerializedOrder>> GetItemsAsync(
+            bool forceRefresh = false)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -121,25 +140,70 @@ namespace CarWashService.MobileApp.Services
                 client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
-                    string response = await client
-                        .GetAsync("orders")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedOrder>>(response);
+                    HttpResponseMessage response = await client
+                        .GetAsync("orders");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return JsonConvert
+                            .DeserializeObject<IEnumerable<SerializedOrder>>(
+                            await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                        Debug.WriteLine(response);
+                    }
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
-                    return null;
+                    await DependencyService
+                           .Get<IFeedbackService>()
+                           .InformError(ex);
+                    Debug.WriteLine(ex);
                 }
             }
+            return new List<SerializedOrder>();
         }
 
-        public Task<bool> UpdateItemAsync(SerializedOrder item)
+        public async Task<bool> UpdateItemAsync(SerializedOrder item)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                     new AuthenticationHeaderValue("Basic",
+                                                   AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri(App.BaseUrl);
+                try
+                {
+                    HttpResponseMessage response = await client
+                        .GetAsync($"orders/{item.Id}/confirm");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Заказ подтверждён.");
+                        return true;
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                        Debug.WriteLine(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.OK;
+                }
+                catch (Exception ex)
+                {
+                    await DependencyService
+                           .Get<IFeedbackService>()
+                           .InformError(ex);
+                    Debug.WriteLine(ex);
+                    return false;
+                }
+            }
         }
     }
 }

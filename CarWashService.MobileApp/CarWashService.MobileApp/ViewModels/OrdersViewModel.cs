@@ -1,15 +1,9 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
-using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -26,59 +20,38 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 if (SetProperty(ref searchText, value))
                 {
-                    _ = Task.Run(() =>
-                      {
-                          LoadOrdersAsync();
-                      });
+                    LoadOrdersAsync();
                 }
             }
         }
 
         private async void LoadOrdersAsync()
         {
+            Orders.Clear();
+            IEnumerable<SerializedOrder> currentOrders =
+                await OrderDataStore.GetItemsAsync();
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                currentOrders = currentOrders
+                    .Where(s =>
+                    s.ServiceNames.Any(sn =>
+                        {
+                            return sn.StartsWith(SearchText,
+                                                 StringComparison.OrdinalIgnoreCase);
+                        }));
+            }
             Device.BeginInvokeOnMainThread(() =>
             {
-                Orders.Clear();
-            });
-            try
-            {
-                IEnumerable<SerializedOrder> items = await OrderDataStore
-                        .GetItemsAsync();
-                if (!string.IsNullOrWhiteSpace(SearchText))
+                foreach (SerializedOrder currentOrder in currentOrders)
                 {
-                    items = items
-                        .Where(s =>
-                        {
-                            return s.ServiceNames.Any(sn =>
-                            {
-                                return sn.StartsWith(SearchText,
-                                                     StringComparison.OrdinalIgnoreCase);
-                            });
-                        });
+                    Orders.Add(currentOrder);
                 }
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    foreach (SerializedOrder item in items)
-                    {
-                        Orders.Add(item);
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.StackTrace);
-                await FeedbackService.Inform("У вас нет интернет " +
-                    "подключения. Включён оффлайн-режим.");
-            }
+            });
         }
 
         internal void OnAppearing()
         {
-            Orders = new ObservableCollection<SerializedOrder>();
-            _ = Task.Run(() =>
-              {
-                  LoadOrdersAsync();
-              });
+            LoadOrdersAsync();
         }
 
         public ObservableCollection<SerializedOrder> Orders
@@ -87,54 +60,27 @@ namespace CarWashService.MobileApp.ViewModels
             set => _ = SetProperty(ref orders, value);
         }
 
-        private Command acceptOrderCommand;
+        private Command<SerializedOrder> acceptOrderCommand;
 
-        public ICommand AcceptOrderCommand
+        public Command<SerializedOrder> AcceptOrderCommand
         {
             get
             {
                 if (acceptOrderCommand == null)
                 {
-                    acceptOrderCommand = new Command(AcceptOrderAsync);
+                    acceptOrderCommand =
+                        new Command<SerializedOrder>(AcceptOrderAsync);
                 }
 
                 return acceptOrderCommand;
             }
         }
 
-        private async void AcceptOrderAsync(object parameter)
+        private async void AcceptOrderAsync(SerializedOrder parameter)
         {
-            int orderId = (parameter as SerializedOrder).Id;
-            using (HttpClient client = new HttpClient())
+            if (await OrderDataStore.UpdateItemAsync(parameter))
             {
-                client.DefaultRequestHeaders.Authorization =
-                     new AuthenticationHeaderValue("Basic",
-                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
-                try
-                {
-                    HttpResponseMessage response = await client
-                        .GetAsync(new Uri(client.BaseAddress + $"orders/{orderId}/confirm"));
-                    if (response.StatusCode != HttpStatusCode.Unauthorized)
-                    {
-                        await FeedbackService
-                            .Inform("Заказ успешно подтверждён.");
-                        LoadOrdersAsync();
-                    }
-                    else
-                    {
-                        await FeedbackService
-                            .InformError("Не удалось подтвердить заказ. " +
-                            "Обратитесь в службу поддержки.");
-                    }
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService
-                          .Inform("Проверьте подключение к сети " +
-                          "и попробуйте ещё раз.");
-                }
+                LoadOrdersAsync();
             }
         }
 
@@ -163,6 +109,11 @@ namespace CarWashService.MobileApp.ViewModels
 
         private Command<SerializedOrder> deleteOrderCommand;
 
+        public OrdersViewModel()
+        {
+            Orders = new ObservableCollection<SerializedOrder>();
+        }
+
         public Command<SerializedOrder> DeleteOrderCommand
         {
             get
@@ -178,19 +129,11 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void DeleteOrderAsync(SerializedOrder order)
         {
-            if (await FeedbackService.Ask("Удалить заказ?"))
+            if (await OrderDataStore
+                .DeleteItemAsync(order.Id
+                .ToString()))
             {
-                if (await OrderDataStore
-                    .DeleteItemAsync(order.Id
-                    .ToString()))
-                {
-                    await FeedbackService.Inform("Заказ удалён.");
-                    LoadOrdersAsync();
-                }
-                else
-                {
-                    await FeedbackService.InformError("Не удалось удалить заказ.");
-                }
+                LoadOrdersAsync();
             }
         }
     }

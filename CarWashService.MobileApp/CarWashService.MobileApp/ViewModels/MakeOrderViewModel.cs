@@ -1,13 +1,8 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
-using CarWashService.MobileApp.Services;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -18,7 +13,7 @@ namespace CarWashService.MobileApp.ViewModels
     {
         private bool isNew;
 
-        private IEnumerable<SerializedService> servicesOfOrder;
+        private ObservableCollection<SerializedService> servicesOfOrder;
 
         internal void OnAppearing()
         {
@@ -38,47 +33,28 @@ namespace CarWashService.MobileApp.ViewModels
             }
             else
             {
-                ServicesOfOrder = App.CurrentServices;
+                foreach (SerializedService serviceOfOrder in App.CurrentServices)
+                {
+                    ServicesOfOrder.Add(serviceOfOrder);
+                }
                 TotalPrice = ServicesOfOrder.Sum(s => s.Price);
             }
         }
 
         private async Task LoadServicesOfOrderAsync()
         {
-            using (HttpClient client = new HttpClient())
+            ServicesOfOrder.Clear();
+            IEnumerable<SerializedService> currentServicesOfOrder =
+                await OrderServicesDataStore
+                .GetItemAsync(
+                    App.CurrentOrder.Id.ToString());
+            foreach (SerializedService serviceOfOrder in currentServicesOfOrder)
             {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
-                try
-                {
-                    int orderId = App.CurrentOrder.Id;
-                    string response = await client
-                        .GetAsync($"orders/{orderId}")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    SerializedOrder order = JsonConvert
-                        .DeserializeObject<SerializedOrder>(response);
-                    List<SerializedService> currentServices =
-                        new List<SerializedService>();
-                    foreach (int id in order.Services)
-                    {
-                        currentServices.Add(
-                            await ServiceDataStore.GetItemAsync(id
-                                .ToString()));
-                    }
-                    ServicesOfOrder = currentServices;
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                };
+                servicesOfOrder.Add(serviceOfOrder);
             }
         }
 
-        public IEnumerable<SerializedService> ServicesOfOrder
+        public ObservableCollection<SerializedService> ServicesOfOrder
         {
             get => servicesOfOrder;
             set => SetProperty(ref servicesOfOrder, value);
@@ -101,36 +77,14 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            StringBuilder validationErrors = new StringBuilder();
-            if (AppointmentDateTime.TimeOfDay < DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay
-              || AppointmentDateTime.TimeOfDay > DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay)
-            {
-                _ = validationErrors.AppendLine("В указанное вами время " +
-                    "филиал не работает. Он работает с " +
-                    $"{DateTime.Parse(CurrentBranch.WorkFrom).TimeOfDay:hh\\:mm} до " +
-                    $"{DateTime.Parse(CurrentBranch.WorkTo).TimeOfDay:hh\\:mm}.");
-            }
-            if (AppointmentDateTime < DateTime.Now)
-            {
-                _ = validationErrors.AppendLine("Дата назначения " +
-                    "должна быть позднее текущей даты.");
-            }
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(
-                    validationErrors.ToString());
-                return;
-            }
             SerializedOrder order = new SerializedOrder
             {
-                AppointmentDate = AppointmentDateTime
-                    .ToString(),
+                AppointmentDateTimeAsDateTime = AppointmentDateTime,
                 Services = ServicesOfOrder.Select(s => s.Id),
                 BranchId = CurrentBranch.Id
             };
             if (await OrderDataStore.AddItemAsync(order))
             {
-                await FeedbackService.Inform("Заказ оформлен.");
                 await Shell.Current.GoToAsync("..");
             }
         }
@@ -168,6 +122,11 @@ namespace CarWashService.MobileApp.ViewModels
 
         private Command deleteOrderCommand;
 
+        public MakeOrderViewModel()
+        {
+            ServicesOfOrder = new ObservableCollection<SerializedService>();
+        }
+
         public ICommand DeleteOrderCommand
         {
             get
@@ -183,21 +142,13 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void DeleteOrderAsync()
         {
-            if (await FeedbackService.Ask("Удалить заказ?"))
+            if (await OrderDataStore
+                .DeleteItemAsync(App
+                .CurrentOrder
+                .Id
+                .ToString()))
             {
-                if (await OrderDataStore
-                    .DeleteItemAsync(App
-                    .CurrentOrder
-                    .Id
-                    .ToString()))
-                {
-                    await FeedbackService.Inform("Заказ удалён.");
-                    await Shell.Current.GoToAsync("..");
-                }
-                else
-                {
-                    await FeedbackService.InformError("Не удалось удалить заказ.");
-                }
+                await Shell.Current.GoToAsync("..");
             }
         }
     }
