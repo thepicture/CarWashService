@@ -151,7 +151,7 @@ namespace CarWashService.MobileApp.Services
                     }
                     else
                     {
-                        DependencyService
+                        _ = DependencyService
                             .Get<IFeedbackService>()
                             .InformError(response);
                     }
@@ -159,7 +159,7 @@ namespace CarWashService.MobileApp.Services
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
-                    DependencyService
+                    _ = DependencyService
                         .Get<IFeedbackService>()
                         .InformError(ex);
                 }

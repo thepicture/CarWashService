@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace CarWashService.MobileApp.Models.Serialized
 {
@@ -12,6 +14,9 @@ namespace CarWashService.MobileApp.Models.Serialized
         public string CityName { get; set; }
         public int[] ServiceIds { get; set; }
         public List<string> PhoneNumbers { get; set; } = new List<string>();
-
+        [JsonIgnore]
+        public DateTime WorkFromAsDate => DateTime.Parse(WorkFrom);
+        [JsonIgnore]
+        public DateTime WorkToAsDate => DateTime.Parse(WorkTo);
     }
 }

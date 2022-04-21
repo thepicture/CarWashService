@@ -24,7 +24,7 @@ namespace CarWashService.MobileApp
             {
                 if (SetProperty(ref searchText, value))
                 {
-                    LoadServicesAsync();
+                    _ = LoadServicesAsync();
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace CarWashService.MobileApp
         {
             SelectedServices = new ObservableCollection<SerializedService>();
             Services = new ObservableCollection<SerializedService>();
-            LoadServicesAsync();
+            _ = LoadServicesAsync();
         }
 
         private async Task LoadServicesAsync()

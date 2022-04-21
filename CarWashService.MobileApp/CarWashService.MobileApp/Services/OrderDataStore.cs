@@ -36,7 +36,7 @@ namespace CarWashService.MobileApp.Services
                     Debug.WriteLine(ex.StackTrace);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        DependencyService.Get<IFeedbackService>()
+                        _ = DependencyService.Get<IFeedbackService>()
                             .InformError("Ошибка запроса: " + ex.StackTrace);
                     });
                     return await Task.FromResult(false);
@@ -46,7 +46,7 @@ namespace CarWashService.MobileApp.Services
                     Debug.WriteLine(ex.StackTrace);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        DependencyService.Get<IFeedbackService>()
+                        _ = DependencyService.Get<IFeedbackService>()
                         .InformError("Транзакция отменена: " + ex.StackTrace);
                     });
                     return await Task.FromResult(false);
@@ -56,7 +56,7 @@ namespace CarWashService.MobileApp.Services
                     Debug.WriteLine(ex.StackTrace);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        DependencyService.Get<IFeedbackService>()
+                        _ = DependencyService.Get<IFeedbackService>()
                         .InformError("Запрос был пустой: " + ex.StackTrace);
                     });
                     return await Task.FromResult(false);
@@ -66,7 +66,7 @@ namespace CarWashService.MobileApp.Services
                     Debug.WriteLine(ex.StackTrace);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        DependencyService.Get<IFeedbackService>()
+                        _ = DependencyService.Get<IFeedbackService>()
                         .InformError("Транзакция уже началась: " + ex.StackTrace);
                     });
                     return await Task.FromResult(false);
@@ -76,7 +76,7 @@ namespace CarWashService.MobileApp.Services
                     Debug.WriteLine(ex.StackTrace);
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        DependencyService.Get<IFeedbackService>()
+                        _ = DependencyService.Get<IFeedbackService>()
                         .InformError("Неизвестная ошибка: " + ex.StackTrace);
                     });
                     return await Task.FromResult(false);

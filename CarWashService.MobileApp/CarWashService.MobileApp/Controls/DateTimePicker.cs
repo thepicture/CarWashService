@@ -79,7 +79,7 @@ namespace CarWashService.MobileApp.Controls
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    TimePicker.Focus();
+                    _ = TimePicker.Focus();
                     Date = DatePicker.Date;
                     UpdateEntryText();
                     DatePicker.Unfocus();

@@ -4,6 +4,7 @@ using CarWashService.MobileApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -19,10 +20,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         internal void OnAppearing()
         {
-            _ = Task.Run(() =>
-              {
-                  return InsertBranchesIntoPositions();
-              });
+            InsertBranchesIntoPositions();
         }
 
         private async Task InsertBranchesIntoPositions()
@@ -30,36 +28,40 @@ namespace CarWashService.MobileApp.ViewModels
             Locations.Clear();
             IEnumerable<SerializedBranch> branches =
                 await BranchDataStore.GetItemsAsync();
-            if (branches == null)
+            try
             {
-                return;
-            }
-            Geocoder geoCoder = new Geocoder();
-            foreach (SerializedBranch branch in branches)
-            {
-                IEnumerable<Position> approximateLocations =
-                    await geoCoder
-                    .GetPositionsForAddressAsync(
-                    string.Format("{0}, {1}, {2}",
-                                  branch.StreetName,
-                                  branch.CityName,
-                                  "Россия")
-                    );
-                Position position = approximateLocations
-                    .FirstOrDefault();
-                Locations.Add(new LocationHelper
+                Geocoder geoCoder = new Geocoder();
+                foreach (SerializedBranch branch in branches)
                 {
-                    Address = $"{branch.StreetName}, " +
-                    $"{branch.CityName}",
-                    Description = "С "
-                    + TimeSpan.Parse(branch.WorkFrom)
-                    .ToString(@"hh\:mm")
-                    + " по "
-                    + TimeSpan.Parse(branch.WorkTo)
-                    .ToString(@"hh\:mm"),
-                    Position = position,
-                    Branch = branch
-                });
+                    IEnumerable<Position> approximateLocations =
+                        await geoCoder
+                        .GetPositionsForAddressAsync(
+                        string.Format("{0}, {1}, {2}",
+                                      branch.StreetName,
+                                      branch.CityName,
+                                      "Россия")
+                        );
+                    Position position = approximateLocations
+                        .FirstOrDefault();
+                    Locations.Add(new LocationHelper
+                    {
+                        Address = $"{branch.StreetName}, " +
+                        $"{branch.CityName}",
+                        Description = "С "
+                        + TimeSpan.Parse(branch.WorkFrom)
+                        .ToString(@"hh\:mm")
+                        + " по "
+                        + TimeSpan.Parse(branch.WorkTo)
+                        .ToString(@"hh\:mm"),
+                        Position = position,
+                        Branch = branch
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                await FeedbackService.Inform(ex);
+                Debug.WriteLine(ex);
             }
         }
 

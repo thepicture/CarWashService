@@ -61,7 +61,7 @@ namespace CarWashService.MobileApp.Services
 
             if (validationErrors.Length > 0)
             {
-                DependencyService
+                _ = DependencyService
                     .Get<IFeedbackService>()
                     .InformError(validationErrors);
                 return false;
@@ -81,20 +81,20 @@ namespace CarWashService.MobileApp.Services
                                           "application/json"));
                     if (response.StatusCode == HttpStatusCode.NoContent)
                     {
-                        DependencyService
+                        _ = DependencyService
                             .Get<IFeedbackService>()
                             .Inform("Вы зарегистрированы.");
                     }
                     else if (response.StatusCode == HttpStatusCode.Conflict)
                     {
-                        DependencyService
+                        _ = DependencyService
                                .Get<IFeedbackService>()
                                .Inform("Пользователь с таким логином "
                                        + "уже есть.");
                     }
                     else
                     {
-                        DependencyService
+                        _ = DependencyService
                           .Get<IFeedbackService>()
                           .InformError(response);
                         Debug.WriteLine(response);
@@ -103,7 +103,7 @@ namespace CarWashService.MobileApp.Services
                 }
                 catch (Exception ex)
                 {
-                    DependencyService
+                    _ = DependencyService
                          .Get<IFeedbackService>()
                          .InformError(ex);
                     Debug.WriteLine(ex);

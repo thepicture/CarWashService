@@ -4,9 +4,7 @@ using CarWashService.MobileApp.Models.ViewModelHelpers;
 using CarWashService.MobileApp.Views;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -39,38 +37,6 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(CurrentBranch.Title))
-            {
-                _ = validationErrors.AppendLine("Введите наименование " +
-                    "филиала.");
-            }
-            if (string.IsNullOrWhiteSpace(CityName))
-            {
-                _ = validationErrors.AppendLine("Укажите город.");
-            }
-            if (string.IsNullOrWhiteSpace(StreetName))
-            {
-                _ = validationErrors.AppendLine("Введите название улицы.");
-            }
-            if (WorkFrom >= WorkTo)
-            {
-                _ = validationErrors.AppendLine("Время " +
-                    "начала работы должно быть " +
-                    "раньше времени окончания работы.");
-            }
-            if (PhoneNumbers.Count == 0)
-            {
-                _ = validationErrors.AppendLine("Укажите хотя бы один контакт.");
-            }
-
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(
-                    validationErrors.ToString());
-                return;
-            }
-
             CurrentBranch.CityName = CityName;
             CurrentBranch.StreetName = StreetName;
             CurrentBranch.WorkFrom = WorkFrom.ToString();
@@ -79,35 +45,10 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 CurrentBranch.PhoneNumbers.Add(phoneNumber.PhoneNumber);
             }
-            bool isSuccessfulAdding;
-            bool isNewBranch;
-            try
+            if (await BranchDataStore
+                .AddItemAsync(CurrentBranch))
             {
-                isSuccessfulAdding = await BranchDataStore
-                    .AddItemAsync(CurrentBranch);
-                isNewBranch = CurrentBranch.Id == 0;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.StackTrace);
-                await FeedbackService.Inform("Подключение к интернету " +
-                     "отсутствует, проверьте подключение " +
-                     "и попробуйте ещё раз.");
-                return;
-            }
-            if (isSuccessfulAdding)
-            {
-                string action = CurrentBranch.Id == 0 ? "добавлен" : "обновлен";
-                await FeedbackService.Inform($"Филиал {CurrentBranch.Title} " +
-                    $"{action}.");
                 await Shell.Current.GoToAsync($"..");
-            }
-            else
-            {
-                await FeedbackService.InformError("Не удалось " +
-                    "добавить филиал. " +
-                    "Вероятно, политика компании изменилась. " +
-                    "Обратитесь к системному администратору.");
             }
         }
 
@@ -257,21 +198,12 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void DeleteBranchAsync()
         {
-            if (await FeedbackService.Ask("Удалить филиал? " +
-                "Вместе с ним будут удалены связанные заказы."))
+            if (await BranchDataStore
+                .DeleteItemAsync(CurrentBranch
+                .Id
+                .ToString()))
             {
-                if (await BranchDataStore
-                    .DeleteItemAsync(CurrentBranch
-                    .Id
-                    .ToString()))
-                {
-                    await FeedbackService.Inform("Филиал удалён.");
-                    await Shell.Current.GoToAsync("..");
-                }
-                else
-                {
-                    await FeedbackService.InformError("Не удалось удалить филиал.");
-                }
+                await Shell.Current.GoToAsync("..");
             }
         }
 

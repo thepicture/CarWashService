@@ -48,7 +48,7 @@ namespace CarWashService.MobileApp.Services
                         }
                         catch (Exception ex)
                         {
-                            DependencyService
+                            _ = DependencyService
                                 .Get<IFeedbackService>()
                                 .InformError("Не удалось "
                                 + "десереализовать фото: "
@@ -58,7 +58,7 @@ namespace CarWashService.MobileApp.Services
                     }
                     else
                     {
-                        DependencyService
+                        _ = DependencyService
                           .Get<IFeedbackService>()
                           .InformError(response);
                         Debug.WriteLine(response);
@@ -67,7 +67,7 @@ namespace CarWashService.MobileApp.Services
                 }
                 catch (Exception ex)
                 {
-                    DependencyService
+                    _ = DependencyService
                          .Get<IFeedbackService>()
                          .InformError(ex);
                     Debug.WriteLine(ex);
