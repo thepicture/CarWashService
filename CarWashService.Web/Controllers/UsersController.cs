@@ -1,11 +1,13 @@
 ﻿using CarWashService.Web.Models.Entities;
 using CarWashService.Web.Models.Entities.Serialized;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -44,45 +46,70 @@ namespace CarWashService.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (user.Id == 0)
+            if (await db
+                .User
+                .AnyAsync(u =>
+                    u.Login.ToLower()
+                    == user.Login.ToLower()))
             {
-                if (await db
-                    .User
-                    .AnyAsync(u =>
-                        u.Login.ToLower()
-                        == user.Login.ToLower()))
-                {
-                    return Conflict();
-                }
+                return Conflict();
+            }
 
-                if (await db
-                  .User
-                  .AnyAsync(u =>
-                      u.Email.ToLower()
-                      == user.Email.ToLower()))
-                {
-                    return Conflict();
-                }
-                _ = db.User.Add(user);
-            }
-            else
+            if (await db
+              .User
+              .AnyAsync(u =>
+                  u.Email.ToLower()
+                  == user.Email.ToLower()))
             {
-                db.User.Find(user.Id).ImageBytes = user.ImageBytes;
+                return Conflict();
             }
+            _ = db.User.Add(user);
 
             _ = await db.SaveChangesAsync();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [Route("api/users/image")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [HttpPatch]
+        public async Task<IHttpActionResult> PatchImageAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            User userFromDatabase = await db.User.FirstAsync(u =>
+                u.Login == HttpContext.Current.User.Identity.Name);
+            userFromDatabase.ImageBytes = Convert.FromBase64String(
+                await Request.Content.ReadAsStringAsync());
+            await db.SaveChangesAsync();
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [Route("api/users/image")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [HttpGet]
+        [ResponseType(typeof(byte[]))]
+        public async Task<IHttpActionResult> GetImageAsync()
+        {
+            User userFromDatabase = await db.User.FirstAsync(u =>
+                u.Login == HttpContext.Current.User.Identity.Name);
+            return Ok(userFromDatabase.ImageBytes);
+        }
+
         [HttpGet]
         [Route("api/users/login")]
-        public IHttpActionResult IsAuthenticated()
+        [ResponseType(
+            typeof(SerializedUser))]
+        public async Task<IHttpActionResult> IsAuthenticatedAsync()
         {
             ClaimsIdentity identity = (ClaimsIdentity)
                 Thread.CurrentPrincipal.Identity;
-            User user = db.User.First(u => u.Login == identity.Name);
-            return Ok(new SerializedUser(user));
+            User user = await db.User.FirstAsync(u =>
+                u.Login == identity.Name);
+            return Ok(
+                new SerializedUser(user));
         }
 
         [HttpGet]
@@ -97,7 +124,8 @@ namespace CarWashService.Web.Controllers
             {
                 return NotFound();
             }
-            System.Collections.Generic.IEnumerable<string> phones = user.UserPhone.Select(p => p.PhoneNumber);
+            System.Collections.Generic.IEnumerable<string> phones =
+                user.UserPhone.Select(p => p.PhoneNumber);
             var addresses = user.UserAddress.Select(u => new
             {
                 u.Address.StreetName,
@@ -187,8 +215,10 @@ namespace CarWashService.Web.Controllers
         {
             User user = await db
                 .User
-                .FirstOrDefaultAsync(u => u.Login == Thread.CurrentPrincipal.Identity.Name);
-            ClaimsIdentity identity = (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
+                .FirstOrDefaultAsync(u =>
+                u.Login == Thread.CurrentPrincipal.Identity.Name);
+            ClaimsIdentity identity =
+                (ClaimsIdentity)Thread.CurrentPrincipal.Identity;
             string role = identity.FindFirst(ClaimTypes.Role).Value;
             switch (role)
             {

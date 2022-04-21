@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
-             xmlns:mobileapp="clr-namespace:CarWashService.MobileApp"
+             xmlns:viewmodels="clr-namespace:CarWashService.MobileApp.ViewModels"
              xmlns:converters="clr-namespace:CarWashService.MobileApp.Converters"
              xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              Title="Мой аккаунт"
-             x:DataType="mobileapp:AccountViewModel"
+             x:DataType="viewmodels:AccountViewModel"
              x:Class="CarWashService.MobileApp.Views.AccountPage">
     <ContentView>
         <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -16,7 +16,7 @@
                                  Margin="20"
                                  Elevation="5"
                                  IsClickable="True"
-                                 x:DataType="mobileapp:AccountViewModel">
+                                 x:DataType="viewmodels:AccountViewModel">
                     <StackLayout>
                         <Frame CornerRadius="200"
                                Padding="0"

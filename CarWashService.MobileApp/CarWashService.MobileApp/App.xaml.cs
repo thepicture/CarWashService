@@ -25,6 +25,7 @@ namespace CarWashService.MobileApp
             DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<BranchDataStore>();
             DependencyService.Register<RegistrationDataStore>();
+            DependencyService.Register<UserImageDataStore>();
             DependencyService.Register<ApiAuthenticator>();
             DependencyService.Register<ServiceDataStore>();
             DependencyService.Register<DiscountDataStore>();

@@ -12,62 +12,59 @@ using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.Services
 {
-    public class RegistrationDataStore : IDataStore<SerializedUser>
+    public class RegistrationDataStore : IDataStore<SerializedRegistrationUser>
     {
-        public async Task<bool> AddItemAsync(SerializedUser item)
+        public async Task<bool> AddItemAsync(SerializedRegistrationUser item)
         {
-            if (item.Id == 0)
+            StringBuilder validationErrors = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(item.FirstName))
             {
-                StringBuilder validationErrors = new StringBuilder();
-                if (string.IsNullOrWhiteSpace(item.FirstName))
-                {
-                    _ = validationErrors.AppendLine("Введите ваше имя.");
-                }
-                if (string.IsNullOrWhiteSpace(item.LastName))
-                {
-                    _ = validationErrors.AppendLine("Введите вашу фамилию.");
-                }
-                if (string.IsNullOrWhiteSpace(item.Login))
-                {
-                    _ = validationErrors.AppendLine("Введите логин.");
-                }
-                if (string.IsNullOrWhiteSpace(item.Password))
-                {
-                    _ = validationErrors.AppendLine("Введите пароль.");
-                }
-                if (string.IsNullOrWhiteSpace(item.Email)
-                    || !Regex.IsMatch(item.Email, @"\w+@\w+\.\w{2,}"))
-                {
-                    _ = validationErrors.AppendLine("Укажите почту в " +
-                        "формате <aaa>@<bbb>.<cc>.");
-                }
-                if (string
-                    .IsNullOrWhiteSpace(item.PassportNumber)
-                    || !int.TryParse(item.PassportNumber, out _))
-                {
-                    _ = validationErrors.AppendLine("Укажите корректный номер " +
-                        "паспорта до 6 цифр.");
-                }
-                if (string
-                    .IsNullOrWhiteSpace(item.PassportSeries)
-                    || !int.TryParse(item.PassportSeries, out _))
-                {
-                    _ = validationErrors.AppendLine("Укажите корректную серию " +
-                        "паспорта до 4 цифр.");
-                }
+                _ = validationErrors.AppendLine("Введите ваше имя.");
+            }
+            if (string.IsNullOrWhiteSpace(item.LastName))
+            {
+                _ = validationErrors.AppendLine("Введите вашу фамилию.");
+            }
+            if (string.IsNullOrWhiteSpace(item.Login))
+            {
+                _ = validationErrors.AppendLine("Введите логин.");
+            }
+            if (string.IsNullOrWhiteSpace(item.Password))
+            {
+                _ = validationErrors.AppendLine("Введите пароль.");
+            }
+            if (string.IsNullOrWhiteSpace(item.Email)
+                || !Regex.IsMatch(item.Email, @"\w+@\w+\.\w{2,}"))
+            {
+                _ = validationErrors.AppendLine("Укажите почту в " +
+                    "формате <aaa>@<bbb>.<cc>.");
+            }
+            if (string
+                .IsNullOrWhiteSpace(item.PassportNumber)
+                || !int.TryParse(item.PassportNumber, out _))
+            {
+                _ = validationErrors.AppendLine("Укажите корректный номер " +
+                    "паспорта до 6 цифр.");
+            }
+            if (string
+                .IsNullOrWhiteSpace(item.PassportSeries)
+                || !int.TryParse(item.PassportSeries, out _))
+            {
+                _ = validationErrors.AppendLine("Укажите корректную серию " +
+                    "паспорта до 4 цифр.");
+            }
 
-                if (item.UserTypeId == 0)
-                {
-                    _ = validationErrors.AppendLine("Укажите тип пользователя.");
-                }
+            if (item.UserTypeId == 0)
+            {
+                _ = validationErrors.AppendLine("Укажите тип пользователя.");
+            }
 
-                if (validationErrors.Length > 0)
-                {
-                    DependencyService
-                        .Get<IFeedbackService>()
-                        .InformError(validationErrors);
-                    return false;
-                }
+            if (validationErrors.Length > 0)
+            {
+                DependencyService
+                    .Get<IFeedbackService>()
+                    .InformError(validationErrors);
+                return false;
             }
 
             string jsonIdentity = JsonConvert.SerializeObject(item);
@@ -84,18 +81,9 @@ namespace CarWashService.MobileApp.Services
                                           "application/json"));
                     if (response.StatusCode == HttpStatusCode.NoContent)
                     {
-                        if (item.Id == 0)
-                        {
-                            DependencyService
-                                .Get<IFeedbackService>()
-                                .Inform("Вы зарегистрированы.");
-                        }
-                        else
-                        {
-                            DependencyService
-                                .Get<IFeedbackService>()
-                                .Inform("Фото изменено.");
-                        }
+                        DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Вы зарегистрированы.");
                     }
                     else if (response.StatusCode == HttpStatusCode.Conflict)
                     {
@@ -129,17 +117,17 @@ namespace CarWashService.MobileApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<SerializedUser> GetItemAsync(string id)
+        public Task<SerializedRegistrationUser> GetItemAsync(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<SerializedUser>> GetItemsAsync(bool forceRefresh = false)
+        public Task<IEnumerable<SerializedRegistrationUser>> GetItemsAsync(bool forceRefresh = false)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateItemAsync(SerializedUser item)
+        public Task<bool> UpdateItemAsync(SerializedRegistrationUser item)
         {
             throw new NotImplementedException();
         }

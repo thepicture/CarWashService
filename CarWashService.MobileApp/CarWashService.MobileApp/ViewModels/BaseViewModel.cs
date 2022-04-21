@@ -20,8 +20,10 @@ namespace CarWashService.MobileApp.ViewModels
             DependencyService.Get<IDataStore<SerializedDiscount>>();
         public IDataStore<SerializedOrder> OrderDataStore =>
             DependencyService.Get<IDataStore<SerializedOrder>>();
-        public IDataStore<SerializedUser> RegistrationDataStore =>
-           DependencyService.Get<IDataStore<SerializedUser>>();
+        public IDataStore<SerializedRegistrationUser> RegistrationDataStore =>
+            DependencyService.Get<IDataStore<SerializedRegistrationUser>>();
+        public IDataStore<byte[]> UserImageDataStore =>
+            DependencyService.Get<IDataStore<byte[]>>();
         public ICaptchaService CaptchaService =>
             DependencyService.Get<ICaptchaService>();
         public string Role => AppIdentity.Role;
@@ -30,8 +32,8 @@ namespace CarWashService.MobileApp.ViewModels
         bool isBusy = false;
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { _ = SetProperty(ref isBusy, value); }
+            get => isBusy;
+            set => SetProperty(ref isBusy, value);
         }
         private bool isRefreshing = false;
         public bool IsRefreshing

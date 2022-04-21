@@ -82,19 +82,20 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void RegisterAsync()
         {
-            SerializedUser identity = new SerializedUser
-            {
-                Login = Login,
-                Password = Password,
-                Email = Email,
-                FirstName = FirstName,
-                LastName = LastName,
-                Patronymic = Patronymic,
-                PassportNumber = PassportNumber,
-                PassportSeries = PassportSeries,
-                UserTypeId = userType?.Id ?? 0,
-                ImageBytes = ImageBytes
-            };
+            SerializedRegistrationUser identity =
+                new SerializedRegistrationUser
+                {
+                    Login = Login,
+                    Password = Password,
+                    Email = Email,
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    Patronymic = Patronymic,
+                    PassportNumber = PassportNumber,
+                    PassportSeries = PassportSeries,
+                    UserTypeId = userType?.Id ?? 0,
+                    ImageBytes = ImageBytes
+                };
 
             if (await RegistrationDataStore.AddItemAsync(identity))
             {

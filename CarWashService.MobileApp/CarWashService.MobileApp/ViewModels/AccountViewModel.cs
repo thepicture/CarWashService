@@ -1,12 +1,11 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
-using CarWashService.MobileApp.ViewModels;
 using System.IO;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace CarWashService.MobileApp
+namespace CarWashService.MobileApp.ViewModels
 {
     public class AccountViewModel : BaseViewModel
     {
@@ -20,6 +19,10 @@ namespace CarWashService.MobileApp
 
         internal void OnAppearing()
         {
+            if (IsBusy)
+            {
+                return;
+            }
             IsRefreshing = true;
         }
 
@@ -70,17 +73,11 @@ namespace CarWashService.MobileApp
 
         private async void RefreshAsync()
         {
-            var credentials = new LoginAndPasswordFromBasicDecoder()
-                .Decode();
-            var authenticator = new ApiAuthenticator();
-            string login = credentials[0];
-            string password = credentials[1];
-            if (await authenticator.IsCorrectAsync(login,
-                                                   password))
-            {
-                User = authenticator.User;
-                IsRefreshing = false;
-            }
+            SerializedUser currentUser = AppIdentity.User;
+            currentUser.ImageBytes =
+                await UserImageDataStore.GetItemAsync("");
+            User = currentUser;
+            IsRefreshing = false;
         }
 
         private Command changePictureCommand;
@@ -101,6 +98,7 @@ namespace CarWashService.MobileApp
 
         private async void ChangePictureAsync()
         {
+            IsBusy = true;
             FileResult result = await MediaPicker
                 .PickPhotoAsync(new MediaPickerOptions
                 {
@@ -114,14 +112,13 @@ namespace CarWashService.MobileApp
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 await imageStream.CopyToAsync(memoryStream);
-                var imageBytes = memoryStream.ToArray();
-                var newUser = AppIdentity.User;
-                newUser.ImageBytes = imageBytes;
-                if (await RegistrationDataStore.AddItemAsync(newUser))
+                byte[] imageBytes = memoryStream.ToArray();
+                if (await UserImageDataStore.UpdateItemAsync(imageBytes))
                 {
                     IsRefreshing = true;
                 }
             }
+            IsBusy = false;
         }
     }
 }
