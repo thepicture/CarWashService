@@ -59,6 +59,15 @@ namespace CarWashService.MobileApp
                     {
                         HttpClientTimeout = TimeSpan.FromSeconds(seconds);
                     }
+                    if (await DependencyService
+                    .Get<IFeedbackService>()
+                    .Ask("Вызвать "
+                            + "исключение "
+                            + "для аварийного завершения "
+                            + "приложения?"))
+                    {
+                        throw new Exception("Тестовое исключение");
+                    }
                 };
             }
             catch (FeatureNotSupportedException)
