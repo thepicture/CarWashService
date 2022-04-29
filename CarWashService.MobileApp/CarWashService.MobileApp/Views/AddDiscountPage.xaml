@@ -45,7 +45,6 @@
                                             Placeholder="Введите описание скидки"
                                             LeadingIcon="icon_about"
                                             InputType="Text"
-                                            MaxLength="50"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}"
                                             HelperText="* можно оставить пустым" />
