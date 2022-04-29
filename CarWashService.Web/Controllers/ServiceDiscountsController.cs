@@ -87,7 +87,7 @@ namespace CarWashService.Web.Controllers
         // POST: api/ServiceDiscounts
         [ResponseType(typeof(ServiceDiscount))]
         [Authorize(Roles = "Администратор, Сотрудник")]
-        public async Task<IHttpActionResult> PostServiceDiscount(ServiceDiscount serviceDiscount)
+        public async Task<IHttpActionResult> PostServiceDiscount(SerializedDiscount serviceDiscount)
         {
             if (!ModelState.IsValid)
             {
@@ -96,13 +96,23 @@ namespace CarWashService.Web.Controllers
 
             if (serviceDiscount.Id == 0)
             {
-                _ = db.ServiceDiscount.Add(serviceDiscount);
+                _ = db.ServiceDiscount.Add(new ServiceDiscount
+                {
+                    WorkFrom = DateTime.Parse(serviceDiscount.WorkFrom),
+                    WorkTo = DateTime.Parse(serviceDiscount.WorkTo),
+                    ServiceId = serviceDiscount.ServiceId,
+                    Description = serviceDiscount.Description,
+                    DiscountPercent = serviceDiscount.DiscountPercent
+                });
             }
             else
             {
-                db.Entry(
-                    db.ServiceDiscount.Find(serviceDiscount.Id)).CurrentValues
-                    .SetValues(serviceDiscount);
+                ServiceDiscount discountFromDb = db.ServiceDiscount
+                    .First(d => d.Id == serviceDiscount.Id);
+                discountFromDb.WorkFrom = DateTime.Parse(serviceDiscount.WorkFrom);
+                discountFromDb.WorkTo = DateTime.Parse(serviceDiscount.WorkTo);
+                discountFromDb.Description = serviceDiscount.Description;
+                discountFromDb.DiscountPercent = serviceDiscount.DiscountPercent;
             }
 
             _ = await db.SaveChangesAsync();
@@ -112,7 +122,7 @@ namespace CarWashService.Web.Controllers
 
         // DELETE: api/ServiceDiscounts/5
         [ResponseType(typeof(Nullable))]
-        [Authorize(Roles = "Сотрудник")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IHttpActionResult> DeleteServiceDiscount(int id)
         {
             ServiceDiscount serviceDiscount = await db.ServiceDiscount.FindAsync(id);

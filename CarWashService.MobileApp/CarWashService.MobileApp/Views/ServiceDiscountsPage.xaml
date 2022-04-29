@@ -8,9 +8,7 @@
              xmlns:converters="clr-namespace:CarWashService.MobileApp.Converters"
              x:DataType="viewmodels:ServiceDiscountsViewModel"
              x:Name="Page"
-             Title="{Binding Source={x:Static Application.Current}, 
-                             Path=CurrentService.Name, 
-                             StringFormat='Скидки услуги {0}'}"
+             Title="Скидки услуги"
              x:Class="CarWashService.MobileApp.Views.ServiceDiscountsPage">
     <ContentPage.Content>
         <Grid>
