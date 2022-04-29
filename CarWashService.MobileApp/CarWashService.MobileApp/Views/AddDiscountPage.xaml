@@ -33,7 +33,7 @@
                                                 Placeholder="Введите процент скидки"
                                                 LeadingIcon="branch"
                                                 InputType="Numeric"
-                                                MaxLength="50"
+                                                MaxLength="3"
                                                 AlwaysShowUnderline="True"
                                                 TintColor="{StaticResource Primary}"
                                                 HelperText="* Обязательно" />

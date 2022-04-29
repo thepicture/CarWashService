@@ -56,10 +56,23 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-
             CurrentDiscount.DiscountPercentAsString = DiscountPercent;
-            CurrentDiscount.WorkFrom = WorkFrom.ToString();
-            CurrentDiscount.WorkTo = WorkTo.ToString();
+            if (WorkFrom == DateTime.MinValue)
+            {
+                CurrentDiscount.WorkFrom = DateTime.Now.ToString();
+            }
+            else
+            {
+                CurrentDiscount.WorkFrom = WorkFrom.ToString();
+            }
+            if (WorkTo == DateTime.MinValue)
+            {
+                CurrentDiscount.WorkFrom = DateTime.Now.ToString();
+            }
+            else
+            {
+                CurrentDiscount.WorkTo = WorkTo.ToString();
+            }
             CurrentDiscount.ServiceId = App.CurrentService.Id;
             if (await DiscountDataStore.AddItemAsync(CurrentDiscount))
             {
