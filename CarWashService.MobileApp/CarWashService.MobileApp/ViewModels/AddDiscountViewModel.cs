@@ -97,7 +97,7 @@ namespace CarWashService.MobileApp.ViewModels
         }
 
 
-        public bool IsCanDeleteDiscount => CurrentDiscount.Id != 0;
+        public bool IsCanDeleteDiscount => CurrentDiscount.Id != 0 && IsCanDelete;
         private Command deleteDiscountCommand;
 
         public ICommand DeleteDiscountCommand

@@ -72,7 +72,7 @@
                                                              Style="{StaticResource BackgroundButton}" />
                                     <material:MaterialButton CommandParameter="{Binding .}"
                                                              Command="{Binding Source={Reference Page}, 
-                                                                                   Path=BindingContext.GoToEditDiscountPage}"
+                                                                               Path=BindingContext.GoToEditDiscountPage}"
                                                              Text="Редактировать"
                                                              VerticalOptions="EndAndExpand"
                                                              Style="{StaticResource BaseButton}"
@@ -85,13 +85,20 @@
                                                 <Setter Property="IsVisible"
                                                         Value="True" />
                                             </DataTrigger>
+                                            <DataTrigger TargetType="material:MaterialButton"
+                                                         Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                           Path=UserTypeName}"
+                                                         Value="Администратор">
+                                                <Setter Property="IsVisible"
+                                                        Value="True" />
+                                            </DataTrigger>
                                         </material:MaterialButton.Triggers>
                                     </material:MaterialButton>
                                     <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
-                                                                                            Path=BindingContext}"
+                                                                                        Path=BindingContext}"
                                                              Command="{Binding Source={RelativeSource Mode=FindAncestor, 
-                                                                                   AncestorType={x:Type views:ServicesPage}}, 
-                                                                                   Path=BindingContext.ToggleServiceCommand}"
+                                                                               AncestorType={x:Type views:ServicesPage}}, 
+                                                                               Path=BindingContext.ToggleServiceCommand}"
                                                              Text="В корзину"
                                                              VerticalOptions="EndAndExpand"
                                                              Clicked="OnToggle"

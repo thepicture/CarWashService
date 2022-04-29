@@ -30,7 +30,7 @@ namespace CarWashService.MobileApp.ViewModels
             DependencyService.Get<IDataStore<byte[]>>();
         public ICaptchaService CaptchaService =>
             DependencyService.Get<ICaptchaService>();
-        public bool IsCanDelete => "Администратор, Сотрудник"
+        public bool IsCanDelete => "Администратор"
             .Contains(AppIdentity.User.UserTypeName);
 
         bool isBusy = false;

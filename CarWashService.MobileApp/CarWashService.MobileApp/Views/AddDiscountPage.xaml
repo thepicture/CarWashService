@@ -18,7 +18,8 @@
     <ContentPage.ToolbarItems>
         <controls:BindableToolbarItem Text="Удалить"
                                       Command="{Binding DeleteDiscountCommand}"
-                                      IsVisible="{Binding IsCanDeleteDiscount}" />
+                                      IsVisible="{Binding IsCanDeleteDiscount}">
+        </controls:BindableToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView Margin="10,10,10,0"

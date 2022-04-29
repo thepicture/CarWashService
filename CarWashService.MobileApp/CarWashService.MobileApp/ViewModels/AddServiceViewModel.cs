@@ -95,6 +95,6 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
-        public bool IsCanDeleteService => CurrentService.Id > 0;
+        public bool IsCanDeleteService => CurrentService.Id > 0 && IsCanDelete;
     }
 }

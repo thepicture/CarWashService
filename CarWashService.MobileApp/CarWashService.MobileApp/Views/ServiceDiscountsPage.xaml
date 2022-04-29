@@ -102,7 +102,7 @@
                                                 <DataTrigger TargetType="material:MaterialButton"
                                                              Binding="{Binding Source={Static services:AppIdentity.User}, 
                                                                                Path=UserTypeName}"
-                                                             Value="Сотрудник">
+                                                             Value="Администратор">
                                                     <Setter Property="IsVisible"
                                                             Value="True" />
                                                 </DataTrigger>

@@ -92,10 +92,28 @@
                                                                                    AncestorType={x:Type pages:OrdersPage}}, 
                                                                                    Path=BindingContext.DeleteOrderCommand}"
                                                                  Text="Удалить"
+                                                                 IsVisible="False"
                                                                  VerticalOptions="EndAndExpand"
                                                                  FontSize="15"
                                                                  Style="{StaticResource BaseButton}"
-                                                                 BackgroundColor="Red" />
+                                                                 BackgroundColor="Red">
+                                            <material:MaterialButton.Triggers>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                               Path=UserTypeName}"
+                                                             Value="Клиент">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                               Path=UserTypeName}"
+                                                             Value="Администратор">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                            </material:MaterialButton.Triggers>
+                                        </material:MaterialButton>
                                     </StackLayout>
                                 </material:MaterialCard>
                             </Grid>

@@ -142,7 +142,7 @@ namespace CarWashService.Web.Controllers
 
         // DELETE: api/Services/5
         [ResponseType(typeof(Service))]
-        [Authorize(Roles = "Администратор, Сотрудник")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IHttpActionResult> DeleteService(int id)
         {
             Service service = await db.Service.FindAsync(id);
