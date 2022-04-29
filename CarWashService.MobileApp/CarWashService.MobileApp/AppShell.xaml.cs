@@ -65,65 +65,22 @@ namespace CarWashService.MobileApp
         public static void SetShellStacksDependingOnRole()
         {
             TabBar.Items.Clear();
-            switch (AppIdentity.User.UserTypeName)
-            {
-                case "Администратор":
-                    TabBar
-                        .Items.Add(new ShellContent
-                        {
-                            Route = nameof(BranchesPage),
-                            Icon = "branch",
-                            Title = "Филиалы",
-                            ContentTemplate = new DataTemplate(typeof(BranchesPage))
-                        });
-                    TabBar
-                       .Items.Add(new ShellContent
-                       {
-                           Route = nameof(ServicesPage),
-                           Icon = "logo",
-                           Title = "Услуги",
-                           ContentTemplate = new DataTemplate(typeof(ServicesPage))
-                       });
-                    break;
-                case "Сотрудник":
-                    TabBar
-                      .Items.Add(new ShellContent
-                      {
-                          Route = nameof(BranchesPage),
-                          Icon = "branch",
-                          Title = "Филиалы",
-                          ContentTemplate = new DataTemplate(typeof(BranchesPage))
-                      });
-                    TabBar
-                      .Items.Add(new ShellContent
-                      {
-                          Route = nameof(ServicesPage),
-                          Icon = "logo",
-                          Title = "Услуги",
-                          ContentTemplate = new DataTemplate(typeof(ServicesPage))
-                      });
-                    break;
-                case "Клиент":
-                    TabBar
-                      .Items.Add(new ShellContent
-                      {
-                          Route = nameof(BranchesPage),
-                          Icon = "branch",
-                          Title = "Филиалы",
-                          ContentTemplate = new DataTemplate(typeof(BranchesPage))
-                      });
-                    TabBar
-                   .Items.Add(new ShellContent
-                   {
-                       Route = nameof(ServicesPage),
-                       Icon = "logo",
-                       Title = "Услуги",
-                       ContentTemplate = new DataTemplate(typeof(ServicesPage))
-                   });
-                    break;
-                default:
-                    break;
-            }
+            TabBar
+                .Items.Add(new ShellContent
+                {
+                    Route = nameof(BranchesPage),
+                    Icon = "branch",
+                    Title = "Филиалы",
+                    ContentTemplate = new DataTemplate(typeof(BranchesPage))
+                });
+            TabBar
+               .Items.Add(new ShellContent
+               {
+                   Route = nameof(ServicesPage),
+                   Icon = "logo",
+                   Title = "Услуги",
+                   ContentTemplate = new DataTemplate(typeof(ServicesPage))
+               });
             TabBar
                .Items.Add(new ShellContent
                {
