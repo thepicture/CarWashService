@@ -45,7 +45,7 @@
                                                  HeightRequest="1" />
                                         <Label Text="{Binding Path=SellerFullName, 
                                                               StringFormat='Менеджер: {0}', 
-                                                              TargetNullValue='Не подтверждено менеджером'}"
+                                                              TargetNullValue='Не подтверждено сотрудником'}"
                                                HorizontalTextAlignment="Center"
                                                FontAttributes="Bold" />
                                         <BoxView Color="WhiteSmoke"
