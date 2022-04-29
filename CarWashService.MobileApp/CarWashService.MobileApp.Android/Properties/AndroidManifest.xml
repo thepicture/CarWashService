@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="3" android:versionName="1.2" package="com.companyname.carwashservice.mobileapp" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="4" android:versionName="1.3" package="com.companyname.carwashservice.mobileapp" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
 	<application android:label="Автомойка" android:theme="@style/MainTheme" android:icon="@mipmap/icon">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyD0Sw5tv9j-N_CVNSh0uJezcti8Tju5h98" />
