@@ -73,10 +73,12 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void RefreshAsync()
         {
-            SerializedUser currentUser = AppIdentity.User;
-            currentUser.ImageBytes =
-                await UserImageDataStore.GetItemAsync("");
-            User = currentUser;
+            User = new SerializedUser
+            {
+                ImageBytes =
+                await UserImageDataStore.GetItemAsync("")
+            };
+            OnPropertyChanged(nameof(User));
             IsRefreshing = false;
         }
 
