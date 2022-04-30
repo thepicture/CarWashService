@@ -1,6 +1,5 @@
 ﻿using CarWashService.Web.Models.Entities;
 using System;
-using System.Data.Entity;
 using System.Linq;
 
 namespace CarWashService.Web.Models.AuthenticationModels
@@ -9,19 +8,19 @@ namespace CarWashService.Web.Models.AuthenticationModels
     {
         public static bool IsAuthenticated(string login,
                                            string password,
-                                           out User user)
+                                           out string[] role)
         {
             using (CarWashBaseEntities context =
                 new CarWashBaseEntities())
             {
-                user = context
+                role = context
                     .User
-                    .Include(u => u.UserType)
-                    .FirstOrDefault(
-                        u => u.Login.Equals(login,
+                    .Where(u => u.Login.Equals(login,
                                             StringComparison.OrdinalIgnoreCase)
-                              && u.Password == password);
-                return user != null;
+                              && u.Password == password)
+                    .Select(u => u.UserType.Name)
+                    .ToArray();
+                return role.Count() == 1;
             }
         }
     }

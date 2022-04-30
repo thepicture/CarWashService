@@ -17,7 +17,6 @@
             Patronymic = user.Patronymic;
             PassportNumber = user.PassportNumber;
             PassportSeries = user.PassportSeries;
-            ImageBytes = user.ImageBytes;
         }
         public int Id { get; set; }
         public string Login { get; set; }

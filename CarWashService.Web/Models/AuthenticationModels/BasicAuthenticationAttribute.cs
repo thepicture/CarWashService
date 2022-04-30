@@ -1,5 +1,4 @@
-﻿using CarWashService.Web.Models.Entities;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -62,17 +61,17 @@ namespace CarWashService.Web.Models.AuthenticationModels
                 string password = loginAndPassword[1];
                 if (SimpleAuthenticator.IsAuthenticated(login,
                                                         password,
-                                                        out User user))
+                                                        out string[] role))
                 {
                     GenericIdentity identity = new GenericIdentity(login);
                     Claim roleClaim = new Claim(ClaimTypes.Role,
-                                                user.UserType.Name);
+                                                role[0]);
                     identity.AddClaim(roleClaim);
                     Thread.CurrentPrincipal =
                         new GenericPrincipal(identity,
                                              new string[]
                                              {
-                                                 user.UserType.Name
+                                                 role[0]
                                              });
                     if (HttpContext.Current.User != null)
                     {
@@ -81,9 +80,8 @@ namespace CarWashService.Web.Models.AuthenticationModels
                 }
                 else
                 {
-                    actionContext.Response = actionContext
-                  .Request
-                  .CreateResponse(HttpStatusCode.Unauthorized);
+                   actionContext.Response = actionContext.Request
+                        .CreateResponse(HttpStatusCode.Unauthorized);
                 }
             }
             base.OnAuthorization(actionContext);

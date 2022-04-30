@@ -9,9 +9,16 @@ namespace CarWashService.MobileApp
     {
         public static TabBar TabBar = new TabBar();
 
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            Navigation.PopToRootAsync();
+        }
+
         public AppShell()
         {
             InitializeComponent();
+
             Items.Add(TabBar);
 
             Routing.RegisterRoute(
@@ -71,7 +78,7 @@ namespace CarWashService.MobileApp
                     Route = nameof(BranchesPage),
                     Icon = "branch",
                     Title = "Филиалы",
-                    ContentTemplate = new DataTemplate(typeof(BranchesPage))
+                    ContentTemplate = new DataTemplate(typeof(BranchesPage)),
                 });
             TabBar
                .Items.Add(new ShellContent

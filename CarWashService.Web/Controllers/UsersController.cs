@@ -105,12 +105,12 @@ namespace CarWashService.Web.Controllers
         [Route("api/users/login")]
         [ResponseType(
             typeof(SerializedUser))]
-        public async Task<IHttpActionResult> IsAuthenticatedAsync()
+        public IHttpActionResult IsAuthenticatedAsync()
         {
             ClaimsIdentity identity = (ClaimsIdentity)
                 Thread.CurrentPrincipal.Identity;
-            User user = await db.User.FirstAsync(u =>
-                u.Login == identity.Name);
+            User user = db.User.Where(u => u.Login == identity.Name)
+                .First();
             return Ok(
                 new SerializedUser(user));
         }
