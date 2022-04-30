@@ -161,6 +161,14 @@ namespace CarWashService.MobileApp.ViewModels
                 return;
             }
             Stream imageStream = await result.OpenReadAsync();
+            if (imageStream.Length > 500 * 1024)
+            {
+                await FeedbackService
+                    .InformError("Фото аккаунта "
+                    + "должно быть в размере"
+                    + "не более 500кб.");
+                return;
+            }
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 await imageStream.CopyToAsync(memoryStream);
