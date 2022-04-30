@@ -10,8 +10,22 @@ namespace CarWashService.MobileApp
 {
     public partial class App : Application
     {
-        public static string BaseUrl { get; set; } =
-            "https://lostbluephone14.conveyor.cloud/api/";
+        public static string BaseUrl
+        {
+            get
+            {
+                if (SecureStorage.GetAsync("BaseUrl").Result is string value)
+                {
+                    if (value != null)
+                    {
+                        return value;
+                    }
+                }
+                return baseUrl;
+            }
+
+            set => SecureStorage.SetAsync("BaseUrl", value);
+        }
         public static SerializedBranch CurrentBranch { get; set; }
         public static IEnumerable<SerializedService> CurrentServices
         { get; set; }
@@ -20,13 +34,14 @@ namespace CarWashService.MobileApp
         public static SerializedUser User { get; set; }
         public static string AuthorizationValue { get; set; }
         public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(20);
+        private static string baseUrl = "https://lostbluephone14.conveyor.cloud/api/";
         private readonly string andAccelerometerIsOff = "Вы не сможете "
             + "встряхнуть устройство "
             + "для изменения таймаута API в сек.";
         private readonly string accelerometerNotSupported = "На вашем устройстве "
             + "не поддерживается акселерометр.";
-        private readonly string cannotHandleAccelerometer = "Не удалось " +
-            "настроить акселерометр.";
+        private readonly string cannotHandleAccelerometer = "Не удалось "
+            + "настроить акселерометр.";
         public static HttpClientHandler ClientHandler
         {
             get

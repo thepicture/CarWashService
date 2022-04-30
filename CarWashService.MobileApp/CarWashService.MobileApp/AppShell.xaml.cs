@@ -9,12 +9,6 @@ namespace CarWashService.MobileApp
     {
         public static TabBar TabBar = new TabBar();
 
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            Navigation.PopToRootAsync();
-        }
-
         public AppShell()
         {
             InitializeComponent();
@@ -52,7 +46,7 @@ namespace CarWashService.MobileApp
                     Route = nameof(LoginPage),
                     Icon = "authorization",
                     Title = "Авторизация",
-                    ContentTemplate = new DataTemplate(typeof(LoginPage))
+                    ContentTemplate = new DataTemplate(typeof(LoginPage)),
                 });
             TabBar
               .Items.Add(new ShellContent
@@ -104,6 +98,13 @@ namespace CarWashService.MobileApp
                      Title = "Профиль",
                      ContentTemplate = new DataTemplate(typeof(AccountPage))
                  });
+            foreach (var tabBarItem in TabBar.Items)
+            {
+                tabBarItem.Disappearing += (o, e) =>
+                {
+                    tabBarItem.Navigation.PopToRootAsync();
+                };
+            }
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

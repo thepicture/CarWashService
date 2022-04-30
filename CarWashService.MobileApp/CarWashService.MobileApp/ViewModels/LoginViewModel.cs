@@ -3,6 +3,7 @@ using CarWashService.MobileApp.Services;
 using System;
 using System.IO;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
