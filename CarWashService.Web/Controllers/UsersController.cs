@@ -88,14 +88,17 @@ namespace CarWashService.Web.Controllers
         }
 
         [Route("api/users/image")]
-        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [Authorize]
         [HttpGet]
         [ResponseType(typeof(byte[]))]
-        public async Task<IHttpActionResult> GetImageAsync()
+        public IHttpActionResult GetImageAsync()
         {
-            User userFromDatabase = await db.User.FirstAsync(u =>
-                u.Login == HttpContext.Current.User.Identity.Name);
-            return Ok(userFromDatabase.ImageBytes);
+            byte[] imageBytes = db.User.First(u =>
+                u.Login == HttpContext.Current.User.Identity.Name)
+                .ImageBytes;
+            return Ok(
+                ImageResizerService.Resize(
+                    imageBytes, qualityPercent: 5));
         }
 
         [HttpGet]

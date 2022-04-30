@@ -83,6 +83,11 @@ namespace CarWashService.MobileApp.ViewModels
         private Command changePictureCommand;
         private SerializedUser user;
 
+        public AccountViewModel()
+        {
+            User = AppIdentity.User;
+        }
+
         public ICommand ChangePictureCommand
         {
             get

@@ -30,7 +30,8 @@
                         </Frame>
                         <Label HorizontalOptions="Center"
                                FontAttributes="Bold"
-                               FontSize="Large">
+                               FontSize="Large"
+                               HorizontalTextAlignment="Center">
                             <Label.Text>
                                 <Binding Path="UserTypeName"
                                          Source="{Static services:AppIdentity.User}">
