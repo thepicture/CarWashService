@@ -75,6 +75,10 @@
                                          Text="Выход"
                                          VerticalOptions="End"
                                          Style="{StaticResource BackgroundButton}" />
+                <material:MaterialButton Command="{Binding ChangeBaseUrlCommand}"
+                                         Text="Настройки"
+                                         VerticalOptions="End"
+                                         Style="{StaticResource BackgroundButton}" />
             </StackLayout>
         </ScrollView>
     </ContentView>

@@ -33,7 +33,7 @@ namespace CarWashService.MobileApp.Services
                             .Inform(validationErrors);
                 return false;
             }
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =

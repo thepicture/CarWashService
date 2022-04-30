@@ -43,7 +43,7 @@ namespace CarWashService.MobileApp.Services
                 return false;
             }
             item.Price = int.Parse(item.PriceString);
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -94,7 +94,7 @@ namespace CarWashService.MobileApp.Services
             {
                 return false;
             }
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -134,7 +134,7 @@ namespace CarWashService.MobileApp.Services
         {
             try
             {
-                using (HttpClient client = new HttpClient())
+                using (HttpClient client = new HttpClient(App.ClientHandler))
                 {
                     client.Timeout = App.HttpClientTimeout;
                     client.DefaultRequestHeaders.Authorization =
@@ -170,7 +170,7 @@ namespace CarWashService.MobileApp.Services
         public async Task<IEnumerable<SerializedService>> GetItemsAsync
         (bool forceRefresh = false)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =

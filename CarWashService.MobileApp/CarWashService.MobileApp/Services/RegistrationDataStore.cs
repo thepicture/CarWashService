@@ -68,7 +68,7 @@ namespace CarWashService.MobileApp.Services
             }
 
             string jsonIdentity = JsonConvert.SerializeObject(item);
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.BaseAddress = new Uri(App.BaseUrl);

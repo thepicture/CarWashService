@@ -166,5 +166,35 @@ namespace CarWashService.MobileApp.ViewModels
             CaptchaService.GenerateNew();
             MessagingCenter.Send(this, "ReloadCaptcha");
         }
+
+        private Command changeBaseUrlCommand;
+
+        public ICommand ChangeBaseUrlCommand
+        {
+            get
+            {
+                if (changeBaseUrlCommand == null)
+                {
+                    changeBaseUrlCommand = new Command(ChangeBaseUrl);
+                }
+
+                return changeBaseUrlCommand;
+            }
+        }
+
+        private async void ChangeBaseUrl()
+        {
+            string url = await AppShell.Current.CurrentPage.DisplayPromptAsync(
+                        "Установить URL",
+                        $"Текущий URL: " +
+                        $"{App.BaseUrl}" +
+                        $"Введите новый URL",
+                        keyboard: Keyboard.Text,
+                        initialValue: App.BaseUrl);
+            if (url != null)
+            {
+                App.BaseUrl = url;
+            }
+        }
     }
 }

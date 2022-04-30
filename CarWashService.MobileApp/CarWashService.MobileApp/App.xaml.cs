@@ -2,6 +2,7 @@
 using CarWashService.MobileApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -10,7 +11,7 @@ namespace CarWashService.MobileApp
     public partial class App : Application
     {
         public static string BaseUrl { get; set; } =
-            "https://carwashservice-web.conveyor.cloud/api/";
+            "https://lostbluephone14.conveyor.cloud/api/";
         public static SerializedBranch CurrentBranch { get; set; }
         public static IEnumerable<SerializedService> CurrentServices
         { get; set; }
@@ -26,6 +27,15 @@ namespace CarWashService.MobileApp
             + "не поддерживается акселерометр.";
         private readonly string cannotHandleAccelerometer = "Не удалось " +
             "настроить акселерометр.";
+        public static HttpClientHandler ClientHandler
+        {
+            get
+            {
+                HttpClientHandler _handler = new HttpClientHandler();
+                _handler.ServerCertificateCustomValidationCallback += (_, __, ___, ____) => true;
+                return _handler;
+            }
+        }
         public App()
         {
             InitializeComponent();

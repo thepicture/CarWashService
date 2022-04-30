@@ -25,7 +25,7 @@ namespace CarWashService.MobileApp.Services
 
         public async Task<byte[]> GetItemAsync(string id)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -71,7 +71,7 @@ namespace CarWashService.MobileApp.Services
 
         public async Task<bool> UpdateItemAsync(byte[] item)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
