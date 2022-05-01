@@ -69,6 +69,7 @@ namespace CarWashService.MobileApp
             DependencyService.Register<OrderDataStore>();
             DependencyService.Register<OrderServicesDataStore>();
             DependencyService.Register<CaptchaService>();
+            DependencyService.Register<AndroidImageResizer>();
 
             try
             {
