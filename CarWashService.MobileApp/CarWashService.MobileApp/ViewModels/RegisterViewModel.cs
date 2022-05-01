@@ -94,7 +94,7 @@ namespace CarWashService.MobileApp.ViewModels
                     PassportNumber = PassportNumber,
                     PassportSeries = PassportSeries,
                     UserTypeId = userType?.Id ?? 0,
-                    ImageBytes = ImageBytes
+                    ImageBytes = CompressedImageBytes
                 };
 
             if (await RegistrationDataStore.AddItemAsync(identity))
