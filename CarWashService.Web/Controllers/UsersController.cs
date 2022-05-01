@@ -96,9 +96,7 @@ namespace CarWashService.Web.Controllers
             byte[] imageBytes = db.User.First(u =>
                 u.Login == HttpContext.Current.User.Identity.Name)
                 .ImageBytes;
-            return Ok(
-                ImageResizerService.Resize(
-                    imageBytes, qualityPercent: 5));
+            return Ok(imageBytes);
         }
 
         [HttpGet]
