@@ -129,6 +129,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private Command selectImageCommand;
         private byte[] imageBytes;
+        private byte[] compressedImageBytes;
 
         public ICommand SelectImageCommand
         {
@@ -148,31 +149,35 @@ namespace CarWashService.MobileApp.ViewModels
             get => imageBytes;
             set => SetProperty(ref imageBytes, value);
         }
+        public byte[] CompressedImageBytes
+        {
+            get => compressedImageBytes;
+            set => SetProperty(ref compressedImageBytes, value);
+        }
 
         private async void SelectImageAsync()
         {
             FileResult result = await MediaPicker
                .PickPhotoAsync(new MediaPickerOptions
                {
-                   Title = "Выберите фото аккаунта"
+                   Title = "Выберите фото аккаунта",
                });
             if (result == null)
             {
                 return;
             }
-            Stream imageStream = await result.OpenReadAsync();
-            if (imageStream.Length > 500 * 1024)
+            using (Stream imageStream = await result.OpenReadAsync())
             {
-                await FeedbackService
-                    .InformError("Фото аккаунта "
-                    + "должно быть в размере"
-                    + "не более 500кб.");
-                return;
-            }
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                await imageStream.CopyToAsync(memoryStream);
-                ImageBytes = memoryStream.ToArray();
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    await imageStream.CopyToAsync(memoryStream);
+                    ImageBytes = memoryStream.ToArray();
+                    CompressedImageBytes = ImageResizer
+                        .ResizeImage(ImageBytes,
+                                     App.DefaultImageWidth,
+                                     App.DefaultImageHeight,
+                                     App.DefaultQuality);
+                }
             }
             AccountImage = ImageSource.FromStream(() =>
             {

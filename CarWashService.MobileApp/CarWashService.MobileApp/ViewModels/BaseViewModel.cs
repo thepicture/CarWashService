@@ -23,13 +23,15 @@ namespace CarWashService.MobileApp.ViewModels
         public IDataStore<SerializedRegistrationUser> RegistrationDataStore =>
             DependencyService.Get<IDataStore<SerializedRegistrationUser>>();
         public IDataStore<SerializedLoginUser> LoginDataStore =>
-           DependencyService.Get<IDataStore<SerializedLoginUser>>();
+            DependencyService.Get<IDataStore<SerializedLoginUser>>();
         public IDataStore<IEnumerable<SerializedService>> OrderServicesDataStore =>
-          DependencyService.Get<IDataStore<IEnumerable<SerializedService>>>();
+            DependencyService.Get<IDataStore<IEnumerable<SerializedService>>>();
         public IDataStore<byte[]> UserImageDataStore =>
             DependencyService.Get<IDataStore<byte[]>>();
         public ICaptchaService CaptchaService =>
             DependencyService.Get<ICaptchaService>();
+        public IImageResizer ImageResizer =>
+            DependencyService.Get<IImageResizer>();
         public bool IsCanDelete => "Администратор"
             .Contains(AppIdentity.User.UserTypeName);
 
