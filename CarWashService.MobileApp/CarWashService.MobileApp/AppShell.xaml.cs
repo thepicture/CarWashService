@@ -1,6 +1,5 @@
 ﻿using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
-using System;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -39,22 +38,20 @@ namespace CarWashService.MobileApp
         public static void LoadLoginAndRegisterShell()
         {
             TabBar.Items.Clear();
-            TabBar
-                .Items.Add(new ShellContent
-                {
-                    Route = nameof(LoginPage),
-                    Icon = "authorization",
-                    Title = "Авторизация",
-                    ContentTemplate = new DataTemplate(typeof(LoginPage)),
-                });
-            TabBar
-              .Items.Add(new ShellContent
-              {
-                  Route = nameof(LoginPage),
-                  Icon = "registration",
-                  Title = "Регистрация",
-                  ContentTemplate = new DataTemplate(typeof(RegisterPage))
-              });
+            TabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(LoginPage),
+                Icon = "authorization",
+                Title = "Авторизация",
+                ContentTemplate = new DataTemplate(typeof(LoginPage)),
+            });
+            TabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(LoginPage),
+                Icon = "registration",
+                Title = "Регистрация",
+                ContentTemplate = new DataTemplate(typeof(RegisterPage))
+            });
         }
 
         private bool IsLoggedIn()
@@ -65,50 +62,41 @@ namespace CarWashService.MobileApp
         public static void SetShellStacksDependingOnRole()
         {
             TabBar.Items.Clear();
-            TabBar
-                .Items.Add(new ShellContent
-                {
-                    Route = nameof(BranchesPage),
-                    Icon = "branch",
-                    Title = "Филиалы",
-                    ContentTemplate = new DataTemplate(typeof(BranchesPage)),
-                });
-            TabBar
-               .Items.Add(new ShellContent
-               {
-                   Route = nameof(ServicesPage),
-                   Icon = "logo",
-                   Title = "Услуги",
-                   ContentTemplate = new DataTemplate(typeof(ServicesPage))
-               });
-            TabBar
-               .Items.Add(new ShellContent
-               {
-                   Route = nameof(OrdersPage),
-                   Icon = "icon_feed",
-                   Title = "Заказы",
-                   ContentTemplate = new DataTemplate(typeof(OrdersPage))
-               });
-            TabBar
-                 .Items.Add(new ShellContent
-                 {
-                     Route = nameof(AccountPage),
-                     Icon = "profile",
-                     Title = "Профиль",
-                     ContentTemplate = new DataTemplate(typeof(AccountPage))
-                 });
-            foreach (var tabBarItem in TabBar.Items)
+            TabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(BranchesPage),
+                Icon = "branch",
+                Title = "Филиалы",
+                ContentTemplate = new DataTemplate(typeof(BranchesPage)),
+            });
+            TabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(ServicesPage),
+                Icon = "logo",
+                Title = "Услуги",
+                ContentTemplate = new DataTemplate(typeof(ServicesPage))
+            });
+            TabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(OrdersPage),
+                Icon = "icon_feed",
+                Title = "Заказы",
+                ContentTemplate = new DataTemplate(typeof(OrdersPage))
+            });
+            TabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(AccountPage),
+                Icon = "profile",
+                Title = "Профиль",
+                ContentTemplate = new DataTemplate(typeof(AccountPage))
+            });
+            foreach (ShellSection tabBarItem in TabBar.Items)
             {
                 tabBarItem.Disappearing += (o, e) =>
                 {
-                    tabBarItem.Navigation.PopToRootAsync();
+                    _ = tabBarItem.Navigation.PopToRootAsync();
                 };
             }
-        }
-
-        private async void OnMenuItemClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//LoginPage");
         }
     }
 }
