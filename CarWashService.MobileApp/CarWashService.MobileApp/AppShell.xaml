@@ -83,5 +83,4 @@
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
-    <TabBar x:Name="CommonTabBar"/>
 </Shell>

@@ -12,7 +12,6 @@ namespace CarWashService.MobileApp
         public AppShell()
         {
             InitializeComponent();
-
             Items.Add(TabBar);
 
             Routing.RegisterRoute(
