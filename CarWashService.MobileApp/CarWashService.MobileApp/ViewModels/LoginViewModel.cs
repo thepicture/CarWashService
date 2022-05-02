@@ -2,6 +2,7 @@
 using CarWashService.MobileApp.Services;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -184,13 +185,14 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void ChangeBaseUrl()
         {
+            string currentUrl = App.BaseUrl;
             string url = await AppShell.Current.CurrentPage.DisplayPromptAsync(
                         "Установить URL",
                         "Текущий URL:\n" +
-                        $"{App.BaseUrl}\n" +
+                        $"{currentUrl}\n" +
                         "Введите новый URL",
                         keyboard: Keyboard.Text,
-                        initialValue: App.BaseUrl);
+                        initialValue: currentUrl);
             if (url != null)
             {
                 App.BaseUrl = url;

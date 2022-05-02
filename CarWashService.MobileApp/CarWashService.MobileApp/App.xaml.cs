@@ -12,23 +12,11 @@ namespace CarWashService.MobileApp
     {
         public static string BaseUrl
         {
-            get
-            {
-                if (SecureStorage.GetAsync("BaseUrl").Result is string value)
-                {
-                    if (value != null)
-                    {
-                        return value;
-                    }
-                }
-                return baseUrl;
-            }
+            get => Preferences.Get(
+                nameof(BaseUrl), baseUrl);
 
-            set
-            {
-                baseUrl = value;
-                SecureStorage.SetAsync("BaseUrl", value);
-            }
+            set => Preferences.Set(
+                nameof(BaseUrl), value);
         }
         public static SerializedBranch CurrentBranch { get; set; }
         public static IEnumerable<SerializedService> CurrentServices
@@ -38,7 +26,7 @@ namespace CarWashService.MobileApp
         public static SerializedUser User { get; set; }
         public static string AuthorizationValue { get; set; }
         public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(20);
-        private static string baseUrl = "https://lostbluephone14.conveyor.cloud/api/";
+        private static readonly string baseUrl = "https://lostbluephone14.conveyor.cloud/api/";
         private readonly string andAccelerometerIsOff = "Вы не сможете "
             + "встряхнуть устройство "
             + "для изменения таймаута API в сек.";
