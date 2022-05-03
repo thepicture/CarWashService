@@ -20,21 +20,6 @@ namespace CarWashService.MobileApp.Views
             BindingContext = _viewModel;
         }
 
-        private async void CheckConnectionAsync()
-        {
-            if (Connectivity.NetworkAccess == NetworkAccess.None)
-            {
-                if (!await DependencyService.Get<IFeedbackService>()
-                    .Ask("У вас не подключена сеть. " +
-                    "Вы сможете смотреть данные, но " +
-                    "приложение может аварийно завершаться. " +
-                    "Продолжить?"))
-                {
-                    System.Environment.Exit(0);
-                }
-            }
-        }
-
         private void OnPinClicked(object sender, PinClickedEventArgs e)
         {
             _viewModel
@@ -45,6 +30,7 @@ namespace CarWashService.MobileApp.Views
         protected async override void OnAppearing()
         {
             _viewModel.OnAppearing();
+            base.OnAppearing();
             try
             {
                 Plugin.Geolocator.Abstractions.Position position =
@@ -58,8 +44,6 @@ namespace CarWashService.MobileApp.Views
             {
                 Debug.WriteLine(ex);
             }
-            base.OnAppearing();
-            CheckConnectionAsync();
         }
     }
 }
