@@ -13,7 +13,7 @@
              Title="Авторизация"
              IsEnabled="{Binding IsNotBlocked}">
     <ContentView>
-        <ScrollView Margin="0,40,0,0">
+        <ScrollView Margin="0,20,0,0">
             <StackLayout Padding="10,0,10,0"
                          VerticalOptions="Fill">
                 <StackLayout Orientation="Horizontal"
@@ -67,16 +67,16 @@
                 </StackLayout>
                 <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
                                            Text="Запомнить меня" />
+                <material:MaterialButton Command="{Binding ChangeBaseUrlCommand}"
+                                         VerticalOptions="End"
+                                         Opacity="0"
+                                         Style="{StaticResource BackgroundButton}" />
                 <material:MaterialButton Command="{Binding LoginCommand}"
                                          Text="Авторизоваться"
-                                         VerticalOptions="EndAndExpand"
+                                         VerticalOptions="End"
                                          Style="{StaticResource BaseButton}" />
                 <material:MaterialButton Command="{Binding ExitCommand}"
                                          Text="Выход"
-                                         VerticalOptions="End"
-                                         Style="{StaticResource BackgroundButton}" />
-                <material:MaterialButton Command="{Binding ChangeBaseUrlCommand}"
-                                         Text="Настройки"
                                          VerticalOptions="End"
                                          Style="{StaticResource BackgroundButton}" />
             </StackLayout>
