@@ -24,7 +24,7 @@ namespace CarWashService.MobileApp
             {
                 if (SetProperty(ref searchText, value))
                 {
-                    _ = LoadServicesAsync();
+                    LoadServicesAsync();
                 }
             }
         }
@@ -41,10 +41,10 @@ namespace CarWashService.MobileApp
         {
             SelectedServices = new ObservableCollection<SerializedService>();
             Services = new ObservableCollection<SerializedService>();
-            _ = LoadServicesAsync();
+            LoadServicesAsync();
         }
 
-        private async Task LoadServicesAsync()
+        private async void LoadServicesAsync()
         {
             Services.Clear();
             SelectedServices.Clear();
@@ -63,8 +63,8 @@ namespace CarWashService.MobileApp
             }
             foreach (SerializedService service in currentServices)
             {
-                await Task.Delay(200);
                 Services.Add(service);
+                await Task.Delay(200);
             }
         }
 
@@ -131,9 +131,10 @@ namespace CarWashService.MobileApp
 
         private async void GoToMakeOrderAsync()
         {
-            App.CurrentOrder = null;
-            App.CurrentServices = SelectedServices;
-            await Shell.Current.GoToAsync($"{nameof(MakeOrderPage)}");
+            await Shell.Current.Navigation.PushAsync(
+                new MakeOrderPage(
+                    new MakeOrderViewModel(
+                        SelectedServices, CurrentBranch, new SerializedOrder())));
         }
         public bool IsAbleToMakeOrder
         {
@@ -151,9 +152,10 @@ namespace CarWashService.MobileApp
         private ObservableCollection<SerializedService> selectedServices;
         private bool isAbleToMakeOrder;
 
-        public ServicesViewModel(bool isForOrder)
+        public ServicesViewModel(bool isForOrder, SerializedBranch inputBranch = null)
         {
             IsForOrder = isForOrder;
+            CurrentBranch = inputBranch;
         }
 
         public ICommand ToggleServiceCommand
@@ -170,6 +172,7 @@ namespace CarWashService.MobileApp
         }
 
         public bool IsForOrder { get; }
+        public SerializedBranch CurrentBranch { get; }
 
         private void ToggleService(object parameter)
         {

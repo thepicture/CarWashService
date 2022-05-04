@@ -4,9 +4,7 @@ using CarWashService.MobileApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -23,7 +21,7 @@ namespace CarWashService.MobileApp.ViewModels
             InsertBranchesIntoPositions();
         }
 
-        private async Task InsertBranchesIntoPositions()
+        private async void InsertBranchesIntoPositions()
         {
             Locations.Clear();
             IEnumerable<SerializedBranch> branches =
@@ -60,8 +58,7 @@ namespace CarWashService.MobileApp.ViewModels
             }
             catch (Exception ex)
             {
-                await FeedbackService.Inform(ex);
-                Debug.WriteLine(ex);
+                await FeedbackService.InformError(ex);
             }
         }
 
@@ -85,8 +82,9 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void GoToSelectedBranchPageAsync()
         {
-            App.CurrentBranch = SelectedLocation.Branch;
-            await Shell.Current.GoToAsync($"{nameof(AddEditBranchPage)}");
+            await AppShell.Current.Navigation.PushAsync(
+                new AddEditBranchPage(
+                    new AddEditBranchViewModel(SelectedLocation.Branch)));
         }
 
         private Command goToAddBranchPageCommand;
@@ -106,8 +104,10 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void GoToAddBranchPageAsync()
         {
-            App.CurrentBranch = new SerializedBranch();
-            await Shell.Current.GoToAsync($"{nameof(AddEditBranchPage)}");
+            await AppShell.Current.Navigation.PushAsync(
+                new AddEditBranchPage(
+                    new AddEditBranchViewModel(
+                        new SerializedBranch())));
         }
 
         private LocationHelper selectedLocation;

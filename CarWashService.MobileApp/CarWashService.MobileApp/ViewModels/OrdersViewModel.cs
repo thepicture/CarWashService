@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -40,13 +39,10 @@ namespace CarWashService.MobileApp.ViewModels
                                                  StringComparison.OrdinalIgnoreCase);
                         }));
             }
-            Device.BeginInvokeOnMainThread(() =>
+            foreach (SerializedOrder currentOrder in currentOrders)
             {
-                foreach (SerializedOrder currentOrder in currentOrders)
-                {
-                    Orders.Add(currentOrder);
-                }
-            });
+                Orders.Add(currentOrder);
+            }
         }
 
         internal void OnAppearing()
@@ -85,26 +81,26 @@ namespace CarWashService.MobileApp.ViewModels
         }
 
         private ObservableCollection<SerializedOrder> orders;
-        private Command goToOrderPageCommand;
+        private Command<SerializedOrder> goToOrderPageCommand;
 
-        public ICommand GoToOrderPageCommand
+        public Command<SerializedOrder> GoToOrderPageCommand
         {
             get
             {
                 if (goToOrderPageCommand == null)
                 {
-                    goToOrderPageCommand = new Command(GoToOrderPageAsync);
+                    goToOrderPageCommand = new Command<SerializedOrder>(GoToOrderPageAsync);
                 }
 
                 return goToOrderPageCommand;
             }
         }
 
-        private async void GoToOrderPageAsync(object parameter)
+        private async void GoToOrderPageAsync(SerializedOrder parameter)
         {
-            App.CurrentOrder = parameter as SerializedOrder;
-            await Shell.Current.GoToAsync(
-                $"{nameof(MakeOrderPage)}");
+            await AppShell.Current.Navigation.PushAsync(
+                new MakeOrderPage(
+                    new MakeOrderViewModel(null, null, parameter)));
         }
 
         private Command<SerializedOrder> deleteOrderCommand;

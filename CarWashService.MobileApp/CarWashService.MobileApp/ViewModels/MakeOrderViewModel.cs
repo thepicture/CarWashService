@@ -15,26 +15,23 @@ namespace CarWashService.MobileApp.ViewModels
 
         private ObservableCollection<SerializedService> servicesOfOrder;
 
-        internal void OnAppearing()
+        internal async void OnAppearing()
         {
-            IsNew = App.CurrentOrder == null;
-            if (App.CurrentOrder != null)
+            IsNew = CurrentOrder.Id == 0;
+            if (IsNew)
             {
-                _ = LoadServicesOfOrderAsync()
-                    .ContinueWith((task) =>
-                    {
-                        TotalPrice = ServicesOfOrder.Sum(s => s.Price);
-                        AppointmentDateTime = DateTime.Parse(
-                            App.CurrentOrder.AppointmentDate);
-                    });
-            }
-            else
-            {
-                foreach (SerializedService serviceOfOrder in App.CurrentServices)
+                foreach (SerializedService serviceOfOrder in CurrentServices)
                 {
                     ServicesOfOrder.Add(serviceOfOrder);
                 }
                 TotalPrice = ServicesOfOrder.Sum(s => s.Price);
+            }
+            else
+            {
+                await LoadServicesOfOrderAsync();
+                TotalPrice = ServicesOfOrder.Sum(s => s.Price);
+                AppointmentDateTime = DateTime.Parse(
+                    CurrentOrder.AppointmentDate);
             }
         }
 
@@ -42,9 +39,8 @@ namespace CarWashService.MobileApp.ViewModels
         {
             ServicesOfOrder.Clear();
             IEnumerable<SerializedService> currentServicesOfOrder =
-                await OrderServicesDataStore
-                .GetItemAsync(
-                    App.CurrentOrder.Id.ToString());
+                await OrderServicesDataStore.GetItemAsync(
+                    CurrentOrder.Id.ToString());
             foreach (SerializedService serviceOfOrder in currentServicesOfOrder)
             {
                 servicesOfOrder.Add(serviceOfOrder);
@@ -78,7 +74,8 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 AppointmentDateTimeAsDateTime = AppointmentDateTime,
                 Services = ServicesOfOrder.Select(s => s.Id),
-                BranchId = CurrentBranch.Id
+                BranchId = CurrentBranch.Id,
+                Branch = CurrentBranch
             };
             if (await OrderDataStore.AddItemAsync(order))
             {
@@ -93,8 +90,6 @@ namespace CarWashService.MobileApp.ViewModels
             get => branches;
             set => SetProperty(ref branches, value);
         }
-
-        public SerializedBranch CurrentBranch => App.CurrentBranch;
 
         private DateTime appointmentDateTime = DateTime.Now.AddHours(1);
 
@@ -119,9 +114,14 @@ namespace CarWashService.MobileApp.ViewModels
 
         private Command deleteOrderCommand;
 
-        public MakeOrderViewModel()
+        public MakeOrderViewModel(ObservableCollection<SerializedService> selectedServices,
+                                  SerializedBranch inputBranch,
+                                  SerializedOrder inputOrder)
         {
             ServicesOfOrder = new ObservableCollection<SerializedService>();
+            CurrentServices = selectedServices;
+            CurrentBranch = inputBranch;
+            CurrentOrder = inputOrder;
         }
 
         public ICommand DeleteOrderCommand
@@ -137,13 +137,14 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
+        public ObservableCollection<SerializedService> CurrentServices { get; }
+        public SerializedBranch CurrentBranch { get; }
+        public SerializedOrder CurrentOrder { get; }
+
         private async void DeleteOrderAsync()
         {
-            if (await OrderDataStore
-                .DeleteItemAsync(App
-                .CurrentOrder
-                .Id
-                .ToString()))
+            if (await OrderDataStore.DeleteItemAsync(
+                CurrentOrder.Id.ToString()))
             {
                 await Shell.Current.GoToAsync("..");
             }

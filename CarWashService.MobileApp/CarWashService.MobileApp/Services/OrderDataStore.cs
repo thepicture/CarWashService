@@ -18,14 +18,14 @@ namespace CarWashService.MobileApp.Services
         {
             StringBuilder validationErrors = new StringBuilder();
             if (item.AppointmentDateTimeAsDateTime.TimeOfDay
-                < DateTime.Parse(App.CurrentBranch.WorkFrom).TimeOfDay
+                < DateTime.Parse(item.Branch.WorkFrom).TimeOfDay
               || item.AppointmentDateTimeAsDateTime.TimeOfDay
-              > DateTime.Parse(App.CurrentBranch.WorkTo).TimeOfDay)
+              > DateTime.Parse(item.Branch.WorkTo).TimeOfDay)
             {
                 _ = validationErrors.AppendLine("В указанное вами время " +
                     "филиал не работает. Он работает с " +
-                    $"{DateTime.Parse(App.CurrentBranch.WorkFrom).TimeOfDay:hh\\:mm} до " +
-                    $"{DateTime.Parse(App.CurrentBranch.WorkTo).TimeOfDay:hh\\:mm}.");
+                    $"{DateTime.Parse(item.Branch.WorkFrom).TimeOfDay:hh\\:mm} до " +
+                    $"{DateTime.Parse(item.Branch.WorkTo).TimeOfDay:hh\\:mm}.");
             }
             if (item.AppointmentDateTimeAsDateTime < DateTime.Now)
             {

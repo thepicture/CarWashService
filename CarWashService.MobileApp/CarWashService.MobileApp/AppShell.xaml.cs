@@ -13,15 +13,6 @@ namespace CarWashService.MobileApp
             InitializeComponent();
             Items.Add(TabBar);
 
-            Routing.RegisterRoute(
-                nameof(AddEditBranchPage),
-                typeof(AddEditBranchPage));
-            Routing.RegisterRoute(
-                nameof(LoginPage),
-                typeof(LoginPage));
-            Routing.RegisterRoute(
-               nameof(MakeOrderPage),
-               typeof(MakeOrderPage));
             if (IsLoggedIn())
             {
                 SetShellStacksDependingOnRole();

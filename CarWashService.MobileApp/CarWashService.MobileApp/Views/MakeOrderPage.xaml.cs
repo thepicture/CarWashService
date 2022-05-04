@@ -8,10 +8,10 @@ namespace CarWashService.MobileApp.Views
     public partial class MakeOrderPage : ContentPage
     {
         private readonly MakeOrderViewModel _viewModel;
-        public MakeOrderPage()
+        public MakeOrderPage(MakeOrderViewModel makeOrderViewModel)
         {
             InitializeComponent();
-            BindingContext = _viewModel = new MakeOrderViewModel();
+            BindingContext = _viewModel = makeOrderViewModel;
         }
 
         protected override void OnAppearing()

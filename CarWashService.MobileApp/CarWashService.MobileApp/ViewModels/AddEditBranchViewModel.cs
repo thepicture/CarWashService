@@ -61,13 +61,12 @@ namespace CarWashService.MobileApp.ViewModels
             set => SetProperty(ref currentBranch, value);
         }
 
-        public AddEditBranchViewModel()
+        public AddEditBranchViewModel(SerializedBranch inputBranch)
         {
-            CurrentBranch = App
-                .CurrentBranch;
+            CurrentBranch = inputBranch;
             if (CurrentBranch.Id != 0)
             {
-                Title = "Филиал " + CurrentBranch.Title;
+                Title = "Редактирование филиала";
                 StreetName = CurrentBranch.StreetName;
                 CityName = CurrentBranch.CityName;
                 WorkFrom = TimeSpan.Parse(CurrentBranch.WorkFrom);
@@ -225,10 +224,9 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void PerformGoToServicesForOrderPageAsync()
         {
-            App.CurrentBranch = CurrentBranch;
             await Shell.Current.Navigation.PushAsync(
                 new ServicesPage(
-                    new ServicesViewModel(isForOrder: true)));
+                    new ServicesViewModel(isForOrder: true, CurrentBranch)));
         }
 
         private Command activateEditBranchCommand;

@@ -18,10 +18,6 @@ namespace CarWashService.MobileApp
             set => Preferences.Set(
                 nameof(BaseUrl), value);
         }
-        public static SerializedBranch CurrentBranch { get; set; }
-        public static IEnumerable<SerializedService> CurrentServices
-        { get; set; }
-        public static SerializedOrder CurrentOrder { get; set; }
         public static SerializedUser User { get; set; }
         public static string AuthorizationValue { get; set; }
         public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(20);

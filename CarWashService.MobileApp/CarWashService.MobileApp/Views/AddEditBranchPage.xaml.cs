@@ -7,10 +7,10 @@ namespace CarWashService.MobileApp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddEditBranchPage : ContentPage
     {
-        public AddEditBranchPage()
+        public AddEditBranchPage(AddEditBranchViewModel addEditBranchViewModel)
         {
             InitializeComponent();
-            BindingContext = new AddEditBranchViewModel();
+            BindingContext = addEditBranchViewModel;
         }
     }
 }

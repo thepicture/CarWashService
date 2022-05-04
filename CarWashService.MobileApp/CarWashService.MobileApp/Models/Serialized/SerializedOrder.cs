@@ -20,5 +20,7 @@ namespace CarWashService.MobileApp.Models.Serialized
         public decimal TotalPrice { get; set; }
         [JsonIgnore]
         public DateTime AppointmentDateTimeAsDateTime { get; set; }
+        [JsonIgnore]
+        public SerializedBranch Branch { get; set; }
     }
 }
