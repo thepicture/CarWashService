@@ -2,7 +2,6 @@
 using CarWashService.MobileApp.Services;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -27,58 +26,64 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void OnLoginClickedAsync(object obj)
         {
+            IsBusy = true;
             if (string.IsNullOrWhiteSpace(CaptchaText)
                 && CountOfIncorrectAttempts > 2)
             {
                 await FeedbackService.InformError("Введите captcha.");
-                return;
-            }
 
-            if (CaptchaText != null && !CaptchaText.Equals(CaptchaService.Text,
-                                   StringComparison.OrdinalIgnoreCase))
-            {
-                await FeedbackService.InformError("Неверная captcha. " +
-                    "Интерфейс заблокирован на 5 секунд.");
-                IsNotBlocked = false;
-                Device.StartTimer(
-                    TimeSpan.FromSeconds(5), () =>
-                    {
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            FeedbackService.Inform("Интерфейс разблокирован.");
-                            IsNotBlocked = true;
-                        });
-                        return false;
-                    });
-                return;
-            }
-
-            string encodedLoginAndPassword =
-                new LoginAndPasswordToBasicEncoder()
-                .Encode(Login, Password);
-            AppIdentity.AuthorizationValue = encodedLoginAndPassword;
-            SerializedLoginUser serializedLoginUser =
-                new SerializedLoginUser
-                {
-                    Login = Login,
-                    Password = Password,
-                    IsRememberMe = IsRememberMe
-                };
-            if (await LoginDataStore.AddItemAsync(serializedLoginUser))
-            {
-                AppShell.SetShellStacksDependingOnRole();
-                CountOfIncorrectAttempts = 0;
-                CaptchaService.Invalidate();
             }
             else
             {
-                CountOfIncorrectAttempts++;
-                if (CountOfIncorrectAttempts == 3)
+                if (CaptchaText != null && !CaptchaText.Equals(CaptchaService.Text,
+                                       StringComparison.OrdinalIgnoreCase))
                 {
-                    CaptchaService.GenerateNew();
-                    MessagingCenter.Send(this, "ReloadCaptcha");
+                    await FeedbackService.InformError("Неверная captcha. " +
+                        "Интерфейс заблокирован на 5 секунд.");
+                    IsNotBlocked = false;
+                    Device.StartTimer(
+                        TimeSpan.FromSeconds(5), () =>
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                _ = FeedbackService.Inform("Интерфейс разблокирован.");
+                                IsNotBlocked = true;
+                            });
+                            return false;
+                        });
+                }
+                else
+                {
+
+                    string encodedLoginAndPassword =
+                        new LoginAndPasswordToBasicEncoder()
+                        .Encode(Login, Password);
+                    AppIdentity.AuthorizationValue = encodedLoginAndPassword;
+                    SerializedLoginUser serializedLoginUser =
+                        new SerializedLoginUser
+                        {
+                            Login = Login,
+                            Password = Password,
+                            IsRememberMe = IsRememberMe
+                        };
+                    if (await LoginDataStore.AddItemAsync(serializedLoginUser))
+                    {
+                        AppShell.SetShellStacksDependingOnRole();
+                        CountOfIncorrectAttempts = 0;
+                        CaptchaService.Invalidate();
+                    }
+                    else
+                    {
+                        CountOfIncorrectAttempts++;
+                        if (CountOfIncorrectAttempts == 3)
+                        {
+                            CaptchaService.GenerateNew();
+                            MessagingCenter.Send(this, "ReloadCaptcha");
+                        }
+                    }
                 }
             }
+            IsBusy = false;
         }
         private MemoryStream captchaImage;
         private string login;

@@ -35,12 +35,20 @@ namespace CarWashService.MobileApp.ViewModels
         public bool IsCanDelete => "Администратор"
             .Contains(AppIdentity.User.UserTypeName);
 
-        bool isBusy = false;
+        private bool isBusy = false;
         public bool IsBusy
         {
             get => isBusy;
-            set => SetProperty(ref isBusy, value);
+            set
+            {
+                if (SetProperty(ref isBusy, value))
+                {
+                    OnPropertyChanged(
+                        nameof(IsNotBusy));
+                }
+            }
         }
+        public bool IsNotBusy => !IsBusy;
         private bool isRefreshing = false;
         public bool IsRefreshing
         {
