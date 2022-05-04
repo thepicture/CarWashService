@@ -89,8 +89,10 @@ namespace CarWashService.MobileApp.Services
                     {
                         await DependencyService
                                .Get<IFeedbackService>()
-                               .Inform("Пользователь с таким логином "
-                                       + "уже есть.");
+                               .Inform("Пользователь "
+                               + "с введёнными логином "
+                               + "или почтой"
+                               + "уже есть.");
                     }
                     else
                     {
