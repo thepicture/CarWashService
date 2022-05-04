@@ -1,6 +1,7 @@
 ﻿using CarWashService.MobileApp.Models;
 using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
+using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -66,7 +67,14 @@ namespace CarWashService.MobileApp.ViewModels
             CurrentBranch = inputBranch;
             if (CurrentBranch.Id != 0)
             {
-                Title = "Редактирование филиала";
+                if (AppIdentity.User.UserTypeName == "Клиент")
+                {
+                    Title = "Описание филиала";
+                }
+                else
+                {
+                    Title = "Редактирование филиала";
+                }
                 StreetName = CurrentBranch.StreetName;
                 CityName = CurrentBranch.CityName;
                 WorkFrom = TimeSpan.Parse(CurrentBranch.WorkFrom);
