@@ -82,6 +82,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void RegisterAsync()
         {
+            IsBusy = true;
             SerializedRegistrationUser identity =
                 new SerializedRegistrationUser
                 {
@@ -101,6 +102,7 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 AppShell.LoadLoginAndRegisterShell();
             }
+            IsBusy = false;
         }
 
         private string login;
