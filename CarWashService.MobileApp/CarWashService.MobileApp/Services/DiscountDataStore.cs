@@ -31,7 +31,16 @@ namespace CarWashService.MobileApp.Services
                 _ = validationErrors.AppendLine("Дата окончания " +
                     "должна быть позднее даты начала.");
             }
-
+            if (item.WorkFromAsDate == DateTime.MinValue)
+            {
+                _ = validationErrors.AppendLine("Укажите корректную " +
+                    "дату начала.");
+            }
+            if (item.WorkToAsDate == DateTime.MinValue)
+            {
+                _ = validationErrors.AppendLine("Укажите корректную " +
+                    "дату окончания.");
+            }
             if (validationErrors.Length > 0)
             {
                 await DependencyService

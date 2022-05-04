@@ -10,33 +10,32 @@ namespace CarWashService.MobileApp.ViewModels
 
         private SerializedDiscount currentService;
 
-        public AddDiscountViewModel(SerializedDiscount inputDiscount = null)
+        public AddDiscountViewModel(int serviceId,
+                                    SerializedDiscount inputDiscount = null)
         {
             if (inputDiscount == null)
             {
-                CurrentDiscount = new SerializedDiscount();
+                CurrentDiscount = new SerializedDiscount
+                {
+                    WorkFrom = DateTime.Now.ToString(),
+                    WorkTo = DateTime.Now
+                    .AddDays(1)
+                    .ToString()
+                };
             }
             else
             {
                 CurrentDiscount = inputDiscount;
-                DiscountPercent = CurrentDiscount.DiscountPercent.ToString();
-                WorkFrom = CurrentDiscount.WorkFromAsDate;
-                WorkTo = CurrentDiscount.WorkToAsDate;
+                CurrentDiscount.DiscountPercentAsString =
+                    CurrentDiscount.DiscountPercent.ToString();
             }
+            CurrentDiscount.ServiceId = serviceId;
         }
 
         public SerializedDiscount CurrentDiscount
         {
             get => currentService;
             set => SetProperty(ref currentService, value);
-        }
-
-        private string discountPercent;
-
-        public string DiscountPercent
-        {
-            get => discountPercent;
-            set => SetProperty(ref discountPercent, value);
         }
 
         private Command saveChangesCommand;
@@ -56,46 +55,11 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            CurrentDiscount.DiscountPercentAsString = DiscountPercent;
-            if (WorkFrom == DateTime.MinValue)
-            {
-                CurrentDiscount.WorkFrom = DateTime.Now.ToString();
-            }
-            else
-            {
-                CurrentDiscount.WorkFrom = WorkFrom.ToString();
-            }
-            if (WorkTo == DateTime.MinValue)
-            {
-                CurrentDiscount.WorkFrom = DateTime.Now.ToString();
-            }
-            else
-            {
-                CurrentDiscount.WorkTo = WorkTo.ToString();
-            }
-            CurrentDiscount.ServiceId = App.CurrentService.Id;
             if (await DiscountDataStore.AddItemAsync(CurrentDiscount))
             {
                 await Shell.Current.GoToAsync("..");
             }
         }
-
-        private DateTime workFrom = DateTime.Now;
-
-        public DateTime WorkFrom
-        {
-            get => workFrom;
-            set => SetProperty(ref workFrom, value);
-        }
-
-        private DateTime workTo = DateTime.Now.AddDays(1);
-
-        public DateTime WorkTo
-        {
-            get => workTo;
-            set => SetProperty(ref workTo, value);
-        }
-
 
         public bool IsCanDeleteDiscount => CurrentDiscount.Id != 0 && IsCanDelete;
         private Command deleteDiscountCommand;

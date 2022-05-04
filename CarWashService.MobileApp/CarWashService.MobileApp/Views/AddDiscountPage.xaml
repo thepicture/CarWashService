@@ -30,7 +30,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <material:MaterialTextField Text="{Binding DiscountPercent}"
+                    <material:MaterialTextField Text="{Binding CurrentDiscount.DiscountPercentAsString}"
                                                 Placeholder="Введите процент скидки"
                                                 LeadingIcon="branch"
                                                 InputType="Numeric"
@@ -50,9 +50,9 @@
                                             TintColor="{StaticResource Primary}"
                                             HelperText="* можно оставить пустым" />
                 <Label Text="* Укажите дату начала" />
-                <material:MaterialDatePicker Date="{Binding WorkFrom}" />
+                <material:MaterialDatePicker Date="{Binding CurrentDiscount.WorkFrom}" />
                 <Label Text="* Укажите дату окончания" />
-                <material:MaterialDatePicker Date="{Binding WorkTo}" />
+                <material:MaterialDatePicker Date="{Binding CurrentDiscount.WorkTo}" />
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
                                          Text="Сохранить"
                                          VerticalOptions="EndAndExpand"

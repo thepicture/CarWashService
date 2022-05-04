@@ -109,7 +109,6 @@ namespace CarWashService.MobileApp
 
         private async void GoToDiscountsAsync(SerializedService parameter)
         {
-            App.CurrentService = parameter;
             await AppShell.Current.Navigation.PushAsync(
                 new ServiceDiscountsPage(
                     new ServiceDiscountsViewModel(parameter.Id)));

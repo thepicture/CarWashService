@@ -55,8 +55,9 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void PerformGoToAddDiscountPageAsync()
         {
-            await Shell.Current.GoToAsync(
-                $"{nameof(AddDiscountPage)}");
+            await Shell.Current.Navigation.PushAsync(
+                new AddDiscountPage(
+                    new AddDiscountViewModel(ServiceId)));
         }
 
         private Command<SerializedDiscount> deleteDiscountCommand;
@@ -118,7 +119,7 @@ namespace CarWashService.MobileApp.ViewModels
         {
             await Shell.Current.Navigation.PushAsync(
                 new AddDiscountPage(
-                    new AddDiscountViewModel(discount)));
+                    new AddDiscountViewModel(ServiceId, discount)));
         }
     }
 }
