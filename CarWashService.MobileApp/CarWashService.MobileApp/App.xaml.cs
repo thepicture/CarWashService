@@ -20,7 +20,7 @@ namespace CarWashService.MobileApp
         }
         public static SerializedUser User { get; set; }
         public static string AuthorizationValue { get; set; }
-        public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(20);
+        public static TimeSpan HttpClientTimeout = TimeSpan.FromSeconds(30);
         private static readonly string baseUrl = "https://lostbluephone14.conveyor.cloud/api/";
         private readonly string andAccelerometerIsOff = "Вы не сможете "
             + "встряхнуть устройство "
