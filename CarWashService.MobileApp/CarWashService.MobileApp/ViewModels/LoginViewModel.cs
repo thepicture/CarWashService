@@ -1,5 +1,4 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
-using CarWashService.MobileApp.Services;
 using System;
 using System.IO;
 using System.Windows.Input;
@@ -9,97 +8,67 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        public int CountOfIncorrectAttempts
-        {
-            get => countOfIncorrectAttempts;
-            set => SetProperty(ref countOfIncorrectAttempts, value);
-        }
-        public IAuthenticator Authenticator =>
-            DependencyService.Get<IAuthenticator>();
         public Command LoginCommand { get; }
+        public SerializedLoginUser LoginUser
+        {
+            get => loginUser;
+            set => SetProperty(ref loginUser, value);
+        }
 
         public LoginViewModel()
         {
             LoginCommand = new Command(OnLoginClickedAsync);
+            LoginUser = new SerializedLoginUser();
         }
 
+        private const int InterfaceFreezeTimeoutInSeconds = 5;
 
         private async void OnLoginClickedAsync(object obj)
         {
-            IsBusy = true;
+            IsRefreshing = true;
             if (string.IsNullOrWhiteSpace(CaptchaText)
-                && CountOfIncorrectAttempts > 2)
+                && CaptchaService.CountOfAttempts > 2)
             {
                 await FeedbackService.InformError("Введите captcha.");
-
             }
             else
             {
-                if (CaptchaText != null && !CaptchaText.Equals(CaptchaService.Text,
-                                       StringComparison.OrdinalIgnoreCase))
+                if (CaptchaText != null
+                    && !CaptchaText.Equals(CaptchaService.Text,
+                                           StringComparison.OrdinalIgnoreCase))
                 {
-                    await FeedbackService.InformError("Неверная captcha. " +
-                        "Интерфейс заблокирован на 5 секунд.");
+                    await FeedbackService.InformError(
+                        "Неверная captcha. "
+                        + "Интерфейс заблокирован "
+                        + $"на {InterfaceFreezeTimeoutInSeconds} секунд.");
                     IsNotBlocked = false;
                     Device.StartTimer(
-                        TimeSpan.FromSeconds(5), () =>
+                        TimeSpan.FromSeconds(InterfaceFreezeTimeoutInSeconds), () =>
                         {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                _ = FeedbackService.Inform("Интерфейс разблокирован.");
-                                IsNotBlocked = true;
-                            });
+                            _ = FeedbackService
+                                .Inform("Интерфейс разблокирован.");
+                            IsNotBlocked = true;
                             return false;
                         });
                 }
                 else
                 {
-
-                    string encodedLoginAndPassword =
-                        new LoginAndPasswordToBasicEncoder()
-                        .Encode(Login, Password);
-                    AppIdentity.AuthorizationValue = encodedLoginAndPassword;
-                    SerializedLoginUser serializedLoginUser =
-                        new SerializedLoginUser
-                        {
-                            Login = Login,
-                            Password = Password,
-                            IsRememberMe = IsRememberMe
-                        };
-                    if (await LoginDataStore.AddItemAsync(serializedLoginUser))
+                    if (await LoginDataStore.AddItemAsync(LoginUser))
                     {
                         AppShell.SetShellStacksDependingOnRole();
-                        CountOfIncorrectAttempts = 0;
                         CaptchaService.Invalidate();
                     }
                     else
                     {
-                        CountOfIncorrectAttempts++;
-                        if (CountOfIncorrectAttempts == 3)
+                        CaptchaService.CountOfAttempts++;
+                        if (CaptchaService.CountOfAttempts == 3)
                         {
                             CaptchaService.GenerateNew();
-                            MessagingCenter.Send(this, "ReloadCaptcha");
                         }
                     }
                 }
             }
-            IsBusy = false;
-        }
-        private MemoryStream captchaImage;
-        private string login;
-
-        public string Login
-        {
-            get => login;
-            set => SetProperty(ref login, value);
-        }
-
-        private string password;
-
-        public string Password
-        {
-            get => password;
-            set => SetProperty(ref password, value);
+            IsRefreshing = false;
         }
 
         private Command exitCommand;
@@ -123,20 +92,6 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 System.Environment.Exit(0);
             }
-        }
-
-        private bool isRememberMe = false;
-        private int countOfIncorrectAttempts = 0;
-
-        public bool IsRememberMe
-        {
-            get => isRememberMe;
-            set => SetProperty(ref isRememberMe, value);
-        }
-        public MemoryStream CaptchaImage
-        {
-            get => captchaImage;
-            set => SetProperty(ref captchaImage, value);
         }
 
         private Command regenerateCaptchaCommand;
@@ -174,6 +129,7 @@ namespace CarWashService.MobileApp.ViewModels
         }
 
         private Command changeBaseUrlCommand;
+        private SerializedLoginUser loginUser;
 
         public ICommand ChangeBaseUrlCommand
         {

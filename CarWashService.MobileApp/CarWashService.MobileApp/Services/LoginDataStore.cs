@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -36,22 +35,28 @@ namespace CarWashService.MobileApp.Services
             using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.Timeout = App.HttpClientTimeout;
-                client.DefaultRequestHeaders.Authorization =
-                     new AuthenticationHeaderValue("Basic",
-                                                   AppIdentity.AuthorizationValue);
                 client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
+                    StringContent content =
+                        new StringContent(JsonConvert.SerializeObject(item),
+                                          Encoding.UTF8,
+                                          "application/json");
                     HttpResponseMessage response = await client
-                        .GetAsync("users/login");
+                        .PostAsync($"users/login", content);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
+                        string encodedLoginAndPassword =
+                        new LoginAndPasswordToBasicEncoder()
+                        .Encode(item.Login, item.Password);
                         SerializedLoginUser serializedLoginUser =
                         JsonConvert.DeserializeObject<SerializedLoginUser>(
                             await response.Content.ReadAsStringAsync());
                         App.User = serializedLoginUser;
+                        App.AuthorizationValue = encodedLoginAndPassword;
                         if (item.IsRememberMe)
                         {
+                            AppIdentity.AuthorizationValue = encodedLoginAndPassword;
                             AppIdentity.User = serializedLoginUser;
                         }
                         await DependencyService

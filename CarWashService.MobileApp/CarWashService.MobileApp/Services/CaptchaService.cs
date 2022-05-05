@@ -6,6 +6,7 @@ namespace CarWashService.MobileApp.Services
     public class CaptchaService : ICaptchaService, INotifyPropertyChanged
     {
         private string text;
+        private int countOfAttempts;
 
         public string Text
         {
@@ -14,6 +15,17 @@ namespace CarWashService.MobileApp.Services
                 text = value;
                 PropertyChanged?.Invoke(this,
                                         new PropertyChangedEventArgs(nameof(Text)));
+            }
+        }
+
+        public int CountOfAttempts
+        {
+            get => countOfAttempts;
+            set
+            {
+                countOfAttempts = value;
+                PropertyChanged?.Invoke(this,
+                                        new PropertyChangedEventArgs(nameof(CountOfAttempts)));
             }
         }
 
@@ -35,6 +47,7 @@ namespace CarWashService.MobileApp.Services
         public void Invalidate()
         {
             Text = null;
+            CountOfAttempts = 0;
         }
     }
 }

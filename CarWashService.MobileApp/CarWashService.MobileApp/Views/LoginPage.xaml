@@ -13,7 +13,7 @@
              Title="Авторизация"
              IsEnabled="{Binding IsNotBlocked}">
     <ContentView>
-        <RefreshView IsRefreshing="{Binding IsBusy}">
+        <RefreshView IsRefreshing="{Binding IsRefreshing}">
             <ScrollView Margin="0,20,0,0">
                 <StackLayout Padding="10,0,10,0"
                              VerticalOptions="Fill">
@@ -34,25 +34,26 @@
                                    Grid.Column="1" />
                         </StackLayout>
                     </StackLayout>
-                    <material:MaterialTextField Text="{Binding Login}"
+                    <material:MaterialTextField Text="{Binding LoginUser.Login}"
                                                 Placeholder="Введите логин"
                                                 InputType="Text"
                                                 MaxLength="50"
                                                 LeadingIcon="profile"
                                                 AlwaysShowUnderline="True"
                                                 TintColor="{StaticResource Primary}" />
-                    <controls:PasswordMaterialTextField Password="{Binding Password}"
+                    <controls:PasswordMaterialTextField Password="{Binding LoginUser.Password}"
                                                         Placeholder="Введите пароль" />
                     <StackLayout IsVisible="False">
                         <StackLayout.Triggers>
                             <DataTrigger TargetType="StackLayout"
-                                         Binding="{Binding CountOfIncorrectAttempts}"
+                                         Binding="{Binding CaptchaService.CountOfAttempts}"
                                          Value="3">
                                 <Setter Property="IsVisible"
                                         Value="True" />
                             </DataTrigger>
                         </StackLayout.Triggers>
                         <controls:CaptchaView x:Name="Captcha"
+                                              Text="{Binding CaptchaService.Text}"
                                               HorizontalOptions="Fill" />
                         <material:MaterialButton Command="{Binding RegenerateCaptchaCommand}"
                                                  Text="Сгенерировать капчу"
@@ -66,7 +67,7 @@
                                                     AlwaysShowUnderline="True"
                                                     TintColor="{StaticResource Primary}" />
                     </StackLayout>
-                    <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
+                    <material:MaterialCheckbox IsSelected="{Binding LoginUser.IsRememberMe}"
                                                Text="Запомнить меня" />
                     <material:MaterialButton Command="{Binding ChangeBaseUrlCommand}"
                                              VerticalOptions="End"

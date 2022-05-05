@@ -99,18 +99,25 @@ namespace CarWashService.Web.Controllers
             return Ok(imageBytes);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/users/login")]
         [ResponseType(
             typeof(SerializedUser))]
-        public IHttpActionResult IsAuthenticatedAsync()
+        [AllowAnonymous]
+        public IHttpActionResult IsAuthenticatedAsync(User loginUser)
         {
-            ClaimsIdentity identity = (ClaimsIdentity)
-                Thread.CurrentPrincipal.Identity;
-            User user = db.User.Where(u => u.Login == identity.Name)
-                .First();
+            User dbUser = db.User.Where(u => u.Login == loginUser.Login)
+                .FirstOrDefault();
+            if (dbUser == null)
+            {
+                return Unauthorized();
+            }
+            if (dbUser.Password != loginUser.Password)
+            {
+                return Unauthorized();
+            }
             return Ok(
-                new SerializedUser(user));
+                new SerializedUser(dbUser));
         }
 
         [HttpGet]

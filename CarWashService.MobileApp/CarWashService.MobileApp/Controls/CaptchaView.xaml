@@ -2,11 +2,12 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:CarWashService.MobileApp.Models.Captcha"
-             x:Class="CarWashService.MobileApp.Controls.CaptchaView">
+             x:Class="CarWashService.MobileApp.Controls.CaptchaView"
+             x:Name="Page">
     <ContentView.Content>
         <Frame BorderColor="Black">
         <StackLayout Orientation="Horizontal"
-                     BindableLayout.ItemsSource="{Binding TextItems}">
+                     x:Name="TextLayout">
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type controls:CaptchaLetter}">
                         <Label Text="{Binding Letter}"

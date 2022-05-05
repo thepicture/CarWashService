@@ -14,3 +14,6 @@ csharp_style_unused_value_expression_statement_preference = discard_variable
 
 # CS4014: Because this call is not awaited, execution of the current method continues before the call is completed
 dotnet_diagnostic.CS4014.severity = none
+
+# IDE0011: Add braces
+csharp_prefer_braces = when_multiline

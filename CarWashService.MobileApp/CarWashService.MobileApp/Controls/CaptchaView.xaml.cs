@@ -10,40 +10,39 @@ namespace CarWashService.MobileApp.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CaptchaView : ContentView
     {
-        private string text;
+        public static readonly BindableProperty TextProperty =
+            BindableProperty.Create("Text",
+                                    typeof(string),
+                                    typeof(CaptchaView),
+                                    default(string),
+                                    BindingMode.TwoWay,
+                                    propertyChanged: OnTextChanged);
+
         public string Text
         {
-            get => text;
-            set
-            {
-                text = value;
-                OnPropertyChanged(nameof(Text));
-                TextItems = value.ToCharArray()
-                   .Select(c =>
-                   {
-                       return new CaptchaLetter
-                       {
-                           Letter = c.ToString()
-                       };
-                   });
-            }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
-        private IEnumerable<CaptchaLetter> textItems;
-        public IEnumerable<CaptchaLetter> TextItems
+        private static void OnTextChanged(BindableObject bindable,
+                                              object oldValue,
+                                              object newValue)
         {
-            get => textItems;
-            set
-            {
-                textItems = value;
-                OnPropertyChanged(nameof(TextItems));
-            }
+            if (newValue == oldValue) return;
+            IEnumerable<CaptchaLetter> textSource = ((string)newValue)
+                .ToCharArray()
+                .Select(c => new CaptchaLetter
+                {
+                    Letter = c.ToString()
+                });
+            BindableLayout.SetItemsSource(((CaptchaView)bindable).TextLayout,
+                                          textSource);
+            bindable.SetValue(TextProperty, newValue);
         }
 
         public CaptchaView()
         {
             InitializeComponent();
-            BindingContext = this;
         }
     }
 }
