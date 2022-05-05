@@ -23,6 +23,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void InsertBranchesIntoPositions()
         {
+            IsRefreshing = true;
             Locations.Clear();
             IEnumerable<SerializedBranch> branches =
                 await BranchDataStore.GetItemsAsync();
@@ -60,6 +61,7 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 await FeedbackService.InformError(ex);
             }
+            IsRefreshing = false;
         }
 
         private Command goToSelectedBranchPageCommand;

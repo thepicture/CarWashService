@@ -9,41 +9,43 @@
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
              x:DataType="local:BranchesViewModel">
-    <ContentPage.Content>
+    <ContentView>
         <Grid RowDefinitions="7*,2*"
               x:DataType="local:BranchesViewModel">
-            <maps:Map ItemsSource="{Binding Locations}"
-                      IsShowingUser="True"
-                      x:Name="BranchesMap">
-                <x:Arguments>
-                    <maps:MapSpan>
-                        <x:Arguments>
-                            <maps:Position>
-                                <x:Arguments>
-                                    <x:Double>55.751244</x:Double>
-                                    <x:Double>37.618423</x:Double>
-                                </x:Arguments>
-                            </maps:Position>
-                            <x:Double>0.01</x:Double>
-                            <x:Double>0.01</x:Double>
-                        </x:Arguments>
-                    </maps:MapSpan>
-                </x:Arguments>
-                <maps:Map.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type helpers:LocationHelper}">
-                        <maps:Pin Position="{Binding Position}"
-                                  Address="{Binding Address}"
-                                  MarkerClicked="OnPinClicked">
-                            <maps:Pin.Label>
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="Branch.Title" />
-                                    <Binding Path="Description" />
-                                </MultiBinding>
-                            </maps:Pin.Label>
-                        </maps:Pin>
-                    </DataTemplate>
-                </maps:Map.ItemTemplate>
-            </maps:Map>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}">
+                <maps:Map ItemsSource="{Binding Locations}"
+                          IsShowingUser="True"
+                          x:Name="BranchesMap">
+                    <x:Arguments>
+                        <maps:MapSpan>
+                            <x:Arguments>
+                                <maps:Position>
+                                    <x:Arguments>
+                                        <x:Double>55.751244</x:Double>
+                                        <x:Double>37.618423</x:Double>
+                                    </x:Arguments>
+                                </maps:Position>
+                                <x:Double>0.01</x:Double>
+                                <x:Double>0.01</x:Double>
+                            </x:Arguments>
+                        </maps:MapSpan>
+                    </x:Arguments>
+                    <maps:Map.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type helpers:LocationHelper}">
+                            <maps:Pin Position="{Binding Position}"
+                                      Address="{Binding Address}"
+                                      MarkerClicked="OnPinClicked">
+                                <maps:Pin.Label>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Branch.Title" />
+                                        <Binding Path="Description" />
+                                    </MultiBinding>
+                                </maps:Pin.Label>
+                            </maps:Pin>
+                        </DataTemplate>
+                    </maps:Map.ItemTemplate>
+                </maps:Map>
+            </RefreshView>
             <StackLayout Grid.Row="1"
                          VerticalOptions="CenterAndExpand">
                 <Label Text="{Binding SelectedLocation.Branch.Title, 
@@ -77,5 +79,5 @@
                 </StackLayout>
             </StackLayout>
         </Grid>
-    </ContentPage.Content>
+    </ContentView>
 </ContentPage>
