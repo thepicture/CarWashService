@@ -125,7 +125,6 @@ namespace CarWashService.MobileApp.ViewModels
         private void RegenerateCaptcha()
         {
             CaptchaService.GenerateNew();
-            MessagingCenter.Send(this, "ReloadCaptcha");
         }
 
         private Command changeBaseUrlCommand;
