@@ -94,7 +94,7 @@ namespace CarWashService.MobileApp.ViewModels
                     Patronymic = Patronymic,
                     PassportNumber = PassportNumber,
                     PassportSeries = PassportSeries,
-                    UserTypeId = userType?.Id ?? 0,
+                    UserTypeId = UserType?.Id ?? 0,
                     ImageBytes = CompressedImageBytes
                 };
 
