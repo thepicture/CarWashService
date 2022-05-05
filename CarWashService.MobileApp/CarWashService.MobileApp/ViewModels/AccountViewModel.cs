@@ -9,23 +9,6 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class AccountViewModel : BaseViewModel
     {
-        private string login;
-
-        public string Login
-        {
-            get => login;
-            set => SetProperty(ref login, value);
-        }
-
-        internal void OnAppearing()
-        {
-            if (IsBusy)
-            {
-                return;
-            }
-            IsRefreshing = true;
-        }
-
         private Command exitLoginCommand;
 
         public SerializedUser User
@@ -105,7 +88,6 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void ChangePictureAsync()
         {
-            IsBusy = true;
             FileResult result = await MediaPicker
                 .PickPhotoAsync(new MediaPickerOptions
                 {
@@ -129,7 +111,7 @@ namespace CarWashService.MobileApp.ViewModels
                     IsRefreshing = true;
                 }
             }
-            IsBusy = false;
+            IsRefreshing = false;
         }
     }
 }
