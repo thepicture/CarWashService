@@ -53,20 +53,5 @@ namespace CarWashService.MobileApp.Views
             _viewModel.OnAppearing();
             base.OnAppearing();
         }
-
-        private void OnToggle(object sender, System.EventArgs e)
-        {
-            if ((sender as Button).Text == "В корзину")
-            {
-                (sender as Button).Text = "Удалить из корзины";
-                (sender as Button).BackgroundColor = Color.Red;
-            }
-            else
-            {
-                (sender as Button).Text = "В корзину";
-                (sender as Button).BackgroundColor = (Color)App.Current
-                    .Resources["Primary"];
-            }
-        }
     }
 }

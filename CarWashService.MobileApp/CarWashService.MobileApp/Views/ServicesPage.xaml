@@ -7,6 +7,7 @@
              xmlns:views="clr-namespace:CarWashService.MobileApp.Views"
              xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
              xmlns:services="clr-namespace:CarWashService.MobileApp.Services"
+             xmlns:datatemplates="clr-namespace:CarWashService.MobileApp.Views.DataTemplates"
              x:DataType="mobileapp:ServicesViewModel"
              x:Name="Page"
              Title="Услуги"
@@ -27,103 +28,7 @@
                 <StackLayout BindableLayout.ItemsSource="{Binding Services}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="serialized:SerializedService">
-                            <material:MaterialCard Elevation="5"
-                                                   Margin="10"
-                                                   IsClickable="True">
-                                <StackLayout>
-                                    <Label Text="{Binding Path=Name,
-                                                              StringFormat='{}Название: {0}'}"
-                                           FontAttributes="Bold"
-                                           FontSize="Medium"
-                                           HorizontalTextAlignment="Center" />
-                                    <BoxView Color="WhiteSmoke"
-                                             HeightRequest="1" />
-                                    <Label Text="{Binding Path=Description, 
-                                                              TargetNullValue='Описание не предоставлено',
-                                                              StringFormat='{}Описание: {0}'}"
-                                           HorizontalTextAlignment="Center" />
-                                    <Label Text="{Binding Price, StringFormat='Цена: {0:F0} руб.'}"
-                                           HorizontalOptions="Center" />
-                                    <BoxView Color="WhiteSmoke"
-                                             HeightRequest="1" />
-                                    <Label Text="Тип услуги:"
-                                           FontAttributes="Bold"
-                                           HorizontalTextAlignment="Center"
-                                           FontSize="Medium" />
-                                    <StackLayout BindableLayout.ItemsSource="{Binding ServiceTypes}">
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate x:DataType="serialized:SerializedService">
-                                                <material:MaterialCard Elevation="5"
-                                                                       Margin="10"
-                                                                       IsClickable="True">
-                                                    <Label Text="{Binding Source={RelativeSource Self},
-                                                                              Path=BindingContext}" />
-                                                </material:MaterialCard>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
-                                                                                            Path=BindingContext}"
-                                                             Command="{Binding Source={RelativeSource Mode=FindAncestor, 
-                                                                                   AncestorType={x:Type views:ServicesPage}}, 
-                                                                                   Path=BindingContext.GoToDiscountsCommand}"
-                                                             Text="Акции"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BackgroundButton}" />
-                                    <material:MaterialButton CommandParameter="{Binding .}"
-                                                             Command="{Binding Source={Reference Page}, 
-                                                                               Path=BindingContext.GoToEditDiscountPage}"
-                                                             Text="Редактировать"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BaseButton}"
-                                                             IsVisible="False">
-                                        <material:MaterialButton.Triggers>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Static services:AppIdentity.User}, 
-                                                                           Path=UserTypeName}"
-                                                         Value="Сотрудник">
-                                                <Setter Property="IsVisible"
-                                                        Value="True" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Static services:AppIdentity.User}, 
-                                                                           Path=UserTypeName}"
-                                                         Value="Администратор">
-                                                <Setter Property="IsVisible"
-                                                        Value="True" />
-                                            </DataTrigger>
-                                        </material:MaterialButton.Triggers>
-                                    </material:MaterialButton>
-                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
-                                                                                        Path=BindingContext}"
-                                                             Command="{Binding Source={RelativeSource Mode=FindAncestor, 
-                                                                               AncestorType={x:Type views:ServicesPage}}, 
-                                                                               Path=BindingContext.ToggleServiceCommand}"
-                                                             Text="В корзину"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Clicked="OnToggle"
-                                                             IsVisible="False"
-                                                             Style="{StaticResource BaseButton}">
-                                        <material:MaterialButton.Triggers>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Static services:AppIdentity.User}, 
-                                                                           Path=UserTypeName}"
-                                                         Value="Клиент">
-                                                <Setter Property="IsVisible"
-                                                        Value="True" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={RelativeSource Mode=FindAncestor,
-                                                                                                  AncestorType={x:Type views:ServicesPage}}, 
-                                                                           Path=BindingContext.IsClientCheckingForOrder}"
-                                                         Value="False">
-                                                <Setter Property="IsVisible"
-                                                        Value="False" />
-                                            </DataTrigger>
-                                        </material:MaterialButton.Triggers>
-                                    </material:MaterialButton>
-                                </StackLayout>
-                            </material:MaterialCard>
+                            <datatemplates:ServicesTemplate />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
