@@ -16,7 +16,7 @@
         </controls:BindableToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentView>
-        <RefreshView IsRefreshing="{Binding IsBusy}">
+        <RefreshView IsRefreshing="{Binding IsRefreshing}">
             <ScrollView Margin="10">
                 <StackLayout>
                     <material:MaterialTextField Text="{Binding LastName}"
