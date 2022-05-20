@@ -97,6 +97,10 @@ namespace CarWashService.MobileApp.ViewModels
                     UserTypeId = UserType?.Id ?? 0,
                     ImageBytes = CompressedImageBytes
                 };
+            if (IsCustomer)
+            {
+                identity.UserTypeId = 2;
+            }
 
             if (await RegistrationDataStore.AddItemAsync(identity))
             {
@@ -185,6 +189,49 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 return new MemoryStream(ImageBytes);
             });
+        }
+
+        private Command enterEmployeeCodeCommand;
+
+        public ICommand EnterEmployeeCodeCommand
+        {
+            get
+            {
+                if (enterEmployeeCodeCommand == null)
+                    enterEmployeeCodeCommand = new Command(EnterEmployeeCodeAsync);
+
+                return enterEmployeeCodeCommand;
+            }
+        }
+
+        private async void EnterEmployeeCodeAsync()
+        {
+            string enteredEmployeeCode = await App.Current.MainPage.DisplayPromptAsync(
+                        "Ввести код персонала",
+                        "Для обеспечения регистрации как сотрудник или администратор " +
+                        "введите код персонала.",
+                        keyboard: Keyboard.Numeric);
+            if (string.IsNullOrWhiteSpace(enteredEmployeeCode))
+            {
+                return;
+            }
+            if (string.Equals(enteredEmployeeCode, App.EmployeeCode))
+            {
+                IsCustomer = false;
+                await FeedbackService.Inform("Вы можете изменить тип должности.");
+            }
+            else
+            {
+                await FeedbackService.InformError("Неверный код.");
+            }
+        }
+
+        private bool isCustomer = true;
+
+        public bool IsCustomer
+        {
+            get => isCustomer;
+            set => SetProperty(ref isCustomer, value);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -41,6 +40,9 @@ namespace CarWashService.MobileApp
                 return _handler;
             }
         }
+
+        public static readonly string EmployeeCode = "123456";
+
         public App()
         {
             InitializeComponent();

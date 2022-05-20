@@ -6,8 +6,15 @@
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodelhelpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
+             xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="vm:RegisterViewModel"
              Title="Регистрация">
+    <ContentPage.ToolbarItems>
+        <controls:BindableToolbarItem Text="Ввести код"
+                                      Command="{Binding EnterEmployeeCodeCommand}"
+                                      IsVisible="{Binding IsCustomer}">
+        </controls:BindableToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentView>
         <RefreshView IsRefreshing="{Binding IsBusy}">
             <ScrollView Margin="10">
@@ -37,6 +44,13 @@
                                                 TintColor="{StaticResource Primary}" />
                     <Picker Title="Тип пользователя"
                             SelectedItem="{Binding UserType}">
+                        <Picker.IsVisible>
+                            <Binding Path="IsCustomer">
+                                <Binding.Converter>
+                                    <extensions:InvertedBoolConverter />
+                                </Binding.Converter>
+                            </Binding>
+                        </Picker.IsVisible>
                         <Picker.ItemDisplayBinding>
                             <Binding Path="Name"
                                      x:DataType="viewmodelhelpers:UserTypeHelper" />
