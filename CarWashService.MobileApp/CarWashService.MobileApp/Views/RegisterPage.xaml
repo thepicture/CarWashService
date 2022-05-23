@@ -59,8 +59,6 @@
                             <x:Array Type="{x:Type viewmodelhelpers:UserTypeHelper}">
                                 <viewmodelhelpers:UserTypeHelper Id="1"
                                                                  Name="Администратор" />
-                                <viewmodelhelpers:UserTypeHelper Id="2"
-                                                                 Name="Клиент" />
                                 <viewmodelhelpers:UserTypeHelper Id="3"
                                                                  Name="Сотрудник" />
                             </x:Array>
