@@ -6,7 +6,7 @@
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodelhelpers="clr-namespace:CarWashService.MobileApp.Models.ViewModelHelpers"
              xmlns:controls="clr-namespace:CarWashService.MobileApp.Controls"
-             xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters="clr-namespace:CarWashService.MobileApp.Converters"
              x:DataType="vm:RegisterViewModel"
              Title="Регистрация">
     <ContentPage.ToolbarItems>
@@ -47,7 +47,7 @@
                         <Picker.IsVisible>
                             <Binding Path="IsCustomer">
                                 <Binding.Converter>
-                                    <extensions:InvertedBoolConverter />
+                                    <converters:BooleanInversionValueConverter />
                                 </Binding.Converter>
                             </Binding>
                         </Picker.IsVisible>
