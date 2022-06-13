@@ -4,7 +4,9 @@ using CarWashService.MobileApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -16,21 +18,21 @@ namespace CarWashService.MobileApp.ViewModels
         public ObservableCollection<LocationHelper> Locations { get; set; } =
             new ObservableCollection<LocationHelper>();
 
-        internal void OnAppearing()
+        internal async Task OnAppearing()
         {
-            InsertBranchesIntoPositions();
+            await InsertBranchesIntoPositions();
         }
 
-        private async void InsertBranchesIntoPositions()
+        private async Task InsertBranchesIntoPositions()
         {
             IsRefreshing = true;
             Locations.Clear();
             IEnumerable<SerializedBranch> branches =
                 await BranchDataStore.GetItemsAsync();
-            try
+            Geocoder geoCoder = new Geocoder();
+            foreach (SerializedBranch branch in branches)
             {
-                Geocoder geoCoder = new Geocoder();
-                foreach (SerializedBranch branch in branches)
+                try
                 {
                     IEnumerable<Position> approximateLocations =
                         await geoCoder
@@ -56,10 +58,10 @@ namespace CarWashService.MobileApp.ViewModels
                         Branch = branch
                     });
                 }
-            }
-            catch (Exception ex)
-            {
-                await FeedbackService.InformError(ex);
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Failed to place branches: " + ex);
+                }
             }
             IsRefreshing = false;
         }

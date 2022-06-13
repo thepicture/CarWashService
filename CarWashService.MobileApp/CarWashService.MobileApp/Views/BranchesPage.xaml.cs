@@ -29,8 +29,8 @@ namespace CarWashService.MobileApp.Views
 
         protected async override void OnAppearing()
         {
-            _viewModel.OnAppearing();
             base.OnAppearing();
+            await _viewModel.OnAppearing();
             try
             {
                 Plugin.Geolocator.Abstractions.Position position =
