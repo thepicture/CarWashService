@@ -48,7 +48,7 @@ namespace CarWashService.MobileApp.Services
                     .InformError(validationErrors);
                 return false;
             }
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -108,7 +108,7 @@ namespace CarWashService.MobileApp.Services
             {
                 return false;
             }
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -152,7 +152,7 @@ namespace CarWashService.MobileApp.Services
         public async Task<IEnumerable<SerializedBranch>> GetItemsAsync
             (bool forceRefresh = false)
         {
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =

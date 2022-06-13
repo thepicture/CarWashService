@@ -49,7 +49,7 @@ namespace CarWashService.MobileApp.Services
                 return false;
             }
             item.DiscountPercent = int.Parse(item.DiscountPercentAsString);
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -100,7 +100,7 @@ namespace CarWashService.MobileApp.Services
             {
                 return false;
             }
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -144,7 +144,7 @@ namespace CarWashService.MobileApp.Services
         public async Task<IEnumerable<SerializedDiscount>> GetItemsAsync(
             bool forceRefresh = false)
         {
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =

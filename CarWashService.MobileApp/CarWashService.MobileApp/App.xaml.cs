@@ -31,15 +31,6 @@ namespace CarWashService.MobileApp
         public static int DefaultImageWidth = 300;
         public static int DefaultImageHeight = 300;
         public static int DefaultQuality = 30;
-        public static HttpClientHandler ClientHandler
-        {
-            get
-            {
-                HttpClientHandler _handler = new HttpClientHandler();
-                _handler.ServerCertificateCustomValidationCallback += (_, __, ___, ____) => true;
-                return _handler;
-            }
-        }
 
         public static readonly string EmployeeCode = "123456";
 
@@ -48,6 +39,7 @@ namespace CarWashService.MobileApp
             InitializeComponent();
             XF.Material.Forms.Material.Init(this);
 
+            DependencyService.Register<HttpFactoryService>();
             DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<BranchDataStore>();
             DependencyService.Register<RegistrationDataStore>();

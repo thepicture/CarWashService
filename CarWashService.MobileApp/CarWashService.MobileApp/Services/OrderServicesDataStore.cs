@@ -25,7 +25,7 @@ namespace CarWashService.MobileApp.Services
 
         public async Task<IEnumerable<SerializedService>> GetItemAsync(string id)
         {
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =

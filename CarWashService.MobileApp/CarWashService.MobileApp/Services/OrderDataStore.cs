@@ -40,7 +40,7 @@ namespace CarWashService.MobileApp.Services
                 return false;
             }
             item.AppointmentDate = item.AppointmentDateTimeAsDateTime.ToString();
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -89,7 +89,7 @@ namespace CarWashService.MobileApp.Services
             {
                 return false;
             }
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -134,7 +134,7 @@ namespace CarWashService.MobileApp.Services
         public async Task<IEnumerable<SerializedOrder>> GetItemsAsync(
             bool forceRefresh = false)
         {
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
@@ -172,7 +172,7 @@ namespace CarWashService.MobileApp.Services
 
         public async Task<bool> UpdateItemAsync(SerializedOrder item)
         {
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
                 client.Timeout = App.HttpClientTimeout;
                 client.DefaultRequestHeaders.Authorization =
