@@ -37,7 +37,8 @@ namespace CarWashService.MobileApp.Views
                     await CrossGeolocator.Current.GetPositionAsync();
                 BranchesMap.MoveToRegion(
                     MapSpan.FromCenterAndRadius(
-                        new Position(position.Latitude, position.Longitude),
+                        new Position(
+                            Math.Round(position.Latitude, 4), Math.Round(position.Longitude, 4)),
                         Distance.FromKilometers(1)));
             }
             catch (Exception ex)
