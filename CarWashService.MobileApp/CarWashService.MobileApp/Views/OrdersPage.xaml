@@ -27,100 +27,103 @@
         <StackLayout>
             <SearchBar Text="{Binding SearchText}"
                        Placeholder="Поиск по наименованию услуги" />
-            <ScrollView>
-                <StackLayout BindableLayout.ItemsSource="{Binding Orders}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="serialized:SerializedOrder">
-                            <Grid>
-                                <material:MaterialCard Elevation="5"
-                                                       Margin="10"
-                                                       x:DataType="serialized:SerializedOrder"
-                                                       IsClickable="True">
-                                    <StackLayout>
-                                        <Label Text="{Binding Path=ClientFullName,
+            <RefreshView Command="{Binding RefreshCommand}"
+                         IsRefreshing="{Binding IsRefreshing}">
+                <ScrollView>
+                    <StackLayout BindableLayout.ItemsSource="{Binding Orders}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="serialized:SerializedOrder">
+                                <Grid>
+                                    <material:MaterialCard Elevation="5"
+                                                           Margin="10"
+                                                           x:DataType="serialized:SerializedOrder"
+                                                           IsClickable="True">
+                                        <StackLayout>
+                                            <Label Text="{Binding Path=ClientFullName,
                                                               StringFormat='{}Клиент: {0}'}"
-                                               FontAttributes="Bold"
-                                               HorizontalTextAlignment="Center" />
-                                        <BoxView Color="WhiteSmoke"
-                                                 HeightRequest="1" />
-                                        <Label Text="{Binding Path=SellerFullName, 
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center" />
+                                            <BoxView Color="WhiteSmoke"
+                                                     HeightRequest="1" />
+                                            <Label Text="{Binding Path=SellerFullName, 
                                                               StringFormat='Менеджер: {0}', 
                                                               TargetNullValue='Не подтверждено сотрудником'}"
-                                               HorizontalTextAlignment="Center"
-                                               FontAttributes="Bold" />
-                                        <BoxView Color="WhiteSmoke"
-                                                 HeightRequest="1" />
-                                        <Label Text="{Binding TotalPrice, StringFormat='ИТОГО: {0:F0} руб.'}"
-                                               HorizontalOptions="Center" />
-                                        <BoxView Color="WhiteSmoke"
-                                                 HeightRequest="1" />
-                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                   HorizontalTextAlignment="Center"
+                                                   FontAttributes="Bold" />
+                                            <BoxView Color="WhiteSmoke"
+                                                     HeightRequest="1" />
+                                            <Label Text="{Binding TotalPrice, StringFormat='ИТОГО: {0:F0} руб.'}"
+                                                   HorizontalOptions="Center" />
+                                            <BoxView Color="WhiteSmoke"
+                                                     HeightRequest="1" />
+                                            <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                             Path=BindingContext}"
-                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                     Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                    AncestorType={x:Type pages:OrdersPage}}, 
                                                                                    Path=BindingContext.AcceptOrderCommand}"
-                                                                 Text="Подтвердить"
-                                                                 VerticalOptions="EndAndExpand"
-                                                                 Style="{StaticResource BaseButton}">
-                                            <material:MaterialButton.Triggers>
-                                                <DataTrigger TargetType="material:MaterialButton"
-                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                     Text="Подтвердить"
+                                                                     VerticalOptions="EndAndExpand"
+                                                                     Style="{StaticResource BaseButton}">
+                                                <material:MaterialButton.Triggers>
+                                                    <DataTrigger TargetType="material:MaterialButton"
+                                                                 Binding="{Binding Source={Static services:AppIdentity.User}, 
                                                                                Path=UserTypeName}"
-                                                             Value="Клиент">
-                                                    <Setter Property="IsVisible"
-                                                            Value="False" />
-                                                </DataTrigger>
-                                                <DataTrigger TargetType="material:MaterialButton"
-                                                             Binding="{Binding IsConfirmed}"
-                                                             Value="True">
-                                                    <Setter Property="IsVisible"
-                                                            Value="False" />
-                                                </DataTrigger>
-                                            </material:MaterialButton.Triggers>
-                                        </material:MaterialButton>
-                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                 Value="Клиент">
+                                                        <Setter Property="IsVisible"
+                                                                Value="False" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="material:MaterialButton"
+                                                                 Binding="{Binding IsConfirmed}"
+                                                                 Value="True">
+                                                        <Setter Property="IsVisible"
+                                                                Value="False" />
+                                                    </DataTrigger>
+                                                </material:MaterialButton.Triggers>
+                                            </material:MaterialButton>
+                                            <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                             Path=BindingContext}"
-                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                     Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                    AncestorType={x:Type pages:OrdersPage}}, 
                                                                                    Path=BindingContext.GoToOrderPageCommand}"
-                                                                 Text="Подробнее"
-                                                                 VerticalOptions="EndAndExpand"
-                                                                 Style="{StaticResource BackgroundButton}" />
-                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                     Text="Подробнее"
+                                                                     VerticalOptions="EndAndExpand"
+                                                                     Style="{StaticResource BackgroundButton}" />
+                                            <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                             Path=BindingContext}"
-                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                     Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                    AncestorType={x:Type pages:OrdersPage}}, 
                                                                                    Path=BindingContext.DeleteOrderCommand}"
-                                                                 Text="Удалить"
-                                                                 IsVisible="False"
-                                                                 VerticalOptions="EndAndExpand"
-                                                                 FontSize="15"
-                                                                 Style="{StaticResource BaseButton}"
-                                                                 BackgroundColor="Red">
-                                            <material:MaterialButton.Triggers>
-                                                <DataTrigger TargetType="material:MaterialButton"
-                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                     Text="Удалить"
+                                                                     IsVisible="False"
+                                                                     VerticalOptions="EndAndExpand"
+                                                                     FontSize="15"
+                                                                     Style="{StaticResource BaseButton}"
+                                                                     BackgroundColor="Red">
+                                                <material:MaterialButton.Triggers>
+                                                    <DataTrigger TargetType="material:MaterialButton"
+                                                                 Binding="{Binding Source={Static services:AppIdentity.User}, 
                                                                                Path=UserTypeName}"
-                                                             Value="Клиент">
-                                                    <Setter Property="IsVisible"
-                                                            Value="True" />
-                                                </DataTrigger>
-                                                <DataTrigger TargetType="material:MaterialButton"
-                                                             Binding="{Binding Source={Static services:AppIdentity.User}, 
+                                                                 Value="Клиент">
+                                                        <Setter Property="IsVisible"
+                                                                Value="True" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="material:MaterialButton"
+                                                                 Binding="{Binding Source={Static services:AppIdentity.User}, 
                                                                                Path=UserTypeName}"
-                                                             Value="Администратор">
-                                                    <Setter Property="IsVisible"
-                                                            Value="True" />
-                                                </DataTrigger>
-                                            </material:MaterialButton.Triggers>
-                                        </material:MaterialButton>
-                                    </StackLayout>
-                                </material:MaterialCard>
-                            </Grid>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
-            </ScrollView>
+                                                                 Value="Администратор">
+                                                        <Setter Property="IsVisible"
+                                                                Value="True" />
+                                                    </DataTrigger>
+                                                </material:MaterialButton.Triggers>
+                                            </material:MaterialButton>
+                                        </StackLayout>
+                                    </material:MaterialCard>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+            </RefreshView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

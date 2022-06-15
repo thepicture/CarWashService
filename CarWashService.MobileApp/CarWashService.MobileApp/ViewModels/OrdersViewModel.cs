@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -24,7 +26,7 @@ namespace CarWashService.MobileApp.ViewModels
             }
         }
 
-        private async void LoadOrdersAsync()
+        private async Task LoadOrdersAsync()
         {
             Orders.Clear();
             IEnumerable<SerializedOrder> currentOrders =
@@ -43,11 +45,12 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 Orders.Add(currentOrder);
             }
+            IsRefreshing = false;
         }
 
         internal void OnAppearing()
         {
-            LoadOrdersAsync();
+            IsRefreshing = true;
         }
 
         public ObservableCollection<SerializedOrder> Orders
@@ -131,6 +134,24 @@ namespace CarWashService.MobileApp.ViewModels
             {
                 LoadOrdersAsync();
             }
+        }
+
+        private Command refreshCommand;
+
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                if (refreshCommand == null)
+                    refreshCommand = new Command(Refresh);
+
+                return refreshCommand;
+            }
+        }
+
+        private async void Refresh()
+        {
+            await LoadOrdersAsync();
         }
     }
 }
