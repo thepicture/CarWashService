@@ -50,7 +50,7 @@ namespace CarWashService.MobileApp.ViewModels
         }
         public bool IsNotBusy => !IsBusy;
         private bool isRefreshing = false;
-        public bool IsRefreshing
+        public virtual bool IsRefreshing
         {
             get => isRefreshing;
             set => SetProperty(ref isRefreshing, value);

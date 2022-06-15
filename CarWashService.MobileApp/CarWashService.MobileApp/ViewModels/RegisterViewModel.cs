@@ -9,6 +9,19 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class RegisterViewModel : BaseViewModel
     {
+        public override bool IsRefreshing
+        {
+            get => base.IsRefreshing;
+            set
+            {
+                base.IsRefreshing = value;
+                if (value && !IsBusy)
+                {
+                    IsRefreshing = false;
+                }
+            }
+        }
+
         private UserTypeHelper userType;
 
         public UserTypeHelper UserType
@@ -82,6 +95,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void RegisterAsync()
         {
+            IsBusy = true;
             IsRefreshing = true;
             SerializedRegistrationUser identity =
                 new SerializedRegistrationUser
@@ -107,6 +121,7 @@ namespace CarWashService.MobileApp.ViewModels
                 AppShell.LoadLoginAndRegisterShell();
             }
             IsRefreshing = false;
+            IsBusy = false;
         }
 
         private string login;

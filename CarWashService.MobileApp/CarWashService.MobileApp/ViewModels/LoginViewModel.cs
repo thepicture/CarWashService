@@ -1,6 +1,5 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using System;
-using System.IO;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -8,6 +7,19 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
+        public override bool IsRefreshing
+        {
+            get => base.IsRefreshing;
+            set
+            {
+                base.IsRefreshing = value;
+                if (value && !IsBusy)
+                {
+                    IsRefreshing = false;
+                }
+            }
+        }
+
         public Command LoginCommand { get; }
         public SerializedLoginUser LoginUser
         {
@@ -25,6 +37,7 @@ namespace CarWashService.MobileApp.ViewModels
 
         private async void OnLoginClickedAsync(object obj)
         {
+            IsBusy = true;
             IsRefreshing = true;
             if (string.IsNullOrWhiteSpace(CaptchaText)
                 && CaptchaService.CountOfAttempts > 2)
@@ -69,6 +82,7 @@ namespace CarWashService.MobileApp.ViewModels
                 }
             }
             IsRefreshing = false;
+            IsBusy = false;
         }
 
         private Command exitCommand;
