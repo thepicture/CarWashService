@@ -1,23 +1,25 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Models.ViewModelHelpers;
+using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
 
 namespace CarWashService.MobileApp.ViewModels
 {
     public class BranchesViewModel : BaseViewModel
     {
-        public ObservableCollection<LocationHelper> Locations { get; set; } =
-            new ObservableCollection<LocationHelper>();
+        public IListConverter<SerializedBranch, LocationHelper> BranchToPositionConverter =
+           DependencyService.Get<IListConverter<SerializedBranch, LocationHelper>>();
 
+        public ObservableCollection<LocationHelper> Locations
+        {
+            get => locations;
+            set => SetProperty(ref locations, value);
+        }
         internal async Task OnAppearing()
         {
             await InsertBranchesIntoPositions();
@@ -26,43 +28,10 @@ namespace CarWashService.MobileApp.ViewModels
         private async Task InsertBranchesIntoPositions()
         {
             IsRefreshing = true;
-            Locations.Clear();
-            IEnumerable<SerializedBranch> branches =
-                await BranchDataStore.GetItemsAsync();
-            Geocoder geoCoder = new Geocoder();
-            foreach (SerializedBranch branch in branches)
-            {
-                try
-                {
-                    IEnumerable<Position> approximateLocations =
-                        await geoCoder
-                        .GetPositionsForAddressAsync(
-                        string.Format("{0}, {1}, {2}",
-                                      branch.StreetName,
-                                      branch.CityName,
-                                      "Россия")
-                        );
-                    Position position = approximateLocations
-                        .FirstOrDefault();
-                    Locations.Add(new LocationHelper
-                    {
-                        Address = $"{branch.StreetName}, " +
-                        $"{branch.CityName}",
-                        Description = "С "
-                        + TimeSpan.Parse(branch.WorkFrom)
-                        .ToString(@"hh\:mm")
-                        + " по "
-                        + TimeSpan.Parse(branch.WorkTo)
-                        .ToString(@"hh\:mm"),
-                        Position = position,
-                        Branch = branch
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Failed to place branches: " + ex);
-                }
-            }
+            IEnumerable<SerializedBranch> branches = await BranchDataStore.GetItemsAsync();
+            IEnumerable<LocationHelper> currentBranches =
+                await BranchToPositionConverter.ConvertAllAsync(branches);
+            Locations = new ObservableCollection<LocationHelper>(currentBranches);
             IsRefreshing = false;
         }
 
@@ -115,6 +84,7 @@ namespace CarWashService.MobileApp.ViewModels
         }
 
         private LocationHelper selectedLocation;
+        private ObservableCollection<LocationHelper> locations = new ObservableCollection<LocationHelper>();
 
         public LocationHelper SelectedLocation
         {

@@ -1,7 +1,6 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
 using System;
-using System.Net.Http;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -39,6 +38,7 @@ namespace CarWashService.MobileApp
             InitializeComponent();
             XF.Material.Forms.Material.Init(this);
 
+            DependencyService.Register<BranchToLocationHelperListConverter>();
             DependencyService.Register<HttpFactoryService>();
             DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<BranchDataStore>();
