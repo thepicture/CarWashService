@@ -7,19 +7,6 @@ namespace CarWashService.MobileApp.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        public override bool IsRefreshing
-        {
-            get => base.IsRefreshing;
-            set
-            {
-                base.IsRefreshing = value;
-                if (value && !IsBusy)
-                {
-                    IsRefreshing = false;
-                }
-            }
-        }
-
         public Command LoginCommand { get; }
         public SerializedLoginUser LoginUser
         {

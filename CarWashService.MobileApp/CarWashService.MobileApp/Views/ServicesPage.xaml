@@ -21,18 +21,21 @@
         </controls:BindableToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-            <SearchBar Text="{Binding SearchText}"
-                       Placeholder="Поиск по названию" />
-            <ScrollView>
-                <StackLayout BindableLayout.ItemsSource="{Binding Services}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="serialized:SerializedService">
-                            <datatemplates:ServicesTemplate />
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
-            </ScrollView>
-        </StackLayout>
+        <RefreshView Command="{Binding RefreshCommand}"
+                     IsRefreshing="{Binding IsRefreshing}">
+            <StackLayout>
+                <SearchBar Text="{Binding SearchText}"
+                           Placeholder="Поиск по названию" />
+                <ScrollView>
+                    <StackLayout BindableLayout.ItemsSource="{Binding Services}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="serialized:SerializedService">
+                                <datatemplates:ServicesTemplate />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+        </RefreshView>
     </ContentPage.Content>
 </ContentPage>

@@ -12,8 +12,8 @@ namespace CarWashService.MobileApp
 {
     public class ServicesViewModel : BaseViewModel
     {
-        public bool IsClientCheckingForOrder => IsForOrder && !IsCanDelete;
 
+        public bool IsClientCheckingForOrder => IsForOrder && !IsCanDelete;
 
         private string searchText;
 
@@ -41,7 +41,7 @@ namespace CarWashService.MobileApp
         {
             SelectedServices = new ObservableCollection<SerializedService>();
             Services = new ObservableCollection<SerializedService>();
-            LoadServicesAsync();
+            IsRefreshing = true;
         }
 
         private async void LoadServicesAsync()
@@ -66,6 +66,7 @@ namespace CarWashService.MobileApp
                 Services.Add(service);
                 await Task.Delay(200);
             }
+            IsRefreshing = false;
         }
 
         private Command goToAddServicePage;
@@ -207,6 +208,24 @@ namespace CarWashService.MobileApp
             await Shell.Current.Navigation.PushAsync(
                 new AddServicePage(
                     new AddServiceViewModel(service)));
+        }
+
+        private Command refreshCommand;
+
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                if (refreshCommand == null)
+                    refreshCommand = new Command(Refresh);
+
+                return refreshCommand;
+            }
+        }
+
+        private void Refresh()
+        {
+            LoadServicesAsync();
         }
     }
 }
