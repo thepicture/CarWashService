@@ -67,7 +67,7 @@
                     <material:MaterialTextField Text="{Binding Login}"
                                                 Placeholder="Введите логин"
                                                 LeadingIcon="authorization"
-                                                InputType="Text"
+                                                InputType="Plain"
                                                 MaxLength="50"
                                                 AlwaysShowUnderline="True"
                                                 TintColor="{StaticResource Primary}"
