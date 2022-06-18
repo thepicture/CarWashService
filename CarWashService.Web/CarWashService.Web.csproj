@@ -286,7 +286,6 @@
     <Content Include="Models\Entities\BaseModel.edmx.diagram">
       <DependentUpon>BaseModel.edmx</DependentUpon>
     </Content>
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
