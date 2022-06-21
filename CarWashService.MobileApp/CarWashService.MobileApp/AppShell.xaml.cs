@@ -1,5 +1,6 @@
 ﻿using CarWashService.MobileApp.Services;
 using CarWashService.MobileApp.Views;
+using System;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp
@@ -19,8 +20,20 @@ namespace CarWashService.MobileApp
             }
             else
             {
-                LoadLoginAndRegisterShell();
+                LoadWelcomePage();
             }
+        }
+
+        private void LoadWelcomePage()
+        {
+            TabBar.Items.Clear();
+            TabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(WelcomePage),
+                Icon = "authorization",
+                Title = "Добро пожаловать",
+                ContentTemplate = new DataTemplate(typeof(WelcomePage)),
+            });
         }
 
         public static void LoadLoginAndRegisterShell()

@@ -72,29 +72,6 @@ namespace CarWashService.MobileApp.ViewModels
             IsBusy = false;
         }
 
-        private Command exitCommand;
-
-        public ICommand ExitCommand
-        {
-            get
-            {
-                if (exitCommand == null)
-                {
-                    exitCommand = new Command(ExitAsync);
-                }
-
-                return exitCommand;
-            }
-        }
-
-        private async void ExitAsync()
-        {
-            if (await FeedbackService.Ask("Выйти из приложения?"))
-            {
-                System.Environment.Exit(0);
-            }
-        }
-
         private Command regenerateCaptchaCommand;
         private string captchaText;
         private bool isNotBlocked = true;

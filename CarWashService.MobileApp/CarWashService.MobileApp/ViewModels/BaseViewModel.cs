@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace CarWashService.MobileApp.ViewModels
@@ -62,6 +63,27 @@ namespace CarWashService.MobileApp.ViewModels
         {
             get => title;
             set => SetProperty(ref title, value);
+        }
+
+        private Command exitCommand;
+
+        public ICommand ExitCommand
+        {
+            get
+            {
+                if (exitCommand == null)
+                    exitCommand = new Command(ExitAsync);
+
+                return exitCommand;
+            }
+        }
+
+        private async void ExitAsync()
+        {
+            if (await FeedbackService.Ask("Выйти из приложения?"))
+            {
+                System.Environment.Exit(0);
+            }
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,
