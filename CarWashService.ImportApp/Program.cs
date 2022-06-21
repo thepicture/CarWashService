@@ -222,12 +222,6 @@ namespace CarWashService.ImportApp
                         Password = Guid
                             .NewGuid()
                             .ToString(),
-                        PassportNumber = random
-                            .Next(100000, 999999 + 1)
-                            .ToString(),
-                        PassportSeries = random
-                            .Next(1000, 9999 + 1)
-                            .ToString(),
                         Email = Guid
                             .NewGuid()
                             .ToString()

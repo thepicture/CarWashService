@@ -18,7 +18,6 @@ namespace CarWashService.Web.Models.Entities
         public Address()
         {
             this.Branch = new HashSet<Branch>();
-            this.UserAddress = new HashSet<UserAddress>();
         }
     
         public int Id { get; set; }
@@ -28,7 +27,5 @@ namespace CarWashService.Web.Models.Entities
         public virtual City City { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Branch> Branch { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserAddress> UserAddress { get; set; }
     }
 }

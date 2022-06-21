@@ -19,7 +19,6 @@ namespace CarWashService.Web.Models.Entities
         {
             this.Order = new HashSet<Order>();
             this.Order1 = new HashSet<Order>();
-            this.UserAddress = new HashSet<UserAddress>();
             this.UserEmail = new HashSet<UserEmail>();
             this.UserPhone = new HashSet<UserPhone>();
         }
@@ -31,8 +30,6 @@ namespace CarWashService.Web.Models.Entities
         public int UserTypeId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public string PassportNumber { get; set; }
-        public string PassportSeries { get; set; }
         public string Email { get; set; }
         public byte[] ImageBytes { get; set; }
     
@@ -41,8 +38,6 @@ namespace CarWashService.Web.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Order1 { get; set; }
         public virtual UserType UserType { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserAddress> UserAddress { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserEmail> UserEmail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

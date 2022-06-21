@@ -225,9 +225,6 @@
     <Compile Include="Models\Entities\User.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\UserAddress.cs">
-      <DependentUpon>BaseModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Entities\UserEmail.cs">
       <DependentUpon>BaseModel.tt</DependentUpon>
     </Compile>

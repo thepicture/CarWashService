@@ -39,20 +39,6 @@ namespace CarWashService.MobileApp.Services
                 _ = validationErrors.AppendLine("Укажите почту в " +
                     "формате <aaa>@<bbb>.<cc>.");
             }
-            if (string
-                .IsNullOrWhiteSpace(item.PassportNumber)
-                || !int.TryParse(item.PassportNumber, out _))
-            {
-                _ = validationErrors.AppendLine("Укажите корректный номер " +
-                    "паспорта до 6 цифр.");
-            }
-            if (string
-                .IsNullOrWhiteSpace(item.PassportSeries)
-                || !int.TryParse(item.PassportSeries, out _))
-            {
-                _ = validationErrors.AppendLine("Укажите корректную серию " +
-                    "паспорта до 4 цифр.");
-            }
 
             if (item.UserTypeId == 0)
             {

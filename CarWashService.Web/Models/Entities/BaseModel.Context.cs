@@ -34,7 +34,6 @@ namespace CarWashService.Web.Models.Entities
         public virtual DbSet<ServiceDiscount> ServiceDiscount { get; set; }
         public virtual DbSet<ServiceType> ServiceType { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserAddress> UserAddress { get; set; }
         public virtual DbSet<UserEmail> UserEmail { get; set; }
         public virtual DbSet<UserPhone> UserPhone { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }

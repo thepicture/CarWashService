@@ -134,15 +134,9 @@ namespace CarWashService.Web.Controllers
             }
             System.Collections.Generic.IEnumerable<string> phones =
                 user.UserPhone.Select(p => p.PhoneNumber);
-            var addresses = user.UserAddress.Select(u => new
-            {
-                u.Address.StreetName,
-                u.Address.City
-            });
             return Ok(new
             {
                 Phones = phones,
-                Addresses = addresses
             });
         }
 
@@ -172,44 +166,6 @@ namespace CarWashService.Web.Controllers
                     continue;
                 }
                 user.UserPhone.Add(phone);
-                totalChangesCount++;
-            }
-            foreach (Address address in contacts.Adresses)
-            {
-                if (user.UserAddress.Any(ua =>
-                {
-                    return ua.Address.StreetName == address.StreetName
-                           && ua.Address.City.Name == address.City.Name;
-                }))
-                {
-                    continue;
-                }
-                City cityFromDb = await db.City
-                    .FirstOrDefaultAsync(c => c.Name == address.City.Name);
-                if (cityFromDb == null)
-                {
-                    cityFromDb = new City
-                    {
-                        Name = address.City.Name
-                    };
-                    _ = db.City.Add(cityFromDb);
-                }
-
-                Address addressFromDb = await db.Address
-                    .FirstOrDefaultAsync(b => b.StreetName == address.StreetName);
-                if (addressFromDb == null)
-                {
-                    addressFromDb = new Address
-                    {
-                        City = cityFromDb,
-                        StreetName = address.StreetName
-                    };
-                }
-                user.UserAddress.Add(new UserAddress
-                {
-                    UserId = userId,
-                    Address = addressFromDb
-                });
                 totalChangesCount++;
             }
             _ = await db.SaveChangesAsync();

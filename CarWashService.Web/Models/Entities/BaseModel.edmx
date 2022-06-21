@@ -112,18 +112,8 @@
           <Property Name="UserTypeId" Type="int" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="PassportNumber" Type="nvarchar" MaxLength="6" Nullable="false" />
-          <Property Name="PassportSeries" Type="nvarchar" MaxLength="4" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="ImageBytes" Type="varbinary(max)" />
-        </EntityType>
-        <EntityType Name="UserAddress">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="AddressId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserEmail">
           <Key>
@@ -332,30 +322,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserAddress_Address">
-          <End Role="Address" Type="Self.Address" Multiplicity="1" />
-          <End Role="UserAddress" Type="Self.UserAddress" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Address">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserAddress">
-              <PropertyRef Name="AddressId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserAddress_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="UserAddress" Type="Self.UserAddress" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserAddress">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UserEmail_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="UserEmail" Type="Self.UserEmail" Multiplicity="*" />
@@ -393,7 +359,6 @@
           <EntitySet Name="ServiceType" EntityType="Self.ServiceType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TypeOfService" EntityType="Self.TypeOfService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserAddress" EntityType="Self.UserAddress" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEmail" EntityType="Self.UserEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPhone" EntityType="Self.UserPhone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
@@ -453,14 +418,6 @@
             <End Role="UserType" EntitySet="UserType" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserAddress_Address" Association="Self.FK_UserAddress_Address">
-            <End Role="Address" EntitySet="Address" />
-            <End Role="UserAddress" EntitySet="UserAddress" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserAddress_User" Association="Self.FK_UserAddress_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserAddress" EntitySet="UserAddress" />
-          </AssociationSet>
           <AssociationSet Name="FK_UserEmail_User" Association="Self.FK_UserEmail_User">
             <End Role="User" EntitySet="User" />
             <End Role="UserEmail" EntitySet="UserEmail" />
@@ -484,7 +441,6 @@
           <EntitySet Name="ServiceDiscount" EntityType="CarWashBaseModel.ServiceDiscount" />
           <EntitySet Name="ServiceType" EntityType="CarWashBaseModel.ServiceType" />
           <EntitySet Name="User" EntityType="CarWashBaseModel.User" />
-          <EntitySet Name="UserAddress" EntityType="CarWashBaseModel.UserAddress" />
           <EntitySet Name="UserEmail" EntityType="CarWashBaseModel.UserEmail" />
           <EntitySet Name="UserPhone" EntityType="CarWashBaseModel.UserPhone" />
           <EntitySet Name="UserType" EntityType="CarWashBaseModel.UserType" />
@@ -495,10 +451,6 @@
           <AssociationSet Name="FK_Branch_Address" Association="CarWashBaseModel.FK_Branch_Address">
             <End Role="Address" EntitySet="Address" />
             <End Role="Branch" EntitySet="Branch" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserAddress_Address" Association="CarWashBaseModel.FK_UserAddress_Address">
-            <End Role="Address" EntitySet="Address" />
-            <End Role="UserAddress" EntitySet="UserAddress" />
           </AssociationSet>
           <AssociationSet Name="FK_BranchPhone_Branch" Association="CarWashBaseModel.FK_BranchPhone_Branch">
             <End Role="Branch" EntitySet="Branch" />
@@ -523,10 +475,6 @@
           <AssociationSet Name="FK_User_UserType" Association="CarWashBaseModel.FK_User_UserType">
             <End Role="UserType" EntitySet="UserType" />
             <End Role="User" EntitySet="User" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserAddress_User" Association="CarWashBaseModel.FK_UserAddress_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserAddress" EntitySet="UserAddress" />
           </AssociationSet>
           <AssociationSet Name="FK_UserEmail_User" Association="CarWashBaseModel.FK_UserEmail_User">
             <End Role="User" EntitySet="User" />
@@ -558,7 +506,6 @@
           <Property Name="StreetName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="City" Relationship="CarWashBaseModel.FK_Address_City" FromRole="Address" ToRole="City" />
           <NavigationProperty Name="Branch" Relationship="CarWashBaseModel.FK_Branch_Address" FromRole="Address" ToRole="Branch" />
-          <NavigationProperty Name="UserAddress" Relationship="CarWashBaseModel.FK_UserAddress_Address" FromRole="Address" ToRole="UserAddress" />
         </EntityType>
         <EntityType Name="Branch">
           <Key>
@@ -651,26 +598,13 @@
           <Property Name="UserTypeId" Type="Int32" Nullable="false" />
           <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PassportNumber" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
-          <Property Name="PassportSeries" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ImageBytes" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Order" Relationship="CarWashBaseModel.FK_Order_User" FromRole="User" ToRole="Order" />
           <NavigationProperty Name="Order1" Relationship="CarWashBaseModel.FK_Order_User1" FromRole="User" ToRole="Order" />
           <NavigationProperty Name="UserType" Relationship="CarWashBaseModel.FK_User_UserType" FromRole="User" ToRole="UserType" />
-          <NavigationProperty Name="UserAddress" Relationship="CarWashBaseModel.FK_UserAddress_User" FromRole="User" ToRole="UserAddress" />
           <NavigationProperty Name="UserEmail" Relationship="CarWashBaseModel.FK_UserEmail_User" FromRole="User" ToRole="UserEmail" />
           <NavigationProperty Name="UserPhone" Relationship="CarWashBaseModel.FK_UserPhone_User" FromRole="User" ToRole="UserPhone" />
-        </EntityType>
-        <EntityType Name="UserAddress">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="AddressId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Address" Relationship="CarWashBaseModel.FK_UserAddress_Address" FromRole="UserAddress" ToRole="Address" />
-          <NavigationProperty Name="User" Relationship="CarWashBaseModel.FK_UserAddress_User" FromRole="UserAddress" ToRole="User" />
         </EntityType>
         <EntityType Name="UserEmail">
           <Key>
@@ -718,18 +652,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Branch">
-              <PropertyRef Name="AddressId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserAddress_Address">
-          <End Type="CarWashBaseModel.Address" Role="Address" Multiplicity="1" />
-          <End Type="CarWashBaseModel.UserAddress" Role="UserAddress" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Address">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserAddress">
               <PropertyRef Name="AddressId" />
             </Dependent>
           </ReferentialConstraint>
@@ -809,18 +731,6 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="UserTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserAddress_User">
-          <End Type="CarWashBaseModel.User" Role="User" Multiplicity="1" />
-          <End Type="CarWashBaseModel.UserAddress" Role="UserAddress" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserAddress">
-              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -951,23 +861,12 @@
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="ImageBytes" ColumnName="ImageBytes" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="PassportSeries" ColumnName="PassportSeries" />
-                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
                 <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserAddress">
-            <EntityTypeMapping TypeName="CarWashBaseModel.UserAddress">
-              <MappingFragment StoreEntitySet="UserAddress">
-                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

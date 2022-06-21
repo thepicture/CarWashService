@@ -75,25 +75,6 @@
                     <controls:PasswordMaterialTextField Password="{Binding Password}"
                                                         Placeholder="Введите пароль"
                                                         HelperText="* Обязательно" />
-                    <Grid ColumnDefinitions="*,*">
-                        <material:MaterialTextField Text="{Binding PassportSeries}"
-                                                    Placeholder="Серия"
-                                                    LeadingIcon="registration"
-                                                    InputType="Numeric"
-                                                    MaxLength="4"
-                                                    AlwaysShowUnderline="True"
-                                                    TintColor="{StaticResource Primary}"
-                                                    HelperText="* Обязательно" />
-                        <material:MaterialTextField Text="{Binding PassportNumber}"
-                                                    Grid.Column="1"
-                                                    Placeholder="Номер"
-                                                    LeadingIcon="registration"
-                                                    InputType="Numeric"
-                                                    MaxLength="6"
-                                                    AlwaysShowUnderline="True"
-                                                    TintColor="{StaticResource Primary}"
-                                                    HelperText="* Обязательно" />
-                    </Grid>
                     <material:MaterialTextField Text="{Binding Email}"
                                                 Placeholder="Введите email"
                                                 LeadingIcon="profile"

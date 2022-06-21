@@ -62,22 +62,6 @@ namespace CarWashService.MobileApp.ViewModels
             set => SetProperty(ref password, value);
         }
 
-        private string passportNumber;
-
-        public string PassportNumber
-        {
-            get => passportNumber;
-            set => SetProperty(ref passportNumber, value);
-        }
-
-        private string passportSeries;
-
-        public string PassportSeries
-        {
-            get => passportSeries;
-            set => SetProperty(ref passportSeries, value);
-        }
-
         private Command registerCommand;
 
         public ICommand RegisterCommand
@@ -106,8 +90,6 @@ namespace CarWashService.MobileApp.ViewModels
                     FirstName = FirstName,
                     LastName = LastName,
                     Patronymic = Patronymic,
-                    PassportNumber = PassportNumber,
-                    PassportSeries = PassportSeries,
                     UserTypeId = UserType?.Id ?? 0,
                     ImageBytes = CompressedImageBytes
                 };
