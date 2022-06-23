@@ -1,6 +1,9 @@
 ﻿using CarWashService.MobileApp.Models.Serialized;
 using CarWashService.MobileApp.Services;
+using Newtonsoft.Json;
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -94,6 +97,7 @@ namespace CarWashService.MobileApp
             }
 
             MainPage = new AppShell();
+
         }
 
         protected override void OnStart()

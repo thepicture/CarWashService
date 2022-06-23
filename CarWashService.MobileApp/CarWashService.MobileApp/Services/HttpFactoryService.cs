@@ -12,8 +12,11 @@ namespace CarWashService.MobileApp.Services
             HttpClientHandler handler = new HttpClientHandler();
             handler.ServerCertificateCustomValidationCallback +=
                 GetTruthfulCertificateValidationCallback();
-
-            HttpClient client = new HttpClient(handler);
+            HttpClient client = new HttpClient(handler)
+            {
+                BaseAddress = new Uri(App.BaseUrl),
+                Timeout = App.HttpClientTimeout
+            };
 
             return client;
         }

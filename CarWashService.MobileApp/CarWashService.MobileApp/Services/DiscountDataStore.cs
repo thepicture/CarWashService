@@ -51,11 +51,11 @@ namespace CarWashService.MobileApp.Services
             item.DiscountPercent = int.Parse(item.DiscountPercentAsString);
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     string discountJson = JsonConvert.SerializeObject(item);
@@ -102,11 +102,11 @@ namespace CarWashService.MobileApp.Services
             }
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     HttpResponseMessage response = await client
@@ -146,11 +146,11 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     HttpResponseMessage response = await client

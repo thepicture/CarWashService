@@ -45,11 +45,11 @@ namespace CarWashService.MobileApp.Services
             item.Price = int.Parse(item.PriceString);
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     string serviceJson = JsonConvert.SerializeObject(item);
@@ -96,11 +96,11 @@ namespace CarWashService.MobileApp.Services
             }
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     HttpResponseMessage response = await client
@@ -136,11 +136,11 @@ namespace CarWashService.MobileApp.Services
             {
                 using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
                 {
-                    client.Timeout = App.HttpClientTimeout;
+                    
                     client.DefaultRequestHeaders.Authorization =
                       new AuthenticationHeaderValue("Basic",
                                                     AppIdentity.AuthorizationValue);
-                    client.BaseAddress = new Uri(App.BaseUrl);
+                    
                     HttpResponseMessage response = await client
                       .GetAsync($"services/{id}");
                     if (response.StatusCode == HttpStatusCode.OK)
@@ -172,11 +172,11 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                         AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     HttpResponseMessage response = await client

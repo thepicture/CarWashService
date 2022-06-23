@@ -106,18 +106,23 @@ namespace CarWashService.Web.Controllers
         [AllowAnonymous]
         public IHttpActionResult IsAuthenticatedAsync(User loginUser)
         {
-            User dbUser = db.User.Where(u => u.Login == loginUser.Login)
-                .FirstOrDefault();
-            if (dbUser == null)
+            if (!IsUserWithLoginAndPasswordFound(loginUser))
             {
                 return Unauthorized();
             }
-            if (dbUser.Password != loginUser.Password)
+            else
             {
-                return Unauthorized();
+                User user = db.User.AsNoTracking()
+                    .First(u => u.Login == loginUser.Login && u.Password == loginUser.Password);
+
+                return Ok(new SerializedUser(user));
             }
-            return Ok(
-                new SerializedUser(dbUser));
+        }
+
+        private bool IsUserWithLoginAndPasswordFound(User loginUser)
+        {
+            return db.User.AsNoTracking()
+                .Any(u => u.Login == loginUser.Login && u.Password == loginUser.Password);
         }
 
         [HttpGet]

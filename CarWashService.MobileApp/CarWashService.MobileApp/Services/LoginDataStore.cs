@@ -34,8 +34,6 @@ namespace CarWashService.MobileApp.Services
             }
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
-                client.BaseAddress = new Uri(App.BaseUrl);
                 try
                 {
                     StringContent content =
@@ -46,9 +44,8 @@ namespace CarWashService.MobileApp.Services
                         .PostAsync($"users/login", content);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        string encodedLoginAndPassword =
-                        new LoginAndPasswordToBasicEncoder()
-                        .Encode(item.Login, item.Password);
+                        string encodedLoginAndPassword = new LoginAndPasswordToBasicEncoder()
+                            .Encode(item.Login, item.Password);
                         SerializedLoginUser serializedLoginUser =
                         JsonConvert.DeserializeObject<SerializedLoginUser>(
                             await response.Content.ReadAsStringAsync());

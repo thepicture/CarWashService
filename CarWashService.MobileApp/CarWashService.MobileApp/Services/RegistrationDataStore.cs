@@ -56,8 +56,8 @@ namespace CarWashService.MobileApp.Services
             string jsonIdentity = JsonConvert.SerializeObject(item);
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
+                
                 try
                 {
                     HttpResponseMessage response = await client

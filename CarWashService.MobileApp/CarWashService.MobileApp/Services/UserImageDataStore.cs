@@ -27,12 +27,12 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
                         "Basic",
                         AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     HttpResponseMessage response = await client
@@ -73,12 +73,12 @@ namespace CarWashService.MobileApp.Services
         {
             using (HttpClient client = DependencyService.Get<IHttpFactoryService>().GetInstance())
             {
-                client.Timeout = App.HttpClientTimeout;
+                
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
                         "Basic",
                         AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri(App.BaseUrl);
+                
                 try
                 {
                     HttpRequestMessage request = new HttpRequestMessage(
