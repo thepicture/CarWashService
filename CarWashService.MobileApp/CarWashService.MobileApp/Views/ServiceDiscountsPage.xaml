@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:CarWashService.MobileApp.Converters"
              x:DataType="viewmodels:ServiceDiscountsViewModel"
              x:Name="Page"
-             Title="Скидки услуги"
+             Title="Акции"
              x:Class="CarWashService.MobileApp.Views.ServiceDiscountsPage">
     <ContentPage.Content>
         <Grid>
@@ -17,7 +17,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <material:MaterialButton Command="{Binding GoToAddDiscountPage}"
-                                     Text="Добавить скидку"
+                                     Text="Добавить акцию"
                                      VerticalOptions="EndAndExpand"
                                      Style="{StaticResource BaseButton}">
                 <material:MaterialButton.Triggers>
